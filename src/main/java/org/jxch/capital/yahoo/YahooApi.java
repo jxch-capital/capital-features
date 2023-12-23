@@ -30,18 +30,14 @@ public class YahooApi {
 
     @SneakyThrows
     public QuoteRes quote(@NonNull QuoteParam param) {
-        Request request = newYahooRequestBuilder.get().url(param.toUrl(newYahooQuoteUrlBuilder.get())).build();
-
-        try (Response response = yahooClient.newCall(request).execute()) {
+        try (Response response = yahooClient.newCall(param.newRequest(newYahooRequestBuilder, newYahooQuoteUrlBuilder)).execute()) {
             return JSONObject.parseObject(Objects.requireNonNull(response.body()).string(), QuoteRes.class);
         }
     }
 
     @SneakyThrows
     public List<HistoryRes> downloadStockCsv(@NonNull DownloadStockCsvParam param) {
-        Request request = newYahooRequestBuilder.get().url(param.toUrl(newYahooDownloadStockCsvUrlBuilder.get())).build();
-
-        try (Response response = yahooClient.newCall(request).execute()) {
+        try (Response response = yahooClient.newCall(param.newRequest(newYahooRequestBuilder, newYahooDownloadStockCsvUrlBuilder)).execute()) {
             return CsvUtil.getReader().read(Objects.requireNonNull(response.body()).string(), HistoryRes.class);
         }
     }
