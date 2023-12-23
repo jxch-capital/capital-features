@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class HistoryRes {
+public class DownloadStockCsvRes {
     @Alias("Date")
     private Date date;
     @Alias("Open")

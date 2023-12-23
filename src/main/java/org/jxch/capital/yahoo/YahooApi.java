@@ -9,10 +9,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.jxch.capital.yahoo.dto.DownloadStockCsvParam;
-import org.jxch.capital.yahoo.dto.HistoryRes;
-import org.jxch.capital.yahoo.dto.QuoteParam;
-import org.jxch.capital.yahoo.dto.QuoteRes;
+import org.jxch.capital.yahoo.dto.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,9 +20,10 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class YahooApi {
     private final OkHttpClient yahooClient;
+    private final Supplier<Request.Builder> newYahooRequestBuilder;
     private final Supplier<HttpUrl.Builder> newYahooQuoteUrlBuilder;
     private final Supplier<HttpUrl.Builder> newYahooDownloadStockCsvUrlBuilder;
-    private final Supplier<Request.Builder> newYahooRequestBuilder;
+    private final Supplier<HttpUrl.Builder> newYahooChartUrlBuilder;
 
 
     @SneakyThrows
@@ -36,9 +34,16 @@ public class YahooApi {
     }
 
     @SneakyThrows
-    public List<HistoryRes> downloadStockCsv(@NonNull DownloadStockCsvParam param) {
+    public List<DownloadStockCsvRes> downloadStockCsv(@NonNull DownloadStockCsvParam param) {
         try (Response response = yahooClient.newCall(param.newRequest(newYahooRequestBuilder, newYahooDownloadStockCsvUrlBuilder)).execute()) {
-            return CsvUtil.getReader().read(Objects.requireNonNull(response.body()).string(), HistoryRes.class);
+            return CsvUtil.getReader().read(Objects.requireNonNull(response.body()).string(), DownloadStockCsvRes.class);
+        }
+    }
+
+    @SneakyThrows
+    public ChartRes chart(@NonNull ChartParam param){
+        try (Response response = yahooClient.newCall(param.newRequest(newYahooRequestBuilder, newYahooChartUrlBuilder)).execute()){
+            return JSONObject.parseObject(Objects.requireNonNull(response.body()).string(), ChartRes.class);
         }
     }
 

@@ -6,11 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -47,7 +45,6 @@ public class YahooConfig {
     }
 
     @Bean
-    @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Supplier<Request.Builder> newYahooRequestBuilder() {
         return () -> new Request.Builder()
                 .addHeader("cookie", cookie)
@@ -55,7 +52,6 @@ public class YahooConfig {
     }
 
     @Bean
-    @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Supplier<HttpUrl.Builder> newYahooQuoteUrlBuilder(@NonNull Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
         return () -> newYahooUrlBuilder.get()
                 .host("query1.finance.yahoo.com")
@@ -63,11 +59,17 @@ public class YahooConfig {
     }
 
     @Bean
-    @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Supplier<HttpUrl.Builder> newYahooDownloadStockCsvUrlBuilder(@NonNull Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
         return () -> newYahooUrlBuilder.get()
                 .host("query1.finance.yahoo.com")
                 .addPathSegments("/v7/finance/download/");
+    }
+
+    @Bean
+    public Supplier<HttpUrl.Builder> newYahooChartUrlBuilder(@NonNull Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
+        return () -> newYahooUrlBuilder.get()
+                .host("query2.finance.yahoo.com")
+                .addPathSegments("/v8/finance/chart/");
     }
 
 
