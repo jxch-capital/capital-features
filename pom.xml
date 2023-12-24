@@ -30,6 +30,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
@@ -75,10 +80,8 @@
     </dependencies>
 
     <build>
-        <!-- 插件管理，可以定义一些插件的版本和配置 -->
         <pluginManagement>
             <plugins>
-                <!-- Spring Boot的Maven插件，可以提供一些方便的功能，如打包，运行，测试等 -->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
