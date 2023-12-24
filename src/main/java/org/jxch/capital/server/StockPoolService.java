@@ -8,4 +8,6 @@ public interface StockPoolService {
     List<StockPoolDto> findAll();
 
     Integer save(List<StockPoolDto> stockPoolDto);
+
+    void del(List<Long> id);
 }

@@ -25,4 +25,9 @@ public class StockPoolServiceImpl implements StockPoolService {
         return stockPoolRepository.saveAllAndFlush(stockPoolMapper.toStockPool(stockPools)).size();
     }
 
+    @Override
+    public void del(List<Long> id) {
+        stockPoolRepository.deleteAllById(id);
+    }
+
 }

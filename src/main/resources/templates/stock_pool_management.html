@@ -17,7 +17,7 @@
                 <th>操作</th>
             </tr>
             <form action="#" th:action="@{/stock_pool/save}" th:object="${stockPool}" method="post">
-                <tr>
+                <tr th:object="${stockPool}">
                     <td>Auto</td>
                     <td>
                         <label for="poolName"></label>
@@ -43,9 +43,9 @@
                 <td th:text="${item.engine}"></td>
                 <td th:text="${item.poolStocks}"></td>
                 <td>
-                    修改
-                    删除
-                    详情
+                    <a>修改</a>
+                    <a th:href="@{'/stock_pool/del/' + ${item.id}}">删除</a>
+                    <a>详情</a>
                 </td>
             </tr>
         </table>
