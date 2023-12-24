@@ -10,15 +10,6 @@ import java.util.function.Supplier;
 @Configuration
 public class AppControllerConfig {
 
-    @Bean(name = "newIndexView")
-    public Supplier<ModelAndView> newIndexView() {
-        return () -> {
-            ModelAndView view = new ModelAndView();
-            view.setViewName("index");
-            view.addObject("param", new HistoryParam());
-            return view;
-        };
-    }
 
 
 }

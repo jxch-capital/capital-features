@@ -5,7 +5,7 @@
     <title>Capital-Features</title>
 </head>
 <body>
-    <form action="#" th:action="@{/app/history}" th:object="${param}" method="post">
+    <form th:action="@{/app/history}" th:object="${param}" method="post">
         <label for="code">股票代码：</label>
         <input type="text" th:field="*{code}" id="code" placeholder="股票代码">
         <label for="start">开始时间：</label>

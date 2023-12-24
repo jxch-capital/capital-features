@@ -1,7 +1,7 @@
 package org.jxch.capital.controller;
 
 
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.StockPoolDto;
 import org.jxch.capital.server.StockPoolService;
@@ -14,14 +14,13 @@ import java.util.Collections;
 @Slf4j
 @Controller
 @RequestMapping(path = "/stock_pool")
+@RequiredArgsConstructor
 public class StockPoolController {
-    @Resource
-    private StockPoolService stockPoolService;
+    private final StockPoolService stockPoolService;
 
     @GetMapping("/index")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("stock_pool_management");
+        ModelAndView modelAndView = new ModelAndView("stock_pool_management");
         modelAndView.addObject("stockPool", new StockPoolDto());
         modelAndView.addObject("stockPools", stockPoolService.findAll());
         return modelAndView;
@@ -29,8 +28,7 @@ public class StockPoolController {
 
     @RequestMapping(value = "/update/{id}")
     public ModelAndView update(@PathVariable(value = "id") Long id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("stock_pool_update");
+        ModelAndView modelAndView = new ModelAndView("stock_pool_update");
         modelAndView.addObject("stockPool", stockPoolService.findById(id));
         return modelAndView;
     }
