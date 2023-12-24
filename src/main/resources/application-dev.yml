@@ -3,3 +3,9 @@ yahoo:
   proxy-port: 10809
   use-proxy: true
 
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:15432/capital-features
+    username: capital-features
+    password: capital-features
