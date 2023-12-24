@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>股票池编辑</title>
+</head>
+<body>
+<form th:action="@{/stock_pool/save}" th:object="${stockPool}" method="post">
+    <table>
+        <tr>
+            <td><label for="id">ID</label></td>
+            <td><input type="text" th:field="*{id}" id="id" placeholder="ID" required readonly></td>
+        </tr>
+        <tr>
+            <td><label for="poolName">股票池名称</label></td>
+            <td><input type="text" th:field="*{poolName}" id="poolName" placeholder="股票池名称" required></td>
+        </tr>
+        <tr>
+            <td><label for="engine">股票引擎</label></td>
+            <td><input type="text" th:field="*{engine}" id="engine" placeholder="股票引擎" required></td>
+        </tr>
+        <tr>
+            <td><label for="poolStocks">股票代码</label></td>
+            <td><textarea th:field="*{poolStocks}" id="poolStocks" placeholder="股票代码" rows="5" cols="100"
+                          required></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><a th:href="@{'/stock_pool/index'}">取消</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

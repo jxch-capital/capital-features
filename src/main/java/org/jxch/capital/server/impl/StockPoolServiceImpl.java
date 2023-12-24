@@ -21,6 +21,11 @@ public class StockPoolServiceImpl implements StockPoolService {
     }
 
     @Override
+    public StockPoolDto findById(Long id) {
+        return stockPoolMapper.toStockPoolDto(stockPoolRepository.findById(id).orElseThrow());
+    }
+
+    @Override
     public Integer save(List<StockPoolDto> stockPools) {
         return stockPoolRepository.saveAllAndFlush(stockPoolMapper.toStockPool(stockPools)).size();
     }

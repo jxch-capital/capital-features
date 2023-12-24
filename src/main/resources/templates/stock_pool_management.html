@@ -5,57 +5,44 @@
     <title>股票池管理</title>
 </head>
 <body>
-<div>
-    <div>
+<form th:action="@{/stock_pool/save}" th:object="${stockPool}" method="post">
+    <table>
+        <tr>
+            <th>股票池</th>
+            <th>引擎</th>
+            <th>股票代码（逗号分割）</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td>
+                <label for="poolName"></label>
+                <textarea th:field="*{poolName}" id="poolName" placeholder="股票池名称" rows="5"></textarea>
+            </td>
+            <td>
+                <label for="engine"></label>
+                <textarea th:field="*{engine}" id="engine" placeholder="股票引擎" rows="5"></textarea>
+            </td>
+            <td>
+                <label for="poolStocks"></label>
+                <textarea th:field="*{poolStocks}" id="poolStocks" placeholder="股票代码"
+                          rows="5" cols="100"></textarea>
+            </td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
 
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>股票池</th>
-                <th>引擎</th>
-                <th>股票代码（逗号分割）</th>
-                <th>操作</th>
-            </tr>
-            <form action="#" th:action="@{/stock_pool/save}" th:object="${stockPool}" method="post">
-                <tr th:object="${stockPool}">
-                    <td>Auto</td>
-                    <td>
-                        <label for="poolName"></label>
-                        <input type="text" th:field="*{poolName}" id="poolName" placeholder="股票池名称">
-                    </td>
-                    <td>
-                        <label for="engine"></label>
-                        <input type="text" th:field="*{engine}" id="engine" placeholder="股票引擎">
-                    </td>
-                    <td>
-                        <label for="poolStocks"></label>
-                        <input type="text" th:field="*{poolStocks}" id="poolStocks" placeholder="股票代码"
-                               style="width: 500px">
-                    </td>
-                    <td>
-                        <input type="submit" value="添加">
-                    </td>
-                </tr>
-            </form>
-            <tr th:each="item,iter: ${stockPools}">
-                <td th:text="${item.id}"></td>
-                <td th:text="${item.poolName}"></td>
-                <td th:text="${item.engine}"></td>
-                <td th:text="${item.poolStocks}"></td>
-                <td>
-                    <a>修改</a>
-                    <a th:href="@{'/stock_pool/del/' + ${item.id}}">删除</a>
-                    <a>详情</a>
-                </td>
-            </tr>
-        </table>
+        <tr th:each="item,iter: ${stockPools}">
+            <td th:text="${item.poolName}"></td>
+            <td th:text="${item.engine}"></td>
+            <td th:text="${item.poolStocks}"></td>
+            <td>
+                <a th:href="@{'/stock_pool/update/' + ${item.id}}">修改</a>
+                <a th:href="@{'/stock_pool/del/' + ${item.id}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
 
-
-    </div>
-
-    <div>
-
-    </div>
-</div>
 </body>
 </html>
