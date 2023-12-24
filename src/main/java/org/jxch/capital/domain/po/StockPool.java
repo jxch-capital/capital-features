@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -17,4 +19,7 @@ public class StockPool {
     private String poolName;
     private String poolStocks;
     private String engine;
+    private String interval;
+    private Date startDate;
+    private Date endDate;
 }

@@ -10,22 +10,36 @@
         <tr>
             <th>股票池</th>
             <th>引擎</th>
+            <th>时间间隔</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
             <th>股票代码（逗号分割）</th>
             <th>操作</th>
         </tr>
         <tr>
             <td>
                 <label for="poolName"></label>
-                <textarea th:field="*{poolName}" id="poolName" placeholder="股票池名称" rows="5"></textarea>
+                <input type="text" th:field="*{poolName}" id="poolName" placeholder="股票池名称">
             </td>
             <td>
                 <label for="engine"></label>
-                <textarea th:field="*{engine}" id="engine" placeholder="股票引擎" rows="5"></textarea>
+                <input type="text" th:field="*{engine}" id="engine" placeholder="股票引擎">
+            </td>
+            <td>
+                <label for="interval"></label>
+                <input type="text" th:field="*{interval}" id="interval" placeholder="时间间隔">
+            </td>
+            <td>
+                <label for="startDate"></label>
+                <input type="date" th:field="*{startDate}" id="startDate" placeholder="开始时间">
+            </td>
+            <td>
+                <label for="endDate"></label>
+                <input type="date" th:field="*{endDate}" id="endDate" placeholder="结束时间">
             </td>
             <td>
                 <label for="poolStocks"></label>
-                <textarea th:field="*{poolStocks}" id="poolStocks" placeholder="股票代码"
-                          rows="5" cols="100"></textarea>
+                <input type="text" th:field="*{poolStocks}" id="poolStocks" placeholder="股票代码">
             </td>
             <td>
                 <input type="submit" value="添加">
@@ -35,9 +49,12 @@
         <tr th:each="item,iter: ${stockPools}">
             <td th:text="${item.poolName}"></td>
             <td th:text="${item.engine}"></td>
+            <td th:text="${item.interval}"></td>
+            <td th:text="${#dates.format(item.startDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#dates.format(item.endDate, 'yyyy-MM-dd')}"></td>
             <td th:text="${item.poolStocks}"></td>
             <td>
-                <a th:href="@{'/stock_pool/update/' + ${item.id}}">修改</a>
+                <a th:href="@{'/stock_pool/edit/' + ${item.id}}">修改</a>
                 <a th:href="@{'/stock_pool/del/' + ${item.id}}">删除</a>
             </td>
         </tr>

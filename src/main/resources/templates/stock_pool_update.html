@@ -20,6 +20,18 @@
             <td><input type="text" th:field="*{engine}" id="engine" placeholder="股票引擎" required></td>
         </tr>
         <tr>
+            <td><label for="interval">时间间隔</label></td>
+            <td><input type="text" th:field="*{interval}" id="interval" placeholder="时间间隔" required></td>
+        </tr>
+        <tr>
+            <td><label for="startDate">开始时间</label></td>
+            <td><input type="date" th:field="*{startDate}" id="startDate" placeholder="开始时间" required></td>
+        </tr>
+        <tr>
+            <td><label for="endDate">结束时间</label></td>
+            <td><input type="date" th:field="*{endDate}" id="endDate" placeholder="结束时间" required></td>
+        </tr>
+        <tr>
             <td><label for="poolStocks">股票代码</label></td>
             <td><textarea th:field="*{poolStocks}" id="poolStocks" placeholder="股票代码" rows="5" cols="100"
                           required></textarea></td>
