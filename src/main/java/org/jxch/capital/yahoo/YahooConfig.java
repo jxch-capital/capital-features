@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ public class YahooConfig {
     private String cookie;
     private String userAgent;
     private String crumb;
-    private boolean useProxy;
+    private boolean useProxy = false;
     private String proxyHost;
     private Integer proxyPort;
 
@@ -37,36 +38,36 @@ public class YahooConfig {
         return builder.build();
     }
 
-    @Bean
+    @Bean(name = "newYahooUrlBuilder")
     public Supplier<HttpUrl.Builder> newYahooUrlBuilder() {
         return () -> new HttpUrl.Builder()
                 .scheme("https")
                 .addQueryParameter("crumb", crumb);
     }
 
-    @Bean
+    @Bean(name = "newYahooRequestBuilder")
     public Supplier<Request.Builder> newYahooRequestBuilder() {
         return () -> new Request.Builder()
                 .addHeader("cookie", cookie)
                 .addHeader("user-agent", userAgent);
     }
 
-    @Bean
-    public Supplier<HttpUrl.Builder> newYahooQuoteUrlBuilder(@NonNull Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
+    @Bean(name = "newYahooQuoteUrlBuilder")
+    public Supplier<HttpUrl.Builder> newYahooQuoteUrlBuilder(@NonNull @Qualifier("newYahooUrlBuilder") Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
         return () -> newYahooUrlBuilder.get()
                 .host("query1.finance.yahoo.com")
                 .addPathSegments("/v7/finance/quote");
     }
 
-    @Bean
-    public Supplier<HttpUrl.Builder> newYahooDownloadStockCsvUrlBuilder(@NonNull Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
+    @Bean(name = "newYahooDownloadStockCsvUrlBuilder")
+    public Supplier<HttpUrl.Builder> newYahooDownloadStockCsvUrlBuilder(@NonNull @Qualifier("newYahooUrlBuilder")  Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
         return () -> newYahooUrlBuilder.get()
                 .host("query1.finance.yahoo.com")
                 .addPathSegments("/v7/finance/download/");
     }
 
-    @Bean
-    public Supplier<HttpUrl.Builder> newYahooChartUrlBuilder(@NonNull Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
+    @Bean(name = "newYahooChartUrlBuilder")
+    public Supplier<HttpUrl.Builder> newYahooChartUrlBuilder(@NonNull @Qualifier("newYahooUrlBuilder")  Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
         return () -> newYahooUrlBuilder.get()
                 .host("query2.finance.yahoo.com")
                 .addPathSegments("/v8/finance/chart/");
