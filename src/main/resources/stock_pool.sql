@@ -1,26 +1,30 @@
-create table stock_pool
+create table public.stock_pool
 (
-    id          int8        not null
+    id          bigint                                      not null
         constraint stock_pool_pk
             primary key,
-    pool_name   varchar(20) not null,
+    pool_name   varchar(20)                                 not null,
     pool_stocks text,
-    engine      varchar(20) not null
+    engine      varchar(20)                                 not null,
+    interval    varchar(10) default '1d'::character varying not null,
+    start_date  date,
+    end_date    date
 );
 
-comment on table stock_pool is '股票池';
+comment on table public.stock_pool is '股票池';
 
-comment on column stock_pool.pool_name is '股票池名称';
+comment on column public.stock_pool.pool_name is '股票池名称';
 
-comment on column stock_pool.pool_stocks is '股票池代码';
+comment on column public.stock_pool.pool_stocks is '股票池代码';
 
-comment on column stock_pool.engine is '支持股票代码的引擎';
+comment on column public.stock_pool.engine is '支持股票代码的引擎';
 
-create sequence public.stock_pool_seq
-    increment by 50
-    cache 100;
+comment on column public.stock_pool.interval is '间隔';
 
-alter sequence public.stock_pool_seq owner to "capital-features";
+comment on column public.stock_pool.start_date is '开始时间';
 
-alter sequence public.stock_pool_seq owned by public.stock_pool.id;
+comment on column public.stock_pool.end_date is '结束时间';
+
+alter table public.stock_pool
+    owner to "capital-features";
 
