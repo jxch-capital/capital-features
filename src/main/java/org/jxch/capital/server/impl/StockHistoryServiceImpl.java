@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.StockHistoryRepository;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.StockHistoryDto;
-import org.jxch.capital.domain.po.StockHistory;
 import org.jxch.capital.server.StockHistoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +25,11 @@ public class StockHistoryServiceImpl implements StockHistoryService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Throwable.class)
     public void delByStockPoolId(@NonNull List<Long> stockPoolIds) {
         stockPoolIds.forEach(stockPoolId -> {
-            List<Long> stockHistoryIds = stockHistoryRepository.findByStockPoolId(stockPoolId).stream().map(StockHistory::getId).toList();
-            stockHistoryRepository.deleteAllById(stockHistoryIds);
+            stockHistoryRepository.deleteByStockPoolId(stockPoolId);
+            log.info("删除股票池历史数据成功，ID：{}", stockPoolId);
         });
     }
 

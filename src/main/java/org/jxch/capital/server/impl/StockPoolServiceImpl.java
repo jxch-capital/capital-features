@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -46,14 +47,14 @@ public class StockPoolServiceImpl implements StockPoolService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Throwable.class)
     public void del(List<Long> id) {
         stockPoolRepository.deleteAllById(id);
         stockHistoryService.delByStockPoolId(id);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Throwable.class)
     public void update(@NonNull List<Long> stockPoolIds) {
         for (Long stockPoolId : stockPoolIds) {
             stockHistoryService.delByStockPoolId(Collections.singletonList(stockPoolId));
@@ -69,6 +70,7 @@ public class StockPoolServiceImpl implements StockPoolService {
                         .build());
                 List<StockHistoryDto> stockHistoryList = kLineMapper.toStockHistoryDto(history).stream()
                         .map(stockHistory -> stockHistory.setStockPoolId(stockPoolId).setStockCode(code))
+                        .filter(stockHistoryDto -> Objects.nonNull(stockHistoryDto.getClose()))
                         .toList();
 
                 stockHistoryService.save(stockHistoryList);
