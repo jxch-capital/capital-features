@@ -28,7 +28,7 @@ public class StockPoolController {
 
     @RequestMapping(value = "/edit/{id}")
     public ModelAndView edit(@PathVariable(value = "id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("stock_pool_update");
+        ModelAndView modelAndView = new ModelAndView("stock_pool_edit");
         modelAndView.addObject("stockPool", stockPoolService.findById(id));
         return modelAndView;
     }
