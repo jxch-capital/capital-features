@@ -52,7 +52,7 @@
             <td th:text="${item.interval}"></td>
             <td th:text="${#dates.format(item.startDate, 'yyyy-MM-dd')}"></td>
             <td th:text="${#dates.format(item.endDate, 'yyyy-MM-dd')}"></td>
-            <td th:text="${item.poolStocks}"></td>
+            <td th:text="${#strings.abbreviate(item.poolStocks, 20)}" th:title="${item.poolStocks}"></td>
             <td>
                 <a th:href="@{'/stock_pool/edit/' + ${item.id}}">修改</a>
                 <a th:href="@{'/stock_pool/del/' + ${item.id}}">删除</a>
