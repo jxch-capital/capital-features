@@ -2,11 +2,16 @@ package org.jxch.capital.domain.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 public class StockPoolDto {
     private Long id;
@@ -18,4 +23,8 @@ public class StockPoolDto {
     private Date startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
+
+    public List<String> getPoolStockList() {
+        return new ArrayList<>(Arrays.asList(this.poolStocks.split(",")));
+    }
 }

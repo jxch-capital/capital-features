@@ -12,16 +12,18 @@ import java.util.Date;
 
 @Data
 @Accessors(chain = true)
-@Entity(name = "stock_pool")
+@Entity(name = "stock_history")
 @NoArgsConstructor
-public class StockPool {
+public class StockHistory {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO, generator="stock_pool_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "stock_pool_seq")
     private Long id;
-    private String poolName;
-    private String poolStocks;
-    private String engine;
-    private String interval;
-    private Date startDate;
-    private Date endDate;
+    private Long stockPoolId;
+    private String stockCode;
+    private Date date;
+    private Double open;
+    private Double close;
+    private Double high;
+    private Double low;
+    private Long volume;
 }

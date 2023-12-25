@@ -9,11 +9,14 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-public class KLine {
+public class StockHistoryDto {
+    private Long id;
+    private Long stockPoolId;
+    private String stockCode;
     private Date date;
     private Double open;
+    private Double close;
     private Double high;
     private Double low;
-    private Double close;
     private Long volume;
 }

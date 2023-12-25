@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import org.jxch.capital.server.EngineEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
@@ -11,6 +13,7 @@ import java.util.Date;
 
 @Data
 @Builder
+@Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryParam {
@@ -25,4 +28,6 @@ public class HistoryParam {
 
     @Builder.Default
     private String interval = "1d";
+    @Builder.Default
+    private EngineEnum engine = EngineEnum.YAHOO;
 }

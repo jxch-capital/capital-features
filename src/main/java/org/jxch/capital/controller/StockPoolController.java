@@ -27,7 +27,7 @@ public class StockPoolController {
     }
 
     @RequestMapping(value = "/edit/{id}")
-    public ModelAndView update(@PathVariable(value = "id") Long id) {
+    public ModelAndView edit(@PathVariable(value = "id") Long id) {
         ModelAndView modelAndView = new ModelAndView("stock_pool_update");
         modelAndView.addObject("stockPool", stockPoolService.findById(id));
         return modelAndView;
@@ -46,6 +46,12 @@ public class StockPoolController {
     @RequestMapping(value = "/del/{id}")
     public String del(@PathVariable(value = "id") Long id) {
         stockPoolService.del(Collections.singletonList(id));
+        return redirect();
+    }
+
+    @RequestMapping(value = "/update/{id}")
+    public String update(@PathVariable(value = "id") Long id) {
+        stockPoolService.update(Collections.singletonList(id));
         return redirect();
     }
 

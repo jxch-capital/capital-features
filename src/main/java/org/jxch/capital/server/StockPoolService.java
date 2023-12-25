@@ -12,4 +12,6 @@ public interface StockPoolService {
     Integer save(List<StockPoolDto> stockPoolDto);
 
     void del(List<Long> id);
+
+    void update(List<Long> ids);
 }
