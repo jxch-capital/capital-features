@@ -7,12 +7,14 @@ import org.jxch.capital.FeaturesApp;
 import org.jxch.capital.domain.dto.HistoryParam;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.server.StockService;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
 @Service
+@Primary
 @RequiredArgsConstructor
 public class StockServerImpl implements StockService {
 
