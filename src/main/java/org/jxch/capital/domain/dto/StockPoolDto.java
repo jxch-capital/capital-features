@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +24,6 @@ public class StockPoolDto {
     private Date endDate;
 
     public List<String> getPoolStockList() {
-        return new ArrayList<>(Arrays.asList(this.poolStocks.split(",")));
+        return Arrays.stream(this.poolStocks.split(",")).map(String::trim).toList();
     }
 }
