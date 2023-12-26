@@ -1,5 +1,6 @@
 package org.jxch.capital.domain.convert;
 
+import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.StockHistoryDto;
 import org.jxch.capital.domain.po.StockHistory;
@@ -22,5 +23,21 @@ public interface KLineMapper {
     List<StockHistoryDto> toStockHistoryDto(List<KLine> kLines);
 
     List<StockHistory> toStockHistory(List<StockHistoryDto> stockHistoryDtoList);
+
+    default double[] toCloseArr(@NonNull List<KLine> kLines) {
+        return kLines.stream().mapToDouble(KLine::getClose).toArray();
+    }
+
+    default double[] toOpenArr(@NonNull List<KLine> kLines) {
+        return kLines.stream().mapToDouble(KLine::getOpen).toArray();
+    }
+
+    default double[] toHighArr(@NonNull List<KLine> kLines) {
+        return kLines.stream().mapToDouble(KLine::getHigh).toArray();
+    }
+
+    default double[] toLowArr(@NonNull List<KLine> kLines) {
+        return kLines.stream().mapToDouble(KLine::getLow).toArray();
+    }
 
 }
