@@ -6,19 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.HistoryParam;
 import org.jxch.capital.domain.dto.KLine;
+import org.jxch.capital.server.KLineDistanceEnum;
 import org.jxch.capital.server.StockService;
+import org.jxch.capital.utils.AppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import smile.math.distance.EuclideanDistance;
 
 import java.util.Calendar;
 import java.util.List;
 
 @Slf4j
 @SpringBootTest
-class DistanceServiceImplTest {
+class DTWDistanceServiceImplTest {
     @Autowired
-    private DistanceServiceImpl distanceService;
+    private DTWDistanceServiceImpl dtwDistanceService;
     @Autowired
     private StockService stockService;
 
@@ -29,12 +30,12 @@ class DistanceServiceImplTest {
                 .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -1))
                 .build());
         List<KLine> b = stockService.history(HistoryParam.builder()
-                .code("QQQ")
+                .code("SPY")
                 .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -1))
                 .build());
 
-//        DynamicTimeWarping<double[]> timeWarping = new DynamicTimeWarping<>(new EuclideanDistance());
-        double distance = distanceService.distance(a, b, EuclideanDistance::new);
-        log.info("Distance: {}", distance);
+        double distance = AppContextHolder.getContext().getBean(KLineDistanceEnum.DTW.getDistanceService()).distance(a, b);
+//        double distance = dtwDistanceService.distance(a, b);
+        log.info("distance: {}", distance);
     }
 }
