@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.server.impl.DTWDistanceServiceImpl;
+import org.jxch.capital.server.impl.LorentzianDistanceServiceImpl;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -11,9 +12,11 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 public enum KLineDistanceEnum {
-    DTW("DTW", DTWDistanceServiceImpl.class);;
+    DTW("DTW", DTWDistanceServiceImpl.class),
+    LD("LD", LorentzianDistanceServiceImpl.class),
+    ;
     private final String name;
-    private final Class<? extends DistanceService<KLine>> distanceService;
+    private final Class<? extends DistanceService<? extends KLine>> distanceService;
 
     public static KLineDistanceEnum pares(String name) {
         return Arrays.stream(KLineDistanceEnum.values())
