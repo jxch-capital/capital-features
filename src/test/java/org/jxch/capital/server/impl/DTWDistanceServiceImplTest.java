@@ -27,7 +27,7 @@ class DTWDistanceServiceImplTest {
     void distance() {
         List<KLine> a = stockService.history(HistoryParam.builder()
                 .code("QQQ")
-                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -1))
+                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -2))
                 .build());
         List<KLine> b = stockService.history(HistoryParam.builder()
                 .code("SPY")
