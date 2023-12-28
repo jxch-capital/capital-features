@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.server.DistanceService;
+import org.jxch.capital.server.KNNService;
 import org.springframework.stereotype.Service;
 import smile.math.distance.DynamicTimeWarping;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DTWDistanceServiceImpl implements DistanceService<KLine> {
+public class DTWDistanceServiceImpl implements DistanceService, KNNService {
     private final KLineMapper kLineMapper;
 
     @Override
