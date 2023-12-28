@@ -3,6 +3,7 @@ package org.jxch.capital.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.HistoryParam;
+import org.jxch.capital.server.StockService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(path = "/app")
 @RequiredArgsConstructor
 public class AppController {
+    private final StockService stockService;
 
     @GetMapping("/index")
     public ModelAndView index() {
@@ -23,9 +25,9 @@ public class AppController {
     public ModelAndView history(@ModelAttribute HistoryParam param) {
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("param", param);
+        modelAndView.addObject("history", stockService.history(param));
         return modelAndView;
     }
-
 
 
 }

@@ -3,19 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <title>Capital-Features</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
 </head>
 <body>
-    <form th:action="@{/app/history}" th:object="${param}" method="post">
-        <label for="code">股票代码：</label>
-        <input type="text" th:field="*{code}" id="code" placeholder="股票代码">
-        <label for="start">开始时间：</label>
-        <input type="date" th:field="*{start}" id="start" placeholder="开始时间">
-        <label for="end">结束时间：</label>
-        <input type="date" th:field="*{end}" id="end" placeholder="结束时间">
-        <label for="interval">结束时间：</label>
-        <input type="text" th:field="*{interval}" id="interval" placeholder="时间间隔">
-        <input type="submit" value="查询">
-    </form>
+<form th:action="@{/app/history}" th:object="${param}" method="post">
+    <label for="code">股票代码：</label>
+    <input type="text" th:field="*{code}" id="code" placeholder="股票代码">
+    <label for="start">开始时间：</label>
+    <input type="date" th:field="*{start}" id="start" placeholder="开始时间">
+    <label for="end">结束时间：</label>
+    <input type="date" th:field="*{end}" id="end" placeholder="结束时间">
+    <label for="interval">结束时间：</label>
+    <input type="text" th:field="*{interval}" id="interval" placeholder="时间间隔">
+    <input type="submit" value="查询">
+</form>
 
+<div id="klineChart" style="width: 100%;height:800px;" th:if="${history}"></div>
+<script th:inline="javascript" th:if="${history}">
+    const myChart = echarts.init(document.getElementById('klineChart'));
+    const upColor = '#ec0000';
+    const upBorderColor = '#8A0000';
+    const downColor = '#00da3c';
+    const downBorderColor = '#008F28';
+    const dataCount = 2e5;
+    const data = [[${history}]];
+
+    // dataset: [date, open, high, low, close, vol, color(0,1,-1)]
+    const option = {
+        dataset: {
+            source: data
+        },
+        title: {
+            text: 'Data Amount: ' + echarts.format.addCommas(dataCount)
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'line'
+            },
+            formatter: function (params) {
+                const param = params[0];
+                const data = param.data;
+
+                const date = echarts.format.formatTime('yyyy-MM-dd', data.date);
+                const open = data.open.toFixed(2);
+                const close = data.close.toFixed(2);
+                const high = data.high.toFixed(2);
+                const low = data.low.toFixed(2);
+                const vol = (data.volume / 1000000).toFixed(2);
+                return `${param.marker} ${date}<br/>
+                    开盘: ${open}<br/>
+                    收盘: ${close}<br/>
+                    最高: ${high}<br/>
+                    最低: ${low}<br/>
+                    成交: ${vol}kk`;
+            }
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: false
+                }
+            }
+        },
+        grid: [
+            {
+                left: '10%',
+                right: '10%',
+                bottom: 200
+            },
+            {
+                left: '10%',
+                right: '10%',
+                height: 80,
+                bottom: 80
+            }
+        ],
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                // inverse: true,
+                axisLine: {onZero: false},
+                splitLine: {show: false},
+                min: 'dataMin',
+                max: 'dataMax',
+                axisLabel: {
+                    formatter: function (value) {
+                        return echarts.format.formatTime('yyyy\nMM-dd', value)
+                    }
+                }
+            },
+            {
+                type: 'category',
+                gridIndex: 1,
+                boundaryGap: false,
+                axisLine: {onZero: false},
+                axisTick: {show: false},
+                splitLine: {show: false},
+                axisLabel: {show: false},
+                min: 'dataMin',
+                max: 'dataMax'
+            }
+        ],
+        yAxis: [
+            {
+                scale: true,
+                splitArea: {
+                    show: true
+                }
+            },
+            {
+                scale: true,
+                gridIndex: 1,
+                splitNumber: 2,
+                axisLabel: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                splitLine: {show: false}
+            }
+        ],
+        dataZoom: [
+            {
+                type: 'inside',
+                xAxisIndex: [0, 1],
+                start: 10,
+                end: 100
+            },
+            {
+                show: true,
+                xAxisIndex: [0, 1],
+                type: 'slider',
+                bottom: 10,
+                start: 10,
+                end: 100
+            }
+        ],
+        visualMap: {
+            show: false,
+            seriesIndex: 1,
+            dimension: 6,
+            pieces: [
+                {
+                    value: 1,
+                    color: downColor
+                },
+                {
+                    value: -1,
+                    color: upColor
+                }
+            ]
+        },
+        series: [
+            {
+                type: 'candlestick',
+                itemStyle: {
+                    color: downColor,
+                    color0: upColor,
+                    borderColor: downBorderColor,
+                    borderColor0: upBorderColor
+                },
+                encode: {
+                    x: 0,
+                    y: [1, 4, 3, 2]
+                }
+            },
+            {
+                name: 'Volumn',
+                type: 'bar',
+                xAxisIndex: 1,
+                yAxisIndex: 1,
+                itemStyle: {
+                    color: '#7fbe9e'
+                },
+                large: true,
+                encode: {
+                    x: 0,
+                    y: 5
+                }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+</script>
 </body>
 </html>
