@@ -20,6 +20,8 @@
         <fastjson2.version>2.0.43</fastjson2.version>
         <postgresql.version>42.7.1</postgresql.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <caffeine.version>3.1.8</caffeine.version>
+        <smile.version>3.0.2</smile.version>
     </properties>
 
     <dependencies>
@@ -107,7 +109,13 @@
         <dependency>
             <groupId>com.github.haifengl</groupId>
             <artifactId>smile-core</artifactId>
-            <version>3.0.2</version>
+            <version>${smile.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
         </dependency>
 
     </dependencies>

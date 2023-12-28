@@ -37,7 +37,7 @@ public class KNodeServiceImpl implements KNodeService {
     private static int offsetMultiples = 5;
 
     @Override
-    @Cacheable(value = "currentCache", key = "#code + '_' + #size + '_' + #intervalEnum.name()", unless = "#result == null")
+    @Cacheable(value = "currentCache", key = "#code + '_' + #size + '_' + #intervalEnum", unless = "#result == null")
     public KNode current(String code, int size, @NonNull IntervalEnum intervalEnum) {
         List<KLine> history = stockService.history(HistoryParam.builder()
                         .code(code)
