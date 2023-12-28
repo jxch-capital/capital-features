@@ -2,9 +2,12 @@ package org.jxch.capital.server.impl;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KLineFeatures;
-import org.jxch.capital.server.DistanceService;
+import org.jxch.capital.domain.dto.KNeighbor;
+import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.server.KNNService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +15,7 @@ import java.util.stream.IntStream;
 
 @Slf4j
 @Service
-public class LorentzianDistanceServiceImpl implements DistanceService {
+public class LorentzianKNNServiceImpl implements KNNService {
 
     private double[] computeFeatureAverages(@NonNull List<KLineFeatures> featuresList) {
         return IntStream.range(0, featuresList.get(0).getFeaturesNum())
@@ -41,5 +44,10 @@ public class LorentzianDistanceServiceImpl implements DistanceService {
         return IntStream.range(0, featuresNum)
                 .mapToDouble(i -> Math.log(1 + Math.abs(aAverages[i] - bAverages[i])))
                 .sum();
+    }
+
+    @Override
+    public List<KNeighbor> search(KNode kNode, @NotNull List<KNode> all, int size) {
+        return null;
     }
 }

@@ -13,14 +13,18 @@ import java.util.List;
 public interface KLineMapper {
 
     KLine toKLine(DownloadStockCsvRes stock);
+    KLine toKLine(StockHistoryDto stock);
 
     StockHistory toStockHistory(KLine kLine);
 
     StockHistory toStockHistory(StockHistoryDto stockHistoryDto);
 
     List<KLine> toKLine(List<DownloadStockCsvRes> stocks);
+    List<KLine> toKLineByStockHistoryDto(List<StockHistoryDto> stocks);
 
-    List<StockHistoryDto> toStockHistoryDto(List<KLine> kLines);
+    List<StockHistoryDto> toStockHistoryDtoByKLine(List<KLine> kLines);
+
+    List<StockHistoryDto> toStockHistoryDto(List<StockHistory> kLines);
 
     List<StockHistory> toStockHistory(List<StockHistoryDto> stockHistoryDtoList);
 

@@ -10,4 +10,5 @@ public interface StockHistoryService {
 
     void delByStockPoolId(List<Long> stockPoolIds);
 
+    List<StockHistoryDto> findByStockPoolId(Long stockPoolId);
 }

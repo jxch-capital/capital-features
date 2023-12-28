@@ -68,7 +68,7 @@ public class StockPoolServiceImpl implements StockPoolService {
                         .interval(stockPoolDto.getInterval())
                         .engine(EngineEnum.pares(stockPoolDto.getEngine()))
                         .build());
-                List<StockHistoryDto> stockHistoryList = kLineMapper.toStockHistoryDto(history).stream()
+                List<StockHistoryDto> stockHistoryList = kLineMapper.toStockHistoryDtoByKLine(history).stream()
                         .map(stockHistory -> stockHistory.setStockPoolId(stockPoolId).setStockCode(code))
                         .filter(stockHistoryDto -> Objects.nonNull(stockHistoryDto.getClose()))
                         .toList();

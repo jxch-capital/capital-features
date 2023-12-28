@@ -33,4 +33,9 @@ public class StockHistoryServiceImpl implements StockHistoryService {
         });
     }
 
+    @Override
+    public List<StockHistoryDto> findByStockPoolId(Long stockPoolId) {
+        return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolId(stockPoolId));
+    }
+
 }

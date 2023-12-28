@@ -14,3 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: capital-features
     password: capital-features
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
