@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DTWKNNServiceImpl implements KNNService {
     private final KLineMapper kLineMapper;
-    private final KNodeService kNodeService;
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
