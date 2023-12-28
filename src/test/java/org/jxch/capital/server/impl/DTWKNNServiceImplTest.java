@@ -10,6 +10,7 @@ import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KNeighbor;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.server.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,8 @@ class DTWKNNServiceImplTest {
     private DTWKNNServiceImpl dtwDistanceService;
     @Autowired
     private StockService stockService;
+    @Autowired
+    private KNodeService kNodeService;
 
     @Test
     void distance() {
@@ -41,21 +44,21 @@ class DTWKNNServiceImplTest {
 
     @Test
     void search() {
-        KNode kNode = dtwDistanceService.current("AAPL", 20, IntervalEnum.DAY_1);
-        List<KNode> kNodes = dtwDistanceService.comparison(539952, 20);
+        KNode kNode = kNodeService.current("AAPL", 20, IntervalEnum.DAY_1);
+        List<KNode> kNodes = kNodeService.comparison(539952, 20);
         List<KNeighbor> neighbors = dtwDistanceService.search(kNode, kNodes, 8);
         log.info(JSONObject.toJSONString(neighbors));
     }
 
     @Test
     void current() {
-        KNode kNode = dtwDistanceService.current("AAPL", 20, IntervalEnum.DAY_1);
+        KNode kNode = kNodeService.current("AAPL", 20, IntervalEnum.DAY_1);
         log.info(JSONObject.toJSONString(kNode));
     }
 
     @Test
     void comparison() {
-        List<KNode> kNodes = dtwDistanceService.comparison( 539952, 20);
+        List<KNode> kNodes = kNodeService.comparison( 539952, 20);
         log.info(JSONObject.toJSONString(kNodes));
     }
 }
