@@ -1,13 +1,14 @@
 package org.jxch.capital.server;
 
 import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.domain.dto.KNodeParam;
 
 import java.util.List;
 
 public interface KNodeService {
 
-    KNode current(String code, int size, IntervalEnum intervalEnum);
+    KNode current(KNodeParam kNodeParam);
 
-    List<KNode> comparison(long stockPoolId, int size);
+    List<KNode> comparison(KNodeParam kNodeParam);
 
 }

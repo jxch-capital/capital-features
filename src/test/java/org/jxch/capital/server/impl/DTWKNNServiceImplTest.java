@@ -5,10 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.jxch.capital.domain.dto.HistoryParam;
-import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.domain.dto.KNeighbor;
-import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.IntervalEnum;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.server.StockService;
@@ -39,26 +36,26 @@ class DTWKNNServiceImplTest {
                 .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -1))
                 .build());
 
-
+        log.info(JSONObject.toJSONString(a));
     }
 
     @Test
     void search() {
-        KNode kNode = kNodeService.current("AAPL", 20, IntervalEnum.DAY_1);
-        List<KNode> kNodes = kNodeService.comparison(539952, 20);
+        KNode kNode = kNodeService.current(KNodeParam.builder().code("AAPL").size(20).intervalEnum(IntervalEnum.DAY_1).build());
+        List<KNode> kNodes = kNodeService.comparison(KNodeParam.builder().stockPoolId(539952).size(20).build());
         List<KNeighbor> neighbors = dtwDistanceService.search(kNode, kNodes, 8);
         log.info(JSONObject.toJSONString(neighbors));
     }
 
     @Test
     void current() {
-        KNode kNode = kNodeService.current("AAPL", 20, IntervalEnum.DAY_1);
+        KNode kNode = kNodeService.current(KNodeParam.builder().code("AAPL").size(20).intervalEnum(IntervalEnum.DAY_1).build());
         log.info(JSONObject.toJSONString(kNode));
     }
 
     @Test
     void comparison() {
-        List<KNode> kNodes = kNodeService.comparison( 539952, 20);
+        List<KNode> kNodes = kNodeService.comparison(KNodeParam.builder().stockPoolId(539952).size(20).build());
         log.info(JSONObject.toJSONString(kNodes));
     }
 }

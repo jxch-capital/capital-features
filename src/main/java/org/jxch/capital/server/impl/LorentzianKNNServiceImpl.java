@@ -1,12 +1,11 @@
 package org.jxch.capital.server.impl;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KLineFeatures;
-import org.jxch.capital.domain.dto.KNeighbor;
-import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.domain.dto.KLineIndices;
 import org.jxch.capital.server.KNNService;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +14,7 @@ import java.util.stream.IntStream;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class LorentzianKNNServiceImpl implements KNNService {
 
     private double[] computeFeatureAverages(@NonNull List<KLineFeatures> featuresList) {
@@ -28,8 +28,8 @@ public class LorentzianKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(@NonNull List<KLine> a, @NonNull List<KLine> b) {
-        List<KLineFeatures> fa = a.stream().map(kLine -> (KLineFeatures) kLine).toList();
-        List<KLineFeatures> fb = b.stream().map(kLine -> (KLineFeatures) kLine).toList();
+        List<KLineFeatures> fa = a.stream().map(kLine -> KLineFeatures.valueOf((KLineIndices) kLine)).toList();
+        List<KLineFeatures> fb = b.stream().map(kLine -> KLineFeatures.valueOf((KLineIndices) kLine)).toList();
 
         int featuresNum = fa.get(0).getFeaturesNum();
         // 提前计算两个列表中所有特征的平均值
@@ -46,8 +46,4 @@ public class LorentzianKNNServiceImpl implements KNNService {
                 .sum();
     }
 
-    @Override
-    public List<KNeighbor> search(KNode kNode, @NotNull List<KNode> all, int size) {
-        return null;
-    }
 }

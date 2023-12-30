@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.*;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.server.KNodeParams;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.server.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,42 +17,40 @@ import java.util.List;
 
 @Slf4j
 @SpringBootTest
-class ManhattanKNNServiceImplTest {
+class LorentzianKNNServiceImplTest {
     @Autowired
-    private ManhattanKNNServiceImpl manhattanKNNService;
+    private LorentzianKNNServiceImpl lorentzianKNNService;
     @Autowired
     private StockService stockService;
     @Autowired
     private KNodeService kNodeService;
 
     @Test
-    void distance() {
-        List<KLine> a = stockService.history(HistoryParam.builder()
+    void features() {
+        List<KLine> kLines = stockService.history(HistoryParam.builder()
                 .code("QQQ")
-                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -1))
-                .build());
-        List<KLine> b = stockService.history(HistoryParam.builder()
-                .code("SPY")
-                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -1))
+                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -2))
                 .build());
 
-        double distance = manhattanKNNService.distance(a, b);
-        log.info("distance: {}", distance);
+//        List<KLineFeatures> features = lorentzianKNNService.features(kLines);
+//        log.info(JSONObject.toJSONString(features));
+    }
+
+    @Test
+    void distance() {
+
     }
 
     @Test
     void search() {
-        KNodeParam kNodeParam = KNodeParam.builder()
-                .code("AAPL")
-                .size(20)
-                .intervalEnum(IntervalEnum.DAY_1)
-                .stockPoolId(539952)
-                .build();
+        KNodeParam kNodeParam = KNodeParams.LorentzianKNN()
+                .setCode("QQQ")
+                .setStockPoolId(539952);
 
         KNode kNode = kNodeService.current(kNodeParam);
         List<KNode> kNodes = kNodeService.comparison(kNodeParam);
-        List<KNeighbor> neighbors = manhattanKNNService.search(kNode, kNodes, 8);
+
+        List<KNeighbor> neighbors = lorentzianKNNService.search(kNode, kNodes, 20);
         log.info(JSONObject.toJSONString(neighbors));
     }
-
 }

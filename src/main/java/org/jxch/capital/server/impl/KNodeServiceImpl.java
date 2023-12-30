@@ -7,18 +7,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.convert.KLineMapper;
-import org.jxch.capital.domain.dto.HistoryParam;
-import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.domain.dto.KNode;
-import org.jxch.capital.domain.dto.StockHistoryDto;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.server.IndexService;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.server.StockHistoryService;
 import org.jxch.capital.server.StockService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
@@ -33,39 +30,69 @@ public class KNodeServiceImpl implements KNodeService {
     private final StockHistoryService stockHistoryService;
     private final StockService stockService;
     private final KLineMapper kLineMapper;
+    private final IndexService indexService;
     @Setter
     private static int offsetMultiples = 5;
+    @Setter
+    private static int defaultOffset = 30;
 
     @Override
-    @Cacheable(value = "currentCache", key = "#code + '_' + #size + '_' + #intervalEnum", unless = "#result == null")
-    public KNode current(String code, int size, @NonNull IntervalEnum intervalEnum) {
+    public KNode current(@NonNull KNodeParam kNodeParam) {
         List<KLine> history = stockService.history(HistoryParam.builder()
-                        .code(code)
-                        .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.DAY_OF_YEAR, -size * offsetMultiples))
-                        .interval(intervalEnum.getInterval())
-                        .build())
-                .stream()
-                .sorted(Comparator.comparing(KLine::getDate).reversed())
-                .limit(size)
-                .sorted(Comparator.comparing(KLine::getDate))
-                .toList();
+                .code(kNodeParam.getCode())
+                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.DAY_OF_YEAR,
+                        -kNodeParam.getSize() * offsetMultiples - defaultOffset - kNodeParam.getMaxLength() * offsetMultiples))
+                .interval(kNodeParam.getIntervalEnum().getInterval())
+                .build());
 
-        return KNode.builder()
-                .code(code)
-                .kLines(history)
-                .build();
+        if (kNodeParam.hasIndicator()) {
+            List<KLine> kLineIndices = indexService.index(history, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                    .stream()
+                    .sorted(Comparator.comparing(KLine::getDate).reversed())
+                    .limit(kNodeParam.getSize())
+                    .sorted(Comparator.comparing(KLine::getDate))
+                    .map(kLineIns -> (KLine) kLineIns)
+                    .toList();
+            return KNode.builder()
+                    .code(kNodeParam.getCode())
+                    .kLines(kLineIndices)
+                    .build();
+        } else {
+            history = history.stream()
+                    .sorted(Comparator.comparing(KLine::getDate).reversed())
+                    .limit(kNodeParam.getSize())
+                    .sorted(Comparator.comparing(KLine::getDate))
+                    .toList();
+            return KNode.builder()
+                    .code(kNodeParam.getCode())
+                    .kLines(history)
+                    .build();
+        }
     }
 
     @Override
-    @Cacheable(value = "comparisonCache", key = "#stockPoolId + '_' + #size", unless = "#result.isEmpty()")
-    public List<KNode> comparison(long stockPoolId, int size) {
-        return stockHistoryService.findByStockPoolId(stockPoolId).stream()
-                .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
-                .entrySet().stream().flatMap(entry ->
-                        IntStream.range(0, entry.getValue().size() - size + 1)
-                                .mapToObj(start -> entry.getValue().subList(start, start + size))
-                                .map(kLines -> KNode.builder().code(entry.getKey()).kLines(kLineMapper.toKLineByStockHistoryDto(kLines)).build())
-                ).toList();
-    }
+    public List<KNode> comparison(@NonNull KNodeParam kNodeParam) {
+        if (kNodeParam.hasIndicator()) {
+            return stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
+                    .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                    .entrySet().stream().flatMap(entry -> {
+                                List<KLine> kLines = kLineMapper.toKLineByStockHistoryDto(entry.getValue());
+                                List<KLine> kLineIndices = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                                        .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
 
+                                return IntStream.range(0, kLineIndices.size() - kNodeParam.getSize() + 1)
+                                        .mapToObj(start -> kLineIndices.subList(start, start + kNodeParam.getSize()))
+                                        .map(kIndList -> KNode.builder().code(entry.getKey()).kLines(kIndList).build());
+                            }
+                    ).toList();
+        } else {
+            return stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
+                    .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                    .entrySet().stream().flatMap(entry ->
+                            IntStream.range(0, entry.getValue().size() - kNodeParam.getSize() + 1)
+                                    .mapToObj(start -> entry.getValue().subList(start, start + kNodeParam.getSize()))
+                                    .map(kLines -> KNode.builder().code(entry.getKey()).kLines(kLineMapper.toKLineByStockHistoryDto(kLines)).build())
+                    ).toList();
+        }
+    }
 }

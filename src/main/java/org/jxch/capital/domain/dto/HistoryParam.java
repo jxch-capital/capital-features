@@ -30,4 +30,28 @@ public class HistoryParam {
     private String interval = "1d";
     @Builder.Default
     private EngineEnum engine = EngineEnum.YAHOO;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HistoryParam that = (HistoryParam) o;
+
+        if (!code.equals(that.code)) return false;
+        if (!start.equals(that.start)) return false;
+        if (!end.equals(that.end)) return false;
+        if (!interval.equals(that.interval)) return false;
+        return engine == that.engine;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = code.hashCode();
+        result = 31 * result + start.hashCode();
+        result = 31 * result + end.hashCode();
+        result = 31 * result + interval.hashCode();
+        result = 31 * result + engine.hashCode();
+        return result;
+    }
 }

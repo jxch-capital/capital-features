@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class KLineFeatures extends KLine {
+    @Builder.Default
     private List<Double> features = new ArrayList<>();
 
     @Getter
@@ -30,12 +32,33 @@ public class KLineFeatures extends KLine {
         }
     }
 
+    public void addFeatures(Collection<Double> fs) {
+        features.addAll(fs);
+        if (fs.contains(null)) {
+            hasNull = true;
+        }
+    }
+
     public List<Double> getFeatures() {
         return new ArrayList<>(features);
     }
 
     public double get(int index) {
         return features.get(index);
+    }
+
+    @NonNull
+    public static KLineFeatures valueOf(@NonNull KLineIndices indices) {
+        KLineFeatures kLineFeatures = (KLineFeatures) KLineFeatures.builder().build()
+                .setDate(indices.getDate())
+                .setClose(indices.getClose())
+                .setOpen(indices.getOpen())
+                .setHigh(indices.getHigh())
+                .setLow(indices.getLow())
+                .setVolume(indices.getVolume());
+
+        kLineFeatures.addFeatures(indices.getIndices().values());
+        return kLineFeatures;
     }
 
 }

@@ -22,6 +22,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <caffeine.version>3.1.8</caffeine.version>
         <smile.version>3.0.2</smile.version>
+        <ta4j.version>0.15</ta4j.version>
     </properties>
 
     <dependencies>
@@ -116,6 +117,12 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>${caffeine.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.ta4j/ta4j-core -->
+        <dependency>
+            <groupId>org.ta4j</groupId>
+            <artifactId>ta4j-core</artifactId>
+            <version>${ta4j.version}</version>
         </dependency>
 
     </dependencies>
