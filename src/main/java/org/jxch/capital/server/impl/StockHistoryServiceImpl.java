@@ -7,10 +7,10 @@ import org.jxch.capital.dao.StockHistoryRepository;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.StockHistoryDto;
 import org.jxch.capital.server.StockHistoryService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -35,9 +35,19 @@ public class StockHistoryServiceImpl implements StockHistoryService {
     }
 
     @Override
-    @Cacheable(value = "findByStockPoolId", key = "#stockPoolId != null ? #stockPoolId : 0", unless = "#result == null")
+//    @Cacheable(value = "findByStockPoolId",  unless = "#result == null")
     public List<StockHistoryDto> findByStockPoolId(Long stockPoolId) {
         return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolId(stockPoolId));
+    }
+
+    @Override
+    public List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode) {
+        return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolIdAndStockCode(stockPoolId, stockCode));
+    }
+
+    @Override
+    public List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode, Date startDate, Date endDate) {
+        return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolIdAndStockCode(stockPoolId, stockCode, startDate, endDate));
     }
 
 }

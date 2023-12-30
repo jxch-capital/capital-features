@@ -2,6 +2,7 @@ package org.jxch.capital.server;
 
 import org.jxch.capital.domain.dto.StockHistoryDto;
 
+import java.util.Date;
 import java.util.List;
 
 public interface StockHistoryService {
@@ -11,4 +12,8 @@ public interface StockHistoryService {
     void delByStockPoolId(List<Long> stockPoolIds);
 
     List<StockHistoryDto> findByStockPoolId(Long stockPoolId);
+
+    List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode);
+
+    List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode, Date startDate, Date endDate);
 }

@@ -9,6 +9,7 @@ import org.jxch.capital.server.IntervalEnum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -33,6 +34,34 @@ public class KNodeParam {
 
     public boolean hasIndicator() {
         return !indicatorWrappers.isEmpty();
+    }
+
+    public KNodeParam add(KNodeParam kNodeParam) {
+        if (indicatorWrappers.isEmpty()) {
+            this.indicatorWrappers = kNodeParam.getIndicatorWrappers();
+        }
+
+        if (Objects.equals(maxLength, 0)) {
+            this.maxLength = kNodeParam.getMaxLength();
+        }
+
+        if (Objects.equals(code, null)) {
+            this.code = kNodeParam.getCode();
+        }
+
+        if (Objects.equals(size, 0)) {
+            this.size = kNodeParam.getSize();
+        }
+
+        if (Objects.equals(intervalEnum, null)) {
+            this.intervalEnum = kNodeParam.getIntervalEnum();
+        }
+
+        if (Objects.equals(stockPoolId, 0)) {
+            this.stockPoolId = kNodeParam.getStockPoolId();
+        }
+
+        return this;
     }
 
     @Override

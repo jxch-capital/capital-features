@@ -3,8 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>KNN</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-  KNN
+<form th:action="@{/knn/neighbor}" th:object="${param}" method="post">
+    <label for="distanceName">距离服务：</label>
+    <input type="text" th:field="*{distanceName}" id="distanceName" placeholder="距离服务">
+    <label for="code">股票代码：</label>
+    <input type="text" th:field="*{kNodeParam.code}" id="code" placeholder="股票代码">
+    <label for="stockPoolId">股票池ID：</label>
+    <input type="text" th:field="*{kNodeParam.stockPoolId}" id="stockPoolId" placeholder="股票池ID">
+    <label for="neighborSize">近邻数：</label>
+    <input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数">
+    <input type="submit" value="查询">
+</form>
+
+<div th:if="${neighbors}">
+    <table>
+        <tr>
+            <th>NO.</th>
+            <th>股票代码</th>
+            <th>片段长度</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>Distance</th>
+        </tr>
+        <tr th:each="item,iter: ${neighbors}">
+            <td th:text="${iter.index}"></td>
+            <td th:text="${item.kNode.code}"></td>
+            <td th:text="${#lists.size(item.kNode.kLines)}"></td>
+            <td th:text="${#dates.format(item.kNode.kLines[0].date, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#dates.format(item.kNode.kLines[#lists.size(item.kNode.kLines)-1].date, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#numbers.formatDecimal(item.dist, 1, 'COMMA', 2, 'POINT')}" style="text-align: right"></td>
+        </tr>
+    </table>
+</div>
+
+<script th:inline="javascript" th:if="${neighbors}">
+
+</script>
 </body>
 </html>

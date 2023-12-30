@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.KNeighbor;
+import org.jxch.capital.domain.dto.KNodeParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,7 +18,12 @@ class KNNAutoServiceImplTest {
 
     @Test
     void search() {
-        List<KNeighbor> neighbors = knnAutoService.search("DTW-结构优先", "QQQ", 539952, 20);
+        KNodeParam kNodeParam = KNodeParam.builder()
+                .code("QQQ")
+                .stockPoolId(539952)
+                .build();
+
+        List<KNeighbor> neighbors = knnAutoService.search("DTW-结构优先", kNodeParam, 20);
         log.info(JSONObject.toJSONString(neighbors));
     }
 }
