@@ -30,4 +30,8 @@ public class ManhattanKNNServiceImpl implements KNNService {
                 + manhattanDistance.d(kLineMapper.toLowArr(a), kLineMapper.toLowArr(b))) / 4;
     }
 
+    @Override
+    public String getName() {
+        return "曼哈顿距离-结构优先";
+    }
 }

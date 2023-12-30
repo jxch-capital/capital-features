@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.server.KNNService;
-import org.jxch.capital.server.KNodeService;
 import org.springframework.stereotype.Service;
 import smile.math.distance.DynamicTimeWarping;
 
@@ -23,4 +22,8 @@ public class DTWKNNServiceImpl implements KNNService {
                 + DynamicTimeWarping.d(kLineMapper.toLowArr(a), kLineMapper.toLowArr(b))) / 4;
     }
 
+    @Override
+    public String getName() {
+        return "DTW-结构优先";
+    }
 }

@@ -3,11 +3,14 @@ package org.jxch.capital.server.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.domain.dto.KLineFeatures;
-import org.jxch.capital.domain.dto.KLineIndices;
+import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.server.IntervalEnum;
 import org.jxch.capital.server.KNNService;
 import org.springframework.stereotype.Service;
+import org.ta4j.core.indicators.CCIIndicator;
+import org.ta4j.core.indicators.RSIIndicator;
+import org.ta4j.core.indicators.adx.ADXIndicator;
+import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -46,4 +49,21 @@ public class LorentzianKNNServiceImpl implements KNNService {
                 .sum();
     }
 
+    @Override
+    public String getName() {
+        return "洛伦兹距离-结构优先";
+    }
+
+    @Override
+    public KNodeParam getDefaultKNodeParam() {
+        return KNodeParam.builder()
+                .maxLength(20)
+                .size(1)
+                .intervalEnum(IntervalEnum.DAY_1)
+                .build()
+                .addIndicator(IndicatorWrapper.builder().name("CCI").indicatorFunc(barSeries -> new CCIIndicator(barSeries, 20)).build())
+                .addIndicator(IndicatorWrapper.builder().name("ADX").indicatorFunc(barSeries -> new ADXIndicator(barSeries, 20)).build())
+                .addIndicator(IndicatorWrapper.builder().name("RSI-14").indicatorFunc(barSeries -> new RSIIndicator(new ClosePriceIndicator(barSeries), 14)).build())
+                .addIndicator(IndicatorWrapper.builder().name("RSI-20").indicatorFunc(barSeries -> new RSIIndicator(new ClosePriceIndicator(barSeries), 20)).build());
+    }
 }

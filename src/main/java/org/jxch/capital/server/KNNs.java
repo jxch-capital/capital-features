@@ -6,7 +6,7 @@ import java.util.List;
 
 public class KNNs {
 
-    public static List<String> getAllDistanceServices() {
+    public static List<String> getAllDistanceServicesName() {
         return AppContextHolder.getContext().getBeansOfType(KNNService.class).values()
                 .stream().map(KNNService::getName).toList();
     }

@@ -30,4 +30,12 @@ public interface KNNService {
         return getClass().getSimpleName();
     }
 
+    default KNodeParam getDefaultKNodeParam() {
+        return KNodeParam.builder()
+                .maxLength(20)
+                .size(20)
+                .intervalEnum(IntervalEnum.DAY_1)
+                .build();
+    }
+
 }
