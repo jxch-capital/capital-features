@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.server.KNodeParams;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.server.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,16 +43,15 @@ class ManhattanKNNServiceImplTest {
 
     @Test
     void search() {
-        KNodeParam kNodeParam = KNodeParam.builder()
-                .code("AAPL")
-                .size(20)
-                .intervalEnum(IntervalEnum.DAY_1)
-                .stockPoolId(539952)
-                .build();
+        KNodeParam kNodeParam = KNodeParams.LorentzianKNN()
+                .setCode("AAPL")
+                .setSize(20)
+                .setIntervalEnum(IntervalEnum.DAY_1)
+                .setStockPoolId(539952);
 
-        KNode kNode = kNodeService.current(kNodeParam);
-        List<KNode> kNodes = kNodeService.comparison(kNodeParam);
-        List<KNeighbor> neighbors = manhattanKNNService.search(kNode, kNodes, 8);
+//        KNode kNode = kNodeService.current(kNodeParam);
+//        List<KNode> kNodes = kNodeService.comparison(kNodeParam);
+        List<KNeighbor> neighbors = manhattanKNNService.search(kNodeParam, kNodeService, 8);
         log.info(JSONObject.toJSONString(neighbors));
     }
 

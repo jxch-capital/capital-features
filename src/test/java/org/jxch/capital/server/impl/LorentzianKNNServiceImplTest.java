@@ -47,10 +47,7 @@ class LorentzianKNNServiceImplTest {
                 .setCode("QQQ")
                 .setStockPoolId(539952);
 
-        KNode kNode = kNodeService.current(kNodeParam);
-        List<KNode> kNodes = kNodeService.comparison(kNodeParam);
-
-        List<KNeighbor> neighbors = lorentzianKNNService.search(kNode, kNodes, 20);
+        List<KNeighbor> neighbors = lorentzianKNNService.search(kNodeParam, kNodeService, 20);
         log.info(JSONObject.toJSONString(neighbors));
     }
 }

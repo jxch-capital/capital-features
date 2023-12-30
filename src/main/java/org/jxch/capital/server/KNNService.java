@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KNeighbor;
 import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.domain.dto.KNodeParam;
 
 import java.util.Comparator;
 import java.util.List;
@@ -17,6 +18,12 @@ public interface KNNService {
                         .dist(distance(kn.getKLines(), kNode.getKLines())).kNode(kn).build())
                 .sorted(Comparator.comparingDouble(KNeighbor::getDist))
                 .limit(size).toList();
+    }
+
+    default List<KNeighbor> search(@NonNull KNodeParam kNodeParam, @NonNull KNodeService kNodeService, int size) {
+        KNode kNode = kNodeService.current(kNodeParam);
+        List<KNode> kNodes = kNodeService.comparison(kNodeParam);
+        return search(kNode, kNodes, size);
     }
 
     default String getName() {
