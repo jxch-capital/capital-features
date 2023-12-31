@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>KNN</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
 <form th:action="@{/knn/neighbor}" th:object="${param}" method="post">
@@ -17,8 +18,12 @@
     <input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数">
     <input type="submit" value="查询">
 </form>
-
+<hr/>
 <div th:if="${neighbors}">
+    <div th:if="${statistics}">
+        <span>信号强度：</span>
+        <span th:text="${statistics.futureSignal}"></span>
+    </div>
     <table>
         <tr>
             <th>NO.</th>
@@ -26,7 +31,9 @@
             <th>片段长度</th>
             <th>开始时间</th>
             <th>结束时间</th>
-            <th>Distance</th>
+            <th>相似度</th>
+            <th>信号</th>
+            <th>信号强度</th>
         </tr>
         <tr th:each="item,iter: ${neighbors}">
             <td th:text="${iter.index}"></td>
@@ -35,6 +42,18 @@
             <td th:text="${#dates.format(item.kNode.kLines[0].date, 'yyyy-MM-dd')}"></td>
             <td th:text="${#dates.format(item.kNode.kLines[#lists.size(item.kNode.kLines)-1].date, 'yyyy-MM-dd')}"></td>
             <td th:text="${#numbers.formatDecimal(item.dist, 1, 'COMMA', 2, 'POINT')}" style="text-align: right"></td>
+            <td style="text-align: right">
+                <span th:if="${statistics.analyzes[iter.index].hasFutureSignal}"
+                      th:text="${statistics.analyzes[iter.index].futureSignal}"></span>
+                <span th:unless="${statistics.analyzes[iter.index].hasFutureSignal}">-</span>
+            </td>
+            <td style="text-align: right">
+                <span th:if="${statistics.analyzes[iter.index].hasFutureSignal}">
+                    <span th:text="${#numbers.formatDecimal(statistics.analyzes[iter.index].futurePercent, 1, 'COMMA', 2, 'POINT')}"></span>
+                    <span>%</span>
+                </span>
+                <span th:unless="${statistics.analyzes[iter.index].hasFutureSignal}">-</span>
+            </td>
         </tr>
     </table>
 </div>

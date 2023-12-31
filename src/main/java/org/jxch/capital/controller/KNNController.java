@@ -1,12 +1,13 @@
 package org.jxch.capital.controller;
 
+import cn.hutool.core.date.DateField;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.domain.dto.KNNParam;
-import org.jxch.capital.domain.dto.KNeighbor;
+import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.KNNAutoService;
 import org.jxch.capital.server.KNNs;
+import org.jxch.capital.server.KNodeAnalyzeService;
 import org.jxch.capital.server.impl.LorentzianKNNServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,7 @@ import java.util.List;
 public class KNNController {
     private final KNNAutoService knnAutoService;
     private final LorentzianKNNServiceImpl lorentzianKNNService;
+    private final KNodeAnalyzeService kNodeAnalyzeService;
 
     @GetMapping("/index")
     public ModelAndView index() {
@@ -42,7 +44,23 @@ public class KNNController {
         modelAndView.addObject("knn", KNNs.getAllDistanceServicesName());
         List<KNeighbor> neighbors = knnAutoService.search(
                 knnParam.getDistanceName(), knnParam.getKNodeParam(), knnParam.getNeighborSize());
+
+        List<KLineAnalyzes> kLineAnalyzes = neighbors.stream().map(kNeighbor -> {
+            KLineAnalyzedParam analyzedParam = KLineAnalyzedParam.builder()
+                    .stockPoolId(knnParam.getKNodeParam().getStockPoolId())
+                    .stockCode(kNeighbor.getKNode().getCode())
+                    .startDate(kNeighbor.getKNode().getKLines().get(0).getDate())
+                    .endDate(kNeighbor.getKNode().getKLines().get(kNeighbor.getKNode().getKLines().size() - 1).getDate())
+                    .dateField(DateField.DAY_OF_YEAR)
+                    .extend(40)
+                    .futureNum(8)
+                    .build();
+            return kNodeAnalyzeService.analyze(analyzedParam);
+        }).toList();
+        KLineAnalyzeStatistics statistics = kNodeAnalyzeService.statistics(kLineAnalyzes);
+
         modelAndView.addObject("neighbors", neighbors);
+        modelAndView.addObject("statistics", statistics);
         modelAndView.addObject("param", knnParam);
         return modelAndView;
     }

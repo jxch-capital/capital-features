@@ -1,14 +1,17 @@
 package org.jxch.capital.server.impl;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.KLine;
+import org.jxch.capital.domain.dto.KLineAnalyzeStatistics;
+import org.jxch.capital.domain.dto.KLineAnalyzedParam;
+import org.jxch.capital.domain.dto.KLineAnalyzes;
 import org.jxch.capital.server.KNodeAnalyzeService;
 import org.jxch.capital.server.StockHistoryService;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -19,8 +22,26 @@ public class KNodeAnalyzeServiceImpl implements KNodeAnalyzeService {
     private final KLineMapper kLineMapper;
 
     @Override
-    public List<KLine> search(Long stockPoolId, String stockCode, Date startDate, Date endDate) {
-        return kLineMapper.toKLineByStockHistoryDto(stockHistoryService.findByStockPoolIdAndStockCode(stockPoolId, stockCode, startDate, endDate));
+    public List<KLine> search(@NonNull KLineAnalyzedParam param) {
+        return kLineMapper.toKLineByStockHistoryDto(stockHistoryService.findByStockPoolIdAndStockCode(
+                param.getStockPoolId(), param.getStockCode(), param.getExtendStartDate(), param.getExtendEndDate()));
+    }
+
+    @Override
+    public KLineAnalyzes analyze(@NonNull KLineAnalyzedParam param) {
+        return KLineAnalyzes.builder()
+                .code(param.getStockCode())
+                .startDate(param.getStartDate())
+                .endDate(param.getEndDate())
+                .kLines(search(param))
+                .futureNum(param.getFutureNum())
+                .build()
+                .analyze();
+    }
+
+    @Override
+    public KLineAnalyzeStatistics statistics(List<KLineAnalyzes> analyzes) {
+        return KLineAnalyzeStatistics.builder().analyzes(analyzes).build().statistics();
     }
 
 }
