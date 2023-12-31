@@ -20,7 +20,7 @@ public class StockPoolController {
 
     @GetMapping("/index")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("stock_pool_management");
+        ModelAndView modelAndView = new ModelAndView("stock_pool_index");
         modelAndView.addObject("stockPool", new StockPoolDto());
         modelAndView.addObject("stockPools", stockPoolService.findAll());
         return modelAndView;
