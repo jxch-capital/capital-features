@@ -10,12 +10,14 @@
         <a th:href="@{/app/index}">首页</a>
         <a th:href="@{/stock_base/index}">股票基础信息管理</a>
         <a th:href="@{/stock_pool/index}">股票池管理</a>
+        <a th:href="@{/knn/index}">K近邻</a>
     </span>
 </div>
 
 <form th:action="@{/stock_pool/save}" th:object="${stockPool}" method="post">
     <table>
         <tr>
+            <th>ID</th>
             <th>股票池</th>
             <th>引擎</th>
             <th>时间间隔</th>
@@ -25,6 +27,7 @@
             <th>操作</th>
         </tr>
         <tr>
+            <td>Auto</td>
             <td>
                 <label for="poolName"></label>
                 <input type="text" th:field="*{poolName}" id="poolName" placeholder="股票池名称">
@@ -55,6 +58,7 @@
         </tr>
 
         <tr th:each="item,iter: ${stockPools}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
             <td th:text="${item.poolName}"></td>
             <td th:text="${item.engine}"></td>
             <td th:text="${item.interval}"></td>
