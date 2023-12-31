@@ -8,20 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
-
 @Data
 @Accessors(chain = true)
-@Entity(name = "stock_pool")
+@Entity(name = "stock_base")
 @NoArgsConstructor
-public class StockPool {
+public class StockBase {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.STOCK_POOL_SEQ)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
     private Long id;
-    private String poolName;
-    private String poolStocks;
-    private String engine;
-    private String interval;
-    private Date startDate;
-    private Date endDate;
+    private String code;
+    private String name;
 }

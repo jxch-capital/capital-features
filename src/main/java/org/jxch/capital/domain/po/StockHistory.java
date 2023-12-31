@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class StockHistory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "stock_pool_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.STOCK_POOL_SEQ)
     private Long id;
     private Long stockPoolId;
     private String stockCode;

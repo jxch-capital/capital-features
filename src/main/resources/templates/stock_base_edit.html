@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>股票基础信息编辑</title>
+</head>
+<body>
+<form th:action="@{/stock_base/save}" th:object="${stockBase}" method="post">
+    <table>
+        <tr>
+            <td><label for="id">ID</label></td>
+            <td><input type="text" th:field="*{id}" id="id" placeholder="ID" required readonly></td>
+        </tr>
+        <tr>
+            <td><label for="code">股票代码</label></td>
+            <td><input type="text" th:field="*{code}" id="code" placeholder="股票代码" required></td>
+        </tr>
+        <tr>
+            <td><label for="name">股票名称</label></td>
+            <td><input type="text" th:field="*{name}" id="name" placeholder="股票名称"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><a th:href="@{'/stock_base/index'}">取消</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
