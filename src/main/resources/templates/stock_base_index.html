@@ -5,6 +5,13 @@
     <title>股票基础信息管理</title>
 </head>
 <body>
+<div>
+    <span>
+        <a th:href="@{/app/index}">首页</a>
+        <a th:href="@{/stock_base/index}">股票基础信息管理</a>
+        <a th:href="@{/stock_pool/index}">股票池管理</a>
+    </span>
+</div>
 
 <form th:action="@{/stock_base/save}" th:object="${stockBaseDto}" method="post">
     <table>

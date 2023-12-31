@@ -7,6 +7,14 @@
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
+<div>
+    <span>
+        <a th:href="@{/app/index}">首页</a>
+        <a th:href="@{/stock_base/index}">股票基础信息管理</a>
+        <a th:href="@{/stock_pool/index}">股票池管理</a>
+    </span>
+</div>
+
 <form th:action="@{/knn/neighbor}" th:object="${param}" method="post">
     <label for="distanceName">距离服务：</label>
     <input type="text" th:field="*{distanceName}" id="distanceName" placeholder="距离服务">

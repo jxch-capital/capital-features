@@ -6,6 +6,14 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
 </head>
 <body>
+<div>
+    <span>
+        <a th:href="@{/app/index}">首页</a>
+        <a th:href="@{/stock_base/index}">股票基础信息管理</a>
+        <a th:href="@{/stock_pool/index}">股票池管理</a>
+    </span>
+</div>
+
 <form th:action="@{/app/history}" th:object="${param}" method="post">
     <label for="code">股票代码：</label>
     <input type="text" th:field="*{code}" id="code" placeholder="股票代码">

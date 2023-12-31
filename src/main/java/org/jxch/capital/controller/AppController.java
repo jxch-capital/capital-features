@@ -16,14 +16,19 @@ public class AppController {
 
     @GetMapping("/index")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("app_index");
         modelAndView.addObject("param", new HistoryParam());
         return modelAndView;
     }
 
+    @GetMapping("/title")
+    public ModelAndView title() {
+        return new ModelAndView("app_title");
+    }
+
     @PostMapping(value = "/history")
     public ModelAndView history(@ModelAttribute HistoryParam param) {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("app_index");
         modelAndView.addObject("param", param);
         modelAndView.addObject("history", stockService.history(param));
         return modelAndView;
