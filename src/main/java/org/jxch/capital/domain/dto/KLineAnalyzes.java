@@ -35,6 +35,9 @@ public class KLineAnalyzes {
     private boolean startIsSet = false;
     private boolean endIsSet = false;
     private boolean hasFutureSignal = true;
+    private double maxPrice;
+    private double minPrice;
+    private List<Double> closeArr;
 
     public KLineAnalyzes analyze() {
         for (int i = 0; i < this.kLines.size(); i++) {
@@ -54,11 +57,24 @@ public class KLineAnalyzes {
             }
         }
 
+        if (this.endIndex < this.startIndex) {
+            this.endIndex = this.startIndex;
+        }
+
         try {
             this.futureIndex = this.endIndex + this.futureNum;
-            this.futurePercent = (this.kLines.get(futureIndex).getClose() - this.kLines.get(this.endIndex).getClose())
-                    / Math.abs(this.kLines.get(this.endIndex).getClose() - this.kLines.get(startIndex).getClose());
+            if (this.endIndex > this.startIndex) {
+                this.futurePercent = (this.kLines.get(futureIndex).getClose() - this.kLines.get(this.endIndex).getClose())
+                        / Math.abs(this.kLines.get(this.endIndex).getClose() - this.kLines.get(startIndex).getClose());
+            } else {
+                this.futurePercent = (this.kLines.get(futureIndex).getClose() - this.kLines.get(this.endIndex).getClose())
+                        / Math.abs(this.kLines.get(this.endIndex).getHigh() - this.kLines.get(startIndex).getLow());
+            }
             this.futureSignal = this.futurePercent > 0 ? 1 : this.futurePercent < 0 ? -1 : 0;
+
+            this.maxPrice = this.kLines.stream().map(KLine::getHigh).max(Double::compareTo).orElseThrow();
+            this.minPrice = this.kLines.stream().map(KLine::getLow).min(Double::compareTo).orElseThrow();
+            this.closeArr = this.kLines.stream().map(KLine::getClose).toList();
 
             return this;
         } catch (IndexOutOfBoundsException exception) {

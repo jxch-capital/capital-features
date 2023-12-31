@@ -5,6 +5,7 @@
     <title>KNN</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
 </head>
 <body>
 <div>
@@ -43,6 +44,7 @@
             <th>相似度</th>
             <th>信号</th>
             <th>信号强度</th>
+            <th>简图</th>
         </tr>
         <tr th:each="item,iter: ${neighbors}">
             <td th:text="${iter.index}"></td>
@@ -63,12 +65,71 @@
                 </span>
                 <span th:unless="${statistics.analyzes[iter.index].hasFutureSignal}">-</span>
             </td>
+            <td>
+                <div th:id="'KLineChart'+${iter.index}" style="width: 200px;height:30px;"></div>
+                <script th:inline="javascript">
+                    echarts.init(document.getElementById('KLineChart' + [[${iter.index}]])).setOption({
+                        xAxis: {
+                            show: false,
+                            type: 'category',
+                        },
+                        yAxis: {
+                            show: false,
+                            type: 'value',
+                            max: [[${statistics.analyzes[iter.index].maxPrice}]],
+                            min: [[${statistics.analyzes[iter.index].minPrice}]],
+                        },
+                        grid: {
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                        },
+                        visualMap: {
+                            type: 'piecewise',
+                            show: false,
+                            dimension: 0,
+                            seriesIndex: 0,
+                            pieces: [
+                                {
+                                    gt:0,
+                                    lt: [[${statistics.analyzes[iter.index].startIndex}]],
+                                    color: 'gray'
+                                },
+                                {
+                                    gt: [[${statistics.analyzes[iter.index].startIndex}]],
+                                    lt: [[${statistics.analyzes[iter.index].endIndex}]],
+                                    color: 'red'
+                                },
+                                {
+                                    gt: [[${statistics.analyzes[iter.index].endIndex}]],
+                                    lt: [[${statistics.analyzes[iter.index].futureIndex}]],
+                                    color: 'blue'
+                                },
+                                {
+                                    gt: [[${statistics.analyzes[iter.index].futureIndex}]],
+                                    color: 'gray'
+                                }
+                            ]
+                        },
+                        series: [
+                            {
+                                data: [[${statistics.analyzes[iter.index].closeArr}]],
+                                type: 'line',
+                                symbol: 'none',
+                                itemStyle: {
+                                    color: 'black'
+                                },
+                                lineStyle: {
+                                    width: 1
+                                },
+                            }
+                        ]
+                    });
+                </script>
+            </td>
         </tr>
     </table>
 </div>
-
-<script th:inline="javascript" th:if="${neighbors}">
-
-</script>
 </body>
 </html>
