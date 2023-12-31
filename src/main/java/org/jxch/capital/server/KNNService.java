@@ -5,6 +5,7 @@ import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KNeighbor;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
+import org.jxch.capital.utils.AppContextHolder;
 
 import java.util.Comparator;
 import java.util.List;
@@ -24,6 +25,10 @@ public interface KNNService {
         KNode kNode = kNodeService.current(kNodeParam);
         List<KNode> kNodes = kNodeService.comparison(kNodeParam);
         return search(kNode, kNodes, size);
+    }
+
+    default List<KNeighbor> search(@NonNull KNodeParam kNodeParam, int size) {
+        return search(kNodeParam, AppContextHolder.getContext().getBean(KNodeService.class), size);
     }
 
     default String getName() {
