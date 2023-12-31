@@ -8,8 +8,8 @@ import lombok.experimental.Accessors;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
 public class StockBaseDto {
     private Long id;

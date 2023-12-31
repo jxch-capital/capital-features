@@ -1,10 +1,10 @@
 create table public.stock_base
 (
-    id   bigint      not null
+    id   bigint       not null
         constraint stock_base_pk
             primary key,
-    code varchar(20) not null,
-    name varchar(100)
+    code varchar(20)  not null,
+    name varchar(100) not null
 );
 
 comment on column public.stock_base.id is '主键';
