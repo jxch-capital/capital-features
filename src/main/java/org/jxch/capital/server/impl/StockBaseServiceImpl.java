@@ -28,6 +28,11 @@ public class StockBaseServiceImpl implements StockBaseService {
     }
 
     @Override
+    public StockBaseDto findByCode(String code) {
+        return stockBaseMapper.toStockBaseDto(stockBaseRepository.findByCode(code));
+    }
+
+    @Override
     public Integer save(List<StockBaseDto> stockBaseDtoList) {
         return stockBaseRepository.saveAllAndFlush(stockBaseMapper.toStockBase(stockBaseDtoList)).size();
     }

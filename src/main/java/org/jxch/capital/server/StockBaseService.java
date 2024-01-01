@@ -10,6 +10,8 @@ public interface StockBaseService {
 
     List<StockBaseDto> findByCode(List<String> codes);
 
+    StockBaseDto findByCode(String code);
+
     Integer save(List<StockBaseDto> stockBaseDtoList);
 
     void del(List<Long> ids);

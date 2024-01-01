@@ -3,6 +3,8 @@ package org.jxch.capital.domain.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jxch.capital.server.EngineEnum;
+import org.jxch.capital.server.IntervalEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Arrays;
@@ -26,4 +28,13 @@ public class StockPoolDto {
     public List<String> getPoolStockList() {
         return Arrays.stream(this.poolStocks.split(",")).map(String::trim).toList();
     }
+
+    public IntervalEnum getIntervalEnum() {
+        return IntervalEnum.valueOf(this.interval);
+    }
+
+    public EngineEnum getEngineEnum() {
+        return EngineEnum.pares(this.engine);
+    }
+
 }

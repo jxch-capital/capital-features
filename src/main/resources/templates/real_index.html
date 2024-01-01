@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实时看板</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.0/chroma.min.js"></script>
+</head>
+<body>
+<form th:action="@{/real/search}" th:object="${param}" method="post">
+    <label for="stockPoolId">股票池ID：</label>
+    <input type="text" th:field="*{stockPoolId}" id="stockPoolId" placeholder="股票池ID">
+    <label for="offset">偏移天数：</label>
+    <input type="text" th:field="*{offset}" id="offset" placeholder="偏移天数">
+    <input type="submit" value="查询">
+</form>
+
+<div th:if="${nodes}">
+    <table>
+        <tr>
+            <th>No.</th>
+            <th>股票代码</th>
+            <th>股票名称</th>
+            <th>5D_P</th>
+            <th>20D_P</th>
+            <th>40D_P</th>
+            <th>简图</th>
+        </tr>
+        <tr th:each="item,iter: ${nodes}">
+            <td th:text="${iter.index}"></td>
+            <td th:text="${item.code}"></td>
+            <td th:text="${item.name}"></td>
+            <td th:id="'d5p'+${iter.index}" style="text-align: right">
+                <span th:text="${#numbers.formatDecimal(item.d5Percent, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+            <td th:id="'d20p'+${iter.index}" style="text-align: right">
+                <span th:text="${#numbers.formatDecimal(item.d20Percent, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+            <td th:id="'d40p'+${iter.index}" style="text-align: right">
+                <span th:text="${#numbers.formatDecimal(item.d40Percent, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+            <td>
+                <div th:id="'KLineChart'+${iter.index}" style="width: 200px;height:30px;"></div>
+                <script th:inline="javascript">
+                    function getColor(value) {
+                        return chroma.scale([chroma("#ff0000"), chroma("#00ff00")]).domain([-40, 40])(value).hex();
+                    }
+
+                    document.getElementById('d5p' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.d5Percent}]]);
+                    document.getElementById('d20p' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.d20Percent}]]);
+                    document.getElementById('d40p' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.d40Percent}]]);
+                    echarts.init(document.getElementById('KLineChart' + [[${iter.index}]])).setOption({
+                        xAxis: {
+                            show: false,
+                            type: 'category',
+                        },
+                        yAxis: {
+                            show: false,
+                            type: 'value',
+                            max: [[${item.maxPrice}]],
+                            min: [[${item.minPrice}]],
+                        },
+                        grid: {
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                        },
+                        visualMap: {
+                            type: 'piecewise',
+                            show: false,
+                            dimension: 0,
+                            seriesIndex: 0,
+                            pieces: [
+                                {
+                                    gt: 0,
+                                    lt: 40,
+                                    color: 'gray'
+                                },
+                                {
+                                    gt: 40,
+                                    color: 'black'
+                                }
+                            ]
+                        },
+                        series: [
+                            {
+                                data: [[${item.closeArr}]],
+                                type: 'line',
+                                symbol: 'none',
+                                itemStyle: {
+                                    color: 'black'
+                                },
+                                lineStyle: {
+                                    width: 1
+                                },
+                                markPoint: {
+                                    data: [
+                                        {
+                                            type: 'max',
+                                            itemStyle: {
+                                                color: '#00ff00',
+                                            },
+                                            symbol: 'circle',
+                                            symbolSize: 4,
+                                            label: {
+                                                show: false,
+                                            }
+                                        }, {
+                                            type: 'min',
+                                            itemStyle: {
+                                                color: '#ff0000',
+                                            },
+                                            symbol: 'circle',
+                                            symbolSize: 4,
+                                            label: {
+                                                show: false,
+                                            }
+                                        },
+                                    ]
+                                }
+                            }
+                        ]
+                    });
+                </script>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
