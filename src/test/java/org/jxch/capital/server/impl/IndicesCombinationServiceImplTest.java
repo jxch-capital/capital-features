@@ -5,10 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.jxch.capital.domain.dto.IndicatorWrapper;
-import org.jxch.capital.domain.dto.KNode;
-import org.jxch.capital.domain.dto.KNodeParam;
-import org.jxch.capital.domain.dto.KNodeTrain;
+import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.IntervalEnum;
 import org.jxch.capital.server.KNodeService;
@@ -43,12 +40,14 @@ class IndicesCombinationServiceImplTest {
         List<KNode> kNodes = kNodeService.comparison(kNodeParam);
 
         KNodeTrain kNodeTrain = KNodeTrain.builder().kNode(kNode).code("AAPL").futureNum(4).build();
-        List<double[][]> features = kNodes.stream().map(k -> KNodeTrain.builder().code(k.getCode()).kNode(k).futureNum(4).build())
-                .map(KNodeTrain::getFeaturesT).toList();
+        List<KNodeTrain> kNodeTrains = kNodes.stream().map(k -> KNodeTrain.builder().code(k.getCode()).kNode(k).futureNum(4).build())
+                .toList();
+        KNodeTrains nodeTrains = KNodeTrains.builder().kNodes(kNodeTrains).build();
+
 
         log.info(JSONObject.toJSONString(kNodeTrain.getFeatures()));
         log.info(JSONObject.toJSONString(kNodeTrain.getFeaturesT()));
-        log.info(JSONObject.toJSONString(features));
+        log.info(JSONObject.toJSONString(nodeTrains));
     }
 
 }
