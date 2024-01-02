@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>股票指标管理</title>
+</head>
+<body>
+<div>
+    <span>
+        <a th:href="@{/app/index}">首页</a>
+        <a th:href="@{/stock_base/index}">股票基础信息管理</a>
+        <a th:href="@{/stock_pool/index}">股票池管理</a>
+        <a th:href="@{/knn/index}">K近邻</a>
+        <a th:href="@{/real/index}">实时看板</a>
+        <a th:href="@{/indices/index}">指标管理</a>
+    </span>
+</div>
+
+<form th:action="@{/indices/save}" th:object="${indexConfig}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>指标名称</th>
+            <th>指标</th>
+            <th>参数类型</th>
+            <th>参数列表</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="name"></label>
+                <input type="text" th:field="*{name}" id="name" placeholder="指标名称" required>
+            </td>
+            <td>
+                <label for="indexName">
+                    <select id="indexName" th:field="*{indexName}" required>
+                        <option th:each="item: ${supports}" th:value="${item}" th:text="${item}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="paramTypes"></label>
+                <input type="text" th:field="*{indexParamTypes}" id="paramTypes" placeholder="Auto" readonly>
+            </td>
+            <td>
+                <label for="params"></label>
+                <input type="text" th:field="*{indexParams}" id="params" placeholder="参数列表, 使用逗号分割（Indicator类型使用对应的ID）" required>
+            </td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
+            </td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${indices}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.indexName}"></td>
+            <td th:text="${item.indexParamTypes}"></td>
+            <td th:text="${item.indexParams}"></td>
+            <td th:text="${item.remark}"></td>
+            <td>
+                <a th:href="@{'/indices/edit/' + ${item.id}}">修改</a>
+                <a th:href="@{'/indices/del/' + ${item.id}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

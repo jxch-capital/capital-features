@@ -10,16 +10,16 @@ import org.jxch.capital.server.KNNs;
 import org.jxch.capital.server.KNodeAnalyzeService;
 import org.jxch.capital.server.StockPoolService;
 import org.jxch.capital.server.impl.LorentzianKNNServiceImpl;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping(path = "/knn")
 @RequiredArgsConstructor
 public class KNNController {

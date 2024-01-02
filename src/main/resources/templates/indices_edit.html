@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>指标编辑</title>
+</head>
+<body>
+<form th:action="@{/indices/save}" th:object="${indexConfig}" method="post">
+    <table>
+        <tr>
+            <td><label for="id">ID</label></td>
+            <td><input type="text" th:field="*{id}" id="id" placeholder="ID" required readonly></td>
+        </tr>
+        <tr>
+            <td><label for="name">指标名称</label></td>
+            <td><input type="text" th:field="*{name}" id="name" placeholder="指标名称" required></td>
+        </tr>
+        <tr>
+            <td><label for="name">指标</label></td>
+            <td>
+                <label for="indexName">
+                    <select id="indexName" th:field="*{indexName}" required>
+                        <option th:each="item: ${supports}" th:value="${item}" th:text="${item}"></option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="paramTypes">参数类型</label></td>
+            <td>
+                <textarea th:field="*{indexParamTypes}" id="paramTypes" rows="5" cols="100"
+                          placeholder="参数类型, 使用逗号分割（引用其他指标使用Indicator）" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="params">参数列表</label></td>
+            <td>
+                <textarea th:field="*{indexParams}" id="params" rows="5" cols="100"
+                          placeholder="参数列表, 使用逗号分割（Indicator类型使用对应的ID）" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="remark">备注</label></td>
+            <td><textarea th:field="*{remark}" id="remark" placeholder="备注" rows="5" cols="100"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><a th:href="@{'/indices/index'}">取消</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
