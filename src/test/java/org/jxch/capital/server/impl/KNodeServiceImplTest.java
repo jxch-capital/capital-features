@@ -1,11 +1,14 @@
 package org.jxch.capital.server.impl;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.IndicatorWrapper;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
+import org.jxch.capital.server.IndicesConfigService;
 import org.jxch.capital.server.IntervalEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +17,7 @@ import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.adx.ADXIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Slf4j
@@ -21,6 +25,8 @@ import java.util.List;
 class KNodeServiceImplTest {
     @Autowired
     private KNodeServiceImpl kNodeService;
+    @Autowired
+    private IndicesConfigService indicesConfigService;
 
     @Test
     void current() {
@@ -57,5 +63,23 @@ class KNodeServiceImplTest {
 
         List<KNode> kNodes = kNodeService.comparison(kNodeParam);
         log.info(JSONObject.toJSONString(kNodes));
+    }
+
+    @Test
+    void kNode() {
+
+        KNodeParam kNodeParam = KNodeParam.builder()
+                .code("AAPL")
+                .stockPoolId(539952)
+                .maxLength(20)
+                .size(1)
+                .intervalEnum(IntervalEnum.DAY_1)
+                .end(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -2))
+                .build()
+                .addIndicator(IndicatorWrapper.builder().name(indicesConfigService.findById(49955L).getName())
+                        .indicatorFunc(barSeries -> indicesConfigService.getIndicatorById(49955L, barSeries)).build());
+
+        KNode kNode = kNodeService.kNode(kNodeParam);
+        log.info(JSONObject.toJSONString(kNode));
     }
 }

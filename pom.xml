@@ -25,6 +25,7 @@
         <ta4j.version>0.15</ta4j.version>
         <guava.version>33.0.0-jre</guava.version>
         <tensorflow.version>0.5.0</tensorflow.version>
+        <ejml.version>0.43.1</ejml.version>
     </properties>
 
     <dependencies>
@@ -64,6 +65,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.ejml/ejml-all -->
+        <dependency>
+            <groupId>org.ejml</groupId>
+            <artifactId>ejml-all</artifactId>
+            <version>${ejml.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.tensorflow/tensorflow-core-platform-gpu -->
         <dependency>

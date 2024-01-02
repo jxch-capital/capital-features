@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface KNodeService {
 
+    KNode kNode(KNodeParam kNodeParam);
+
     KNode current(KNodeParam kNodeParam);
 
     List<KNode> comparison(KNodeParam kNodeParam);

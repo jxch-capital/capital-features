@@ -37,11 +37,12 @@ public class KNodeServiceImpl implements KNodeService {
     private static int defaultOffset = 30;
 
     @Override
-    public KNode current(@NonNull KNodeParam kNodeParam) {
+    public KNode kNode(@NonNull KNodeParam kNodeParam) {
         List<KLine> history = stockService.history(HistoryParam.builder()
                 .code(kNodeParam.getCode())
-                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.DAY_OF_YEAR,
+                .start(DateUtil.offset(kNodeParam.getEnd(), DateField.DAY_OF_YEAR,
                         -kNodeParam.getSize() * offsetMultiples - defaultOffset - kNodeParam.getMaxLength() * offsetMultiples))
+                .end(kNodeParam.getEnd())
                 .interval(kNodeParam.getIntervalEnum().getInterval())
                 .build());
 
@@ -68,6 +69,11 @@ public class KNodeServiceImpl implements KNodeService {
                     .kLines(history)
                     .build();
         }
+    }
+
+    @Override
+    public KNode current(@NonNull KNodeParam kNodeParam) {
+        return kNode(kNodeParam.setEnd(Calendar.getInstance().getTime()));
     }
 
     @Override

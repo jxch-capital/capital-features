@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jxch.capital.server.IntervalEnum;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Data
 @Builder
@@ -26,9 +24,16 @@ public class KNodeParam {
     private int maxLength = 0;
     @Builder.Default
     private List<IndicatorWrapper> indicatorWrappers = new ArrayList<>();
+    @Builder.Default
+    private Date end = Calendar.getInstance().getTime();
 
     public KNodeParam addIndicator(IndicatorWrapper indicatorWrapper) {
-        indicatorWrappers.add(indicatorWrapper);
+        this.indicatorWrappers.add(indicatorWrapper);
+        return this;
+    }
+
+    public KNodeParam addIndicators(List<IndicatorWrapper> wrappers) {
+        this.indicatorWrappers.addAll(wrappers);
         return this;
     }
 
@@ -59,6 +64,10 @@ public class KNodeParam {
 
         if (Objects.equals(stockPoolId, 0)) {
             this.stockPoolId = kNodeParam.getStockPoolId();
+        }
+
+        if (!Objects.equals(end, kNodeParam.getEnd())) {
+            this.end = kNodeParam.getEnd();
         }
 
         return this;
