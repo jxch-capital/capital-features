@@ -66,3 +66,9 @@ v1.5.0
 v2.0.0
 
 * 对接capital-web
+
+---
+
+版本依赖
+* TensorFlow 2.10.1 依赖 CUDA 11.2 和 cudnn 8.1.0
+  * WIN下安装完CUDA后需要重启，否则JVM无法加载

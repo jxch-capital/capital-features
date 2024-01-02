@@ -65,12 +65,6 @@
             <version>${spring-boot.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.tensorflow/tensorflow-core-api -->
-        <dependency>
-            <groupId>org.tensorflow</groupId>
-            <artifactId>tensorflow-core-api</artifactId>
-            <version>${tensorflow.version}</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.tensorflow/tensorflow-core-platform-gpu -->
         <dependency>
             <groupId>org.tensorflow</groupId>
