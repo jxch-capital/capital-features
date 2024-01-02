@@ -24,6 +24,7 @@
         <smile.version>3.0.2</smile.version>
         <ta4j.version>0.15</ta4j.version>
         <guava.version>33.0.0-jre</guava.version>
+        <tensorflow.version>0.5.0</tensorflow.version>
     </properties>
 
     <dependencies>
@@ -63,6 +64,24 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.tensorflow/tensorflow-core-api -->
+        <dependency>
+            <groupId>org.tensorflow</groupId>
+            <artifactId>tensorflow-core-api</artifactId>
+            <version>${tensorflow.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.tensorflow/tensorflow-core-platform-gpu -->
+        <dependency>
+            <groupId>org.tensorflow</groupId>
+            <artifactId>tensorflow-core-platform-gpu</artifactId>
+            <version>${tensorflow.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.tensorflow/tensorflow-framework -->
+        <dependency>
+            <groupId>org.tensorflow</groupId>
+            <artifactId>tensorflow-framework</artifactId>
+            <version>${tensorflow.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>

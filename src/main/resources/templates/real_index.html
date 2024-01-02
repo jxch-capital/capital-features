@@ -7,9 +7,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.0/chroma.min.js"></script>
 </head>
 <body>
+<div>
+    <span>
+        <a th:href="@{/app/index}">首页</a>
+        <a th:href="@{/stock_base/index}">股票基础信息管理</a>
+        <a th:href="@{/stock_pool/index}">股票池管理</a>
+        <a th:href="@{/knn/index}">K近邻</a>
+        <a th:href="@{/real/index}">实时看板</a>
+    </span>
+</div>
+
 <form th:action="@{/real/search}" th:object="${param}" method="post">
-    <label for="stockPoolId">股票池ID：</label>
-    <input type="text" th:field="*{stockPoolId}" id="stockPoolId" placeholder="股票池ID">
+    <label for="stockPoolId">
+        <span>股票池ID：</span>
+        <select id="stockPoolId" th:field="*{stockPoolId}">
+            <option th:each="item: ${pools}" th:value="${item.id}" th:text="${item.poolName}"></option>
+        </select>
+    </label>
     <label for="offset">偏移天数：</label>
     <input type="text" th:field="*{offset}" id="offset" placeholder="偏移天数">
     <input type="submit" value="查询">

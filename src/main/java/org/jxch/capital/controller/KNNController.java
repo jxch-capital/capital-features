@@ -8,6 +8,7 @@ import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.KNNAutoService;
 import org.jxch.capital.server.KNNs;
 import org.jxch.capital.server.KNodeAnalyzeService;
+import org.jxch.capital.server.StockPoolService;
 import org.jxch.capital.server.impl.LorentzianKNNServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,11 +26,13 @@ public class KNNController {
     private final KNNAutoService knnAutoService;
     private final LorentzianKNNServiceImpl lorentzianKNNService;
     private final KNodeAnalyzeService kNodeAnalyzeService;
+    private final StockPoolService stockPoolService;
 
     @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("knn_index");
         modelAndView.addObject("knn", KNNs.getAllDistanceServicesName());
+        modelAndView.addObject("pools", stockPoolService.findAll());
         modelAndView.addObject("param",
                 KNNParam.builder()
                         .distanceName(lorentzianKNNService.getName())
@@ -61,6 +64,7 @@ public class KNNController {
 
         modelAndView.addObject("neighbors", neighbors);
         modelAndView.addObject("statistics", statistics);
+        modelAndView.addObject("pools", stockPoolService.findAll());
         modelAndView.addObject("param", knnParam);
         return modelAndView;
     }
