@@ -15,17 +15,24 @@ import java.util.*;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class KNodeParam {
-    private String code;
-    private int size;
-    private IntervalEnum intervalEnum;
-    private long stockPoolId;
-
+    @Builder.Default
+    private String code = "SPY";
+    @Builder.Default
+    private int size = 20;
+    @Builder.Default
+    private IntervalEnum intervalEnum = IntervalEnum.DAY_1;
+    @Builder.Default
+    private long stockPoolId = -1;
     @Builder.Default
     private int maxLength = 0;
     @Builder.Default
     private List<IndicatorWrapper> indicatorWrappers = new ArrayList<>();
     @Builder.Default
     private Date end = Calendar.getInstance().getTime();
+    @Builder.Default
+    private int futureNum = 0;
+    @Builder.Default
+    private long indicesComId = -1;
 
     public KNodeParam addIndicator(IndicatorWrapper indicatorWrapper) {
         this.indicatorWrappers.add(indicatorWrapper);
@@ -70,7 +77,15 @@ public class KNodeParam {
             this.end = kNodeParam.getEnd();
         }
 
+        if (Objects.equals(futureNum, 0)) {
+            this.futureNum = kNodeParam.getFutureNum();
+        }
+
         return this;
+    }
+
+    public boolean hasIndicesComId() {
+        return !Objects.equals(this.indicesComId, -1);
     }
 
     @Override
@@ -82,17 +97,25 @@ public class KNodeParam {
 
         if (size != that.size) return false;
         if (stockPoolId != that.stockPoolId) return false;
-        if (!code.equals(that.code)) return false;
-        return intervalEnum == that.intervalEnum;
+        if (maxLength != that.maxLength) return false;
+        if (futureNum != that.futureNum) return false;
+        if (!Objects.equals(code, that.code)) return false;
+        if (intervalEnum != that.intervalEnum) return false;
+        if (!Objects.equals(indicatorWrappers, that.indicatorWrappers))
+            return false;
+        return Objects.equals(end, that.end);
     }
 
     @Override
     public int hashCode() {
-        int result = code.hashCode();
+        int result = code != null ? code.hashCode() : 0;
         result = 31 * result + size;
-        result = 31 * result + intervalEnum.hashCode();
+        result = 31 * result + (intervalEnum != null ? intervalEnum.hashCode() : 0);
         result = 31 * result + (int) (stockPoolId ^ (stockPoolId >>> 32));
+        result = 31 * result + maxLength;
+        result = 31 * result + (indicatorWrappers != null ? indicatorWrappers.hashCode() : 0);
+        result = 31 * result + (end != null ? end.hashCode() : 0);
+        result = 31 * result + futureNum;
         return result;
     }
-
 }

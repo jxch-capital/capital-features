@@ -39,7 +39,7 @@ public class KNodeTrain {
         this.futureIndex = this.kLines.size() - 1;
         this.futureDate = this.kLines.get(this.futureIndex).getDate();
         this.startDate = this.kLines.get(0).getDate();
-        this.endIndex = this.kLines.size() - this.futureNum;
+        this.endIndex = this.kLines.size() - 1 - this.futureNum;
         this.endDate = this.kLines.get(this.endIndex).getDate();
 
         if (this.kLines.get(this.futureIndex).getLow() > this.kLines.get(this.endIndex).getHigh()) {
