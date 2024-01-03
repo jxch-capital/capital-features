@@ -30,9 +30,12 @@ public class KNodeParam {
     @Builder.Default
     private Date end = Calendar.getInstance().getTime();
     @Builder.Default
-    private int futureNum = 8;
-    @Builder.Default
     private long indicesComId = -1;
+
+    // todo 删除 futureNum，与 KNodeService 行为不一致
+    @Deprecated
+    @Builder.Default
+    private int futureNum = 8;
 
     public KNodeParam addIndicator(IndicatorWrapper indicatorWrapper) {
         this.indicatorWrappers.add(indicatorWrapper);

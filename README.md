@@ -26,9 +26,10 @@ v1.2.0
   * &#x2705; KNN-洛伦兹
   * &#x2705; KNN-预测计算
   * KNN-聚合查询
-    * 交集
-    * web查询条件设计
-    * 统计结果可视化
+    * KNN参数管理
+    * KNN组合管理
+    * KNN组合计算
+    * 可视化
   * 可视化
     * &#x2705; 统计表
     * 显示K线片段(点击后打开)
@@ -85,4 +86,4 @@ v2.0.0
 
 备忘录：
 * KNodeTrain里的相关特征的转变应该属于KLineFeaturesDto的职责
-* 拆解KNodeParam对象
+* 拆解KNodeParam对象（要与KNodeService行为一致）
