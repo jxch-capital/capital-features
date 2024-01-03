@@ -50,6 +50,7 @@ v1.2.0
   * &#x2705; 查询任一股票片段（预测集）
   * 神经网络构建 - python
   * 神经网络可视化 - Java加载python训练出来的模型
+* 回测功能
 
 v1.3.0
 
@@ -78,3 +79,9 @@ v2.0.0
 版本依赖
 * TensorFlow 2.10.1 依赖 CUDA 11.2 和 cudnn 8.1.0
   * WIN下安装完CUDA后需要重启，否则JVM无法加载
+
+---
+
+备忘录：
+* KNodeTrain里的相关特征的转变应该属于KLineFeaturesDto的职责
+* 拆解KNodeParam对象

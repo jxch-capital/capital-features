@@ -65,6 +65,7 @@ public class KNodeTrain {
         return getIndices();
     }
 
+    // todo 相关特征的转变应该属于KLineFeaturesDto的职责
     public double[][] getFeatures(Function<KLine, KLineFeatures> featureFunc) {
         return this.kLines.subList(startIndex, endIndex).stream().map(featureFunc).map(KLineFeatures::getFeatures)
                 .map(features -> features.stream().mapToDouble(v -> v).toArray())
