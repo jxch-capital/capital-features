@@ -41,7 +41,6 @@ public class TensorflowTest {
 
     @Test
     public void nn() {
-        Ops tf = Ops.create();
 
     }
 

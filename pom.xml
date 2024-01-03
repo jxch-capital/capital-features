@@ -26,6 +26,7 @@
         <guava.version>33.0.0-jre</guava.version>
         <tensorflow.version>0.5.0</tensorflow.version>
         <ejml.version>0.43.1</ejml.version>
+        <dl4j.version>1.0.0-M2.1</dl4j.version>
     </properties>
 
     <dependencies>
@@ -72,6 +73,29 @@
             <artifactId>ejml-all</artifactId>
             <version>${ejml.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.deeplearning4j/deeplearning4j-core -->
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>${dl4j.version}</version>
+            <classifier>windows-x86_64-avx2</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native-platform</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <!-- Use nd4j-cuda-version if you need GPU support and change version accordingly -->
+<!--        <dependency>-->
+<!--            <groupId>org.nd4j</groupId>-->
+<!--            <artifactId>nd4j-cuda-10.1-platform</artifactId>-->
+<!--            <version>${dl4j.version}</version>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.tensorflow/tensorflow-core-platform-gpu -->
         <dependency>
             <groupId>org.tensorflow</groupId>
