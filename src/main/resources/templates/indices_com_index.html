@@ -24,6 +24,7 @@
             <th>指标组合名称</th>
             <th>最大长度</th>
             <th>指标组合ID</th>
+            <th>指标组合名称</th>
             <th>备注</th>
             <th>操作</th>
         </tr>
@@ -41,6 +42,7 @@
                 <label for="indicesIds"></label>
                 <input type="text" th:field="*{indicesIds}" id="indicesIds" placeholder="指标组合ID, 逗号分隔" required>
             </td>
+            <td style="color: gray">Auto</td>
             <td>
                 <label for="remark"></label>
                 <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
@@ -53,8 +55,9 @@
             <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
             <td th:text="${item.name}"></td>
             <td th:text="${item.maxLength}"></td>
-            <td th:text="${item.indicesIds}"></td>
-            <td th:text="${item.remark}"></td>
+            <td th:text="${#strings.abbreviate(item.indicesIds, 20)}" th:title="${item.indicesIds}"></td>
+            <td th:text="${#strings.abbreviate(item.indicesName, 20)}" th:title="${item.indicesName}"></td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
             <td>
                 <a th:href="@{'/indices_com/edit/' + ${item.id}}">修改</a>
                 <a th:href="@{'/indices_com/del/' + ${item.id}}">删除</a>

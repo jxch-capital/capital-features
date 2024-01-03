@@ -5,11 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.*;
-import org.jxch.capital.server.KNNAutoService;
-import org.jxch.capital.server.KNNs;
-import org.jxch.capital.server.KNodeAnalyzeService;
-import org.jxch.capital.server.StockPoolService;
-import org.jxch.capital.server.impl.LorentzianKNNServiceImpl;
+import org.jxch.capital.server.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,20 +20,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KNNController {
     private final KNNAutoService knnAutoService;
-    private final LorentzianKNNServiceImpl lorentzianKNNService;
     private final KNodeAnalyzeService kNodeAnalyzeService;
     private final StockPoolService stockPoolService;
+    private final IndicesCombinationService indicesCombinationService;
 
     @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("knn_index");
         modelAndView.addObject("knn", KNNs.getAllDistanceServicesName());
         modelAndView.addObject("pools", stockPoolService.findAll());
-        modelAndView.addObject("param",
-                KNNParam.builder()
-                        .distanceName(lorentzianKNNService.getName())
-                        .kNodeParam(lorentzianKNNService.getDefaultKNodeParam())
-                        .build());
+        modelAndView.addObject("all_knn", knnAutoService.allKNN());
+        modelAndView.addObject("param", knnAutoService.allKNN().get(0));
+        modelAndView.addObject("indices_com", indicesCombinationService.findAll());
         return modelAndView;
     }
 
@@ -55,8 +49,9 @@ public class KNNController {
                     .startDate(kNeighbor.getKNode().getKLines().get(0).getDate())
                     .endDate(kNeighbor.getKNode().getKLines().get(kNeighbor.getKNode().getKLines().size() - 1).getDate())
                     .dateField(DateField.DAY_OF_YEAR)
-                    .extend(40)
-                    .futureNum(8)
+                    .extend(Math.max(knnParam.getKNodeParam().getSize() + knnParam.getKNodeParam().getFutureNum(),
+                            Math.max(2 * knnParam.getKNodeParam().getFutureNum(), 20)))
+                    .futureNum(knnParam.getKNodeParam().getFutureNum())
                     .build();
             return kNodeAnalyzeService.analyze(analyzedParam);
         }).toList();
@@ -65,7 +60,9 @@ public class KNNController {
         modelAndView.addObject("neighbors", neighbors);
         modelAndView.addObject("statistics", statistics);
         modelAndView.addObject("pools", stockPoolService.findAll());
+        modelAndView.addObject("all_knn", knnAutoService.allKNN());
         modelAndView.addObject("param", knnParam);
+        modelAndView.addObject("indices_com", indicesCombinationService.findAll());
         return modelAndView;
     }
 

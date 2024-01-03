@@ -30,7 +30,7 @@ public class KNodeParam {
     @Builder.Default
     private Date end = Calendar.getInstance().getTime();
     @Builder.Default
-    private int futureNum = 0;
+    private int futureNum = 8;
     @Builder.Default
     private long indicesComId = -1;
 
@@ -44,7 +44,7 @@ public class KNodeParam {
         return this;
     }
 
-    public boolean hasIndicator() {
+    public boolean hasIndicatorWrappers() {
         return !indicatorWrappers.isEmpty();
     }
 

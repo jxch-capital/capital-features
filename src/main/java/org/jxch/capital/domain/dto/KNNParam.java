@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class KNNParam {
     private String distanceName;
-    private Integer neighborSize = 12;
+    @Builder.Default
+    private Integer neighborSize = 20;
     private KNodeParam kNodeParam = new KNodeParam();
 }

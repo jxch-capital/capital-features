@@ -8,10 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.*;
-import org.jxch.capital.server.IndexService;
-import org.jxch.capital.server.KNodeService;
-import org.jxch.capital.server.StockHistoryService;
-import org.jxch.capital.server.StockService;
+import org.jxch.capital.server.*;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +28,7 @@ public class KNodeServiceImpl implements KNodeService {
     private final StockService stockService;
     private final KLineMapper kLineMapper;
     private final IndexService indexService;
+    private final IndicesCombinationService indicesCombinationService;
     @Setter
     private static int offsetMultiples = 5;
     @Setter
@@ -46,7 +44,11 @@ public class KNodeServiceImpl implements KNodeService {
                 .interval(kNodeParam.getIntervalEnum().getInterval())
                 .build());
 
-        if (kNodeParam.hasIndicator()) {
+        if (kNodeParam.hasIndicesComId()) {
+            kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
+        }
+
+        if (kNodeParam.hasIndicatorWrappers()) {
             List<KLine> kLineIndices = indexService.index(history, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
                     .stream()
                     .sorted(Comparator.comparing(KLine::getDate).reversed())
@@ -78,7 +80,11 @@ public class KNodeServiceImpl implements KNodeService {
 
     @Override
     public List<KNode> comparison(@NonNull KNodeParam kNodeParam) {
-        if (kNodeParam.hasIndicator()) {
+        if (kNodeParam.hasIndicesComId()) {
+            kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
+        }
+
+        if (kNodeParam.hasIndicatorWrappers()) {
             return stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
                     .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
                     .entrySet().stream().flatMap(entry -> {

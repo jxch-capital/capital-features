@@ -18,11 +18,17 @@ public class IndicesCombinationDto {
     private Long id;
     private String name;
     private String indicesIds;
+    private String indicesName;
     private Integer maxLength;
     private String remark;
 
     public List<Long> getIndicesIdList() {
         return Arrays.stream(indicesIds.split(",")).map(Long::valueOf).toList();
+    }
+
+    public IndicesCombinationDto setIndicesNameByList(List<String> names) {
+        this.indicesName = String.join(",", names);
+        return this;
     }
 
 }

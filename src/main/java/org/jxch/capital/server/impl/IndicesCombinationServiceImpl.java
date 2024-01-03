@@ -1,11 +1,13 @@
 package org.jxch.capital.server.impl;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.IndicesCombinationRepository;
 import org.jxch.capital.domain.convert.IndicesCombinationMapper;
 import org.jxch.capital.domain.dto.IndicatorWrapper;
 import org.jxch.capital.domain.dto.IndicesCombinationDto;
+import org.jxch.capital.domain.dto.IndicesConfigDto;
 import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.IndicesConfigService;
 import org.springframework.stereotype.Service;
@@ -23,19 +25,27 @@ public class IndicesCombinationServiceImpl implements IndicesCombinationService 
     private final IndicesCombinationMapper indicesCombinationMapper;
     private final IndicesConfigService indicesConfigService;
 
+    private IndicesCombinationDto setIndicesCombinationDtoNames(@NonNull IndicesCombinationDto dto) {
+        return dto.setIndicesNameByList(
+                indicesConfigService.findById(dto.getIndicesIdList()).stream().map(IndicesConfigDto::getName).toList());
+    }
+
     @Override
     public List<IndicesCombinationDto> findAll() {
-        return indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findAll());
+        return indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findAll()).stream()
+                .map(this::setIndicesCombinationDtoNames).toList();
     }
 
     @Override
     public IndicesCombinationDto findById(Long id) {
-        return indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findById(id).orElseThrow());
+        return setIndicesCombinationDtoNames(
+                indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findById(id).orElseThrow()));
     }
 
     @Override
     public List<IndicesCombinationDto> findById(List<Long> ids) {
-        return indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findAllById(ids));
+        return indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findAllById(ids)).stream()
+                .map(this::setIndicesCombinationDtoNames).toList();
     }
 
     @Override

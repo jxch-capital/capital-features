@@ -21,18 +21,34 @@
 </div>
 
 <form th:action="@{/knn/neighbor}" th:object="${param}" method="post">
-    <label for="distanceName">距离算法：</label>
-    <input type="text" th:field="*{distanceName}" id="distanceName" placeholder="距离服务">
-    <label for="code">股票代码：</label>
-    <input type="text" th:field="*{kNodeParam.code}" id="code" placeholder="股票代码">
+    <label for="distanceName">
+        <span>距离算法：</span>
+        <select id="distanceName" th:field="*{distanceName}">
+            <option th:each="item: ${all_knn}" th:value="${item.distanceName}" th:text="${item.distanceName}"></option>
+        </select>
+    </label>
     <label for="stockPoolId">
-        <span>股票池ID：</span>
+        <span>股票池：</span>
         <select id="stockPoolId" th:field="*{kNodeParam.stockPoolId}">
             <option th:each="item: ${pools}" th:value="${item.id}" th:text="${item.poolName}"></option>
         </select>
     </label>
+    <label for="indicesComId">
+        <span>指标组合：</span>
+        <select id="indicesComId" th:field="*{kNodeParam.indicesComId}">
+            <option th:each="item: ${indices_com}" th:value="${item.id}" th:text="${item.name}"></option>
+        </select>
+    </label>
+    <label for="code">股票代码：</label>
+    <input type="text" th:field="*{kNodeParam.code}" id="code" placeholder="股票代码" style="width: 80px">
+    <label for="size">片段大小：</label>
+    <input type="text" th:field="*{kNodeParam.size}" id="size" placeholder="片段大小" style="width: 40px">
+    <label for="maxLength">最大长度：</label>
+    <input type="text" th:field="*{kNodeParam.maxLength}" id="maxLength" placeholder="最大长度" style="width: 40px">
+    <label for="futureNum">预测长度：</label>
+    <input type="text" th:field="*{kNodeParam.futureNum}" id="futureNum" placeholder="预测长度" style="width: 40px">
     <label for="neighborSize">近邻数：</label>
-    <input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数">
+    <input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数" style="width: 40px">
     <input type="submit" value="查询">
 </form>
 <hr/>
