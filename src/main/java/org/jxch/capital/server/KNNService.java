@@ -14,6 +14,16 @@ public interface KNNService {
 
     double distance(List<KLine> a, List<KLine> b);
 
+    default List<KNeighbor> searchHasFuture(KNode futureKNode, @NonNull List<KNode> all, int size, int futureNum) {
+        return all.stream()
+                .map(kn -> KNeighbor.builder()
+                        .dist(distance(kn.subtractLast(futureNum).getKLines(),
+                                futureKNode.subtractLast(futureNum).getKLines()))
+                        .kNode(kn).build())
+                .sorted(Comparator.comparingDouble(KNeighbor::getDist))
+                .limit(size).toList();
+    }
+
     default List<KNeighbor> search(KNode kNode, @NonNull List<KNode> all, int size) {
         return all.stream().map(kn -> KNeighbor.builder()
                         .dist(distance(kn.getKLines(), kNode.getKLines())).kNode(kn).build())

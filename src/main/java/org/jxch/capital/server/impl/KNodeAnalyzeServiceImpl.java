@@ -27,15 +27,19 @@ public class KNodeAnalyzeServiceImpl implements KNodeAnalyzeService {
                 param.getStockPoolId(), param.getStockCode(), param.getExtendStartDate(), param.getExtendEndDate()));
     }
 
-    @Override
-    public KLineAnalyzes analyze(@NonNull KLineAnalyzedParam param) {
+    private KLineAnalyzes buildKLineAnalyzes(@NonNull KLineAnalyzedParam param) {
         return KLineAnalyzes.builder()
                 .code(param.getStockCode())
                 .startDate(param.getStartDate())
                 .endDate(param.getEndDate())
-                .kLines(search(param))
                 .futureNum(param.getFutureNum())
-                .build()
+                .build();
+    }
+
+    @Override
+    public KLineAnalyzes analyze(@NonNull KLineAnalyzedParam param) {
+        return buildKLineAnalyzes(param)
+                .setKLines(search(param))
                 .analyze();
     }
 

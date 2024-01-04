@@ -39,7 +39,8 @@ public class IndicesCombinationServiceImpl implements IndicesCombinationService 
     @Override
     public IndicesCombinationDto findById(Long id) {
         return setIndicesCombinationDtoNames(
-                indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findById(id).orElseThrow()));
+                indicesCombinationMapper.toIndicesCombinationDto(indicesCombinationRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("数据库中没有这个指标组合, ID: " + id))));
     }
 
     @Override

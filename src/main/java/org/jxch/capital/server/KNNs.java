@@ -6,12 +6,12 @@ import java.util.List;
 
 public class KNNs {
 
-    public static List<String> getAllDistanceServicesName() {
+    public static List<String> getAllKNNServicesName() {
         return AppContextHolder.getContext().getBeansOfType(KNNService.class).values()
                 .stream().map(KNNService::getName).toList();
     }
 
-    public static KNNService getDistanceService(String name) {
+    public static KNNService getKNNService(String name) {
         return AppContextHolder.getContext().getBeansOfType(KNNService.class)
                 .values().stream()
                 .filter(service -> service.getName().equals(name))

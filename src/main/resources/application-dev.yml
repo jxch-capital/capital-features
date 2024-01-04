@@ -18,3 +18,9 @@ spring:
     encoding: UTF-8
     suffix: .html
     mode: HTML
+
+logging:
+  level:
+    org.jxch.capital: debug
+    sql: info
+    web: info

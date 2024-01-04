@@ -16,4 +16,20 @@ import java.util.List;
 public class KNode {
     private String code;
     private List<KLine> kLines;
+
+    public KLine getFristKLine() {
+        return kLines.get(0);
+    }
+
+    public KLine getLastKLine() {
+        return kLines.get(kLines.size() - 1);
+    }
+
+    public KNode subtractLast(int num) {
+        return KNode.builder()
+                .code(code)
+                .kLines(kLines.subList(0, kLines.size() - num))
+                .build();
+    }
+
 }

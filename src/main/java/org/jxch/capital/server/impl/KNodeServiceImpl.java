@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -34,8 +35,46 @@ public class KNodeServiceImpl implements KNodeService {
     @Setter
     private static int defaultOffset = 30;
 
+    private void setIndicators(@NonNull KNodeParam kNodeParam) {
+        if (kNodeParam.hasIndicesComId()) {
+            kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
+        }
+    }
+
+    @Override
+    public List<KNode> kNodes(@NonNull KNodeParam kNodeParam, Date start, Date end) {
+        List<KLine> kLines = stockService.history(HistoryParam.builder()
+                .code(kNodeParam.getCode())
+                .start(start)
+                .end(end)
+                .interval(kNodeParam.getIntervalEnum().getInterval())
+                .build());
+
+        return kNodes(kNodeParam, kLines);
+    }
+
+    @Override
+    public List<KNode> kNodes(KNodeParam kNodeParam, List<KLine> kLines) {
+        setIndicators(kNodeParam);
+        if (kNodeParam.hasIndicatorWrappers()) {
+            kLines = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers()).stream()
+                    .map(kLineIns -> (KLine) kLineIns)
+                    .sorted(Comparator.comparing(KLine::getDate).reversed())
+                    .limit(kLines.size() - kNodeParam.getMaxLength())
+                    .sorted(Comparator.comparing(KLine::getDate))
+                    .toList();
+        }
+
+        List<KLine> finalKLines = kLines;
+        return IntStream.range(0, kLines.size() - kNodeParam.getSize() + 1)
+                .mapToObj(startIndex -> finalKLines.subList(startIndex, startIndex + kNodeParam.getSize()))
+                .map(kList -> KNode.builder().code(kNodeParam.getCode()).kLines(kList).build())
+                .toList();
+    }
+
     @Override
     public KNode kNode(@NonNull KNodeParam kNodeParam) {
+        setIndicators(kNodeParam);
         List<KLine> history = stockService.history(HistoryParam.builder()
                 .code(kNodeParam.getCode())
                 .start(DateUtil.offset(kNodeParam.getEnd(), DateField.DAY_OF_YEAR,
@@ -44,9 +83,6 @@ public class KNodeServiceImpl implements KNodeService {
                 .interval(kNodeParam.getIntervalEnum().getInterval())
                 .build());
 
-        if (kNodeParam.hasIndicesComId()) {
-            kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
-        }
 
         if (kNodeParam.hasIndicatorWrappers()) {
             List<KLine> kLineIndices = indexService.index(history, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())

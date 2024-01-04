@@ -42,8 +42,8 @@ public class KLineAnalyzes {
     public KLineAnalyzes analyze() {
         for (int i = 0; i < this.kLines.size(); i++) {
             if (!startIsSet || !endIsSet) {
-                if (!startIsSet && this.startDate.getTime() <= this.kLines.get(i).getDate().getTime()
-                        && this.startDate.getTime() >= this.kLines.get(i - 1).getDate().getTime()) {
+                if (!startIsSet && this.startDate.getTime() >= this.kLines.get(i).getDate().getTime()
+                        && this.startDate.getTime() <= this.kLines.get(i + 1).getDate().getTime()) {
                     this.startIndex = i;
                     this.startIsSet = true;
                 }
@@ -55,10 +55,6 @@ public class KLineAnalyzes {
             } else {
                 break;
             }
-        }
-
-        if (this.endIndex < this.startIndex) {
-            this.endIndex = this.startIndex;
         }
 
         try {
