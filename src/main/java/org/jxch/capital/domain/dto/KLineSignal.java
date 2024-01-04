@@ -32,6 +32,22 @@ public class KLineSignal {
         return signal > limitAbs;
     }
 
+    public boolean isHisBuySignal() {
+        return isBuySignal() && hasTureSignal();
+    }
+
+    public boolean isHisSellSignal() {
+        return isSellSignal() && hasTureSignal();
+    }
+
+    public boolean isHisSellSignal(double limitAbs) {
+        return isSellSignal(limitAbs) && hasTureSignal();
+    }
+
+    public boolean isHisBuySignal(double limitAbs) {
+        return isBuySignal(limitAbs) && hasTureSignal();
+    }
+
     public boolean isSellSignal() {
         return signal < 0;
     }
@@ -41,12 +57,28 @@ public class KLineSignal {
     }
 
     public boolean isSuccessSignal() {
-        return signal * tureSignal > 0;
+        return hasTureSignal() && signal * tureSignal > 0;
+    }
+
+    public boolean isSuccessBuySignal() {
+        return hasTureSignal() && signal > 0 && tureSignal > 0;
+    }
+
+    public boolean isSuccessBuySignal(double limitAbs) {
+        return hasTureSignal() && signal > limitAbs && tureSignal > 0;
     }
 
     public boolean isSuccessSignal(double limitAbs) {
-        return (signal > limitAbs && tureSignal > 0)
-                || (signal < -limitAbs && tureSignal < 0);
+        return hasTureSignal() && ((signal > limitAbs && tureSignal > 0)
+                || (signal < -limitAbs && tureSignal < 0));
+    }
+
+    public boolean isSuccessSellSignal() {
+        return hasTureSignal() && signal < 0 && tureSignal < 0;
+    }
+
+    public boolean isSuccessSellSignal(double limitAbs) {
+        return hasTureSignal() && signal < -limitAbs && tureSignal < 0;
     }
 
 }

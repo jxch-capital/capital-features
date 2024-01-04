@@ -12,6 +12,7 @@ import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.server.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
     private final KNodeService kNodeService;
-    private final StockService stockService;
     private final KNodeAnalyzeService kNodeAnalyzeService;
+    private final IndicesCombinationService indicesCombinationService;
 
     @Override
     public Integer signal(KNode kNode, KNNSignalBackTestParam param) {
@@ -33,11 +34,14 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
     public List<KLineSignal> backTestByCode(@NonNull KNNSignalBackTestParam param) {
         TimeInterval timer = DateUtil.timer();
 
+        param.getKnnParam().getKNodeParam().setCode(param.getCode());
         KNNParam knnParam = param.getKnnParam();
+        int sourceSize = knnParam.getKNodeParam().getSize();
         int futureSize = knnParam.getKNodeParam().getSize() + param.getFutureNum();
         KNNService distanceService = KNNs.getKNNService(knnParam.getDistanceName());
         List<KNode> futureKNodes = kNodeService.comparison(knnParam.getKNodeParam().setSize(futureSize));
         List<KNode> codeFutureKNodes = kNodeService.kNodes(param.getKnnParam().getKNodeParam().setSize(futureSize), param.getStart(), param.getEnd());
+
 
         List<KLineSignal> kLineSignals = codeFutureKNodes.parallelStream()
                 .map(futureKNode -> {
@@ -54,8 +58,26 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
                 .sorted(Comparator.comparing(kLineSignal -> kLineSignal.getKLine().getDate()))
                 .toList();
 
+
+        KNode lastKNode = codeFutureKNodes.get(codeFutureKNodes.size() - 1);
+        List<KNode> kNodes = lastKNode.sliceOut0(sourceSize);
+
+        List<KLineSignal> kLineSignalsAppend = kNodes.parallelStream()
+                .map(kNode -> KLineSignal.builder()
+                        .kLine(kNode.getLastKLine())
+                        .signal(kNodeAnalyzeService.statisticsKNNHasFuture(
+                                distanceService.searchHasFutureNodes(kNode, futureKNodes, param.getKnnParam().getNeighborSize(), param.getFutureNum()),
+                                param.getFutureNum()).getFutureSignal())
+                        .build())
+                .sorted(Comparator.comparing(kLineSignal -> kLineSignal.getKLine().getDate()))
+                .toList();
+
+        ArrayList<KLineSignal> allKLineSignals = new ArrayList<>(kLineSignals);
+        allKLineSignals.addAll(kLineSignalsAppend);
+
         log.debug("回测处理时间：{}s", timer.intervalSecond());
-        return kLineSignals;
+        knnParam.getKNodeParam().setSize(sourceSize);
+        return allKLineSignals;
     }
 
 }

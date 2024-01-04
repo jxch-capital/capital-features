@@ -35,7 +35,7 @@ class KNNSignalBackTestServiceImplTest {
                         .build())
                 .setFutureNum(2)
                 .setCode("QQQ")
-                .setStart(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -10));
+                .setStart(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -4));
 
         List<KLineSignal> kLineSignals = knnSignalBackTestService.backTestByCode(param);
         KLineSignalStatistics statistics = new KLineSignalStatistics(kLineSignals);

@@ -61,4 +61,6 @@ public class LorentzianKNNServiceImpl implements KNNService {
                 .intervalEnum(IntervalEnum.DAY_1)
                 .build();
     }
+
+
 }

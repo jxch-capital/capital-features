@@ -47,17 +47,27 @@ public class KLineFeatures extends KLine {
         return features.get(index);
     }
 
-    @NonNull
-    public static KLineFeatures valueOf(@NonNull KLineIndices indices) {
-        KLineFeatures kLineFeatures = (KLineFeatures) KLineFeatures.builder().build()
+    private static KLineFeatures buildKLineFeatures(@NonNull KLineIndices indices) {
+        return (KLineFeatures) KLineFeatures.builder().build()
                 .setDate(indices.getDate())
                 .setClose(indices.getClose())
                 .setOpen(indices.getOpen())
                 .setHigh(indices.getHigh())
                 .setLow(indices.getLow())
                 .setVolume(indices.getVolume());
+    }
 
+    @NonNull
+    public static KLineFeatures valueOf(@NonNull KLineIndices indices) {
+        KLineFeatures kLineFeatures = buildKLineFeatures(indices);
         kLineFeatures.addFeatures(indices.getIndices().values());
+        return kLineFeatures;
+    }
+
+    @NonNull
+    public static KLineFeatures valueOf(@NonNull KLineIndices indices, @NonNull List<String> indicesNames) {
+        KLineFeatures kLineFeatures = buildKLineFeatures(indices);
+        kLineFeatures.addFeatures(indicesNames.stream().map(indices::get).toList());
         return kLineFeatures;
     }
 

@@ -15,6 +15,7 @@
         <a th:href="@{/real/index}">实时看板</a>
         <a th:href="@{/indices/index}">指标管理</a>
         <a th:href="@{/indices_com/index}">指标组合管理</a>
+        <a th:href="@{/back_signal/knn_index}">KNN信号回测</a>
     </span>
 </div>
 
@@ -126,7 +127,7 @@
             {
                 scale: true,
                 gridIndex: 1,
-                splitNumber: 2,
+                splitNumber: 1,
                 axisLabel: {show: false},
                 axisLine: {show: false},
                 axisTick: {show: false},
@@ -180,7 +181,7 @@
             },
             {
                 name: 'Volumn',
-                type: 'bar',
+                type: 'line',
                 xAxisIndex: 1,
                 yAxisIndex: 1,
                 itemStyle: {

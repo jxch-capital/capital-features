@@ -18,4 +18,8 @@ public class KLineIndices extends KLine {
         indices.put(name, value);
     }
 
+    public Double get(String name) {
+        return indices.get(name);
+    }
+
 }

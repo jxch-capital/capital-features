@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KNN买卖信号回测</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+</head>
+<body>
+<div>
+    <span>
+        <a th:href="@{/app/index}">首页</a>
+        <a th:href="@{/stock_base/index}">股票基础信息管理</a>
+        <a th:href="@{/stock_pool/index}">股票池管理</a>
+        <a th:href="@{/knn/index}">K近邻</a>
+        <a th:href="@{/real/index}">实时看板</a>
+        <a th:href="@{/indices/index}">指标管理</a>
+        <a th:href="@{/indices_com/index}">指标组合管理</a>
+        <a th:href="@{/back_signal/knn_index}">KNN信号回测</a>
+    </span>
+</div>
+
+<form th:action="@{/back_signal/knn_back}" th:object="${param}" method="post">
+    <label for="distanceName">
+        <span>距离算法：</span>
+        <select id="distanceName" th:field="*{knnParam.distanceName}">
+            <option th:each="item: ${knn_service_names}" th:value="${item}" th:text="${item}"></option>
+        </select>
+    </label>
+    <label for="stockPoolId">
+        <span>股票池：</span>
+        <select id="stockPoolId" th:field="*{knnParam.kNodeParam.stockPoolId}">
+            <option th:each="item: ${pools}" th:value="${item.id}" th:text="${item.poolName}"></option>
+        </select>
+    </label>
+    <label for="indicesComId">
+        <span>指标组合：</span>
+        <select id="indicesComId" th:field="*{knnParam.kNodeParam.indicesComId}">
+            <option th:each="item: ${indices_com}" th:value="${item.id}" th:text="${item.name}"></option>
+        </select>
+    </label>
+    <label for="start">开始时间：</label>
+    <input type="date" th:field="*{start}" id="start" placeholder="开始时间" required>
+    <label for="size">片段大小：</label>
+    <input type="text" th:field="*{knnParam.kNodeParam.size}" id="size" placeholder="片段大小" style="width: 40px;" required>
+    <label for="futureNum">预测数：</label>
+    <input type="text" th:field="*{futureNum}" id="futureNum" placeholder="预测数" style="width: 40px;" required>
+    <label for="neighborSize">近邻数：</label>
+    <input type="text" th:field="*{knnParam.neighborSize}" id="neighborSize" placeholder="近邻数" style="width: 40px;"
+           required>
+    <label for="code">股票代码：</label>
+    <input type="text" th:field="*{code}" id="code" placeholder="股票代码" style="width: 40px;" required>
+    <label for="signalLimitAbs">信号抑制：</label>
+    <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号限制" style="width: 40px;" required>
+
+    <input type="submit" value="查询">
+</form>
+<hr/>
+<div th:if="${statistics}">
+    <table>
+        <tr>
+            <td>
+                <span style="color: gray">买入信号: </span>
+                <span th:text="${statistics.buyNum}"></span>
+            </td>
+            <td>
+                <span style="color: gray">卖出信号: </span>
+                <span th:text="${statistics.sellNum}"></span>
+            </td>
+            <td>
+                <span style="color: gray">成功信号: </span>
+                <span th:text="${statistics.winNum}"></span>
+            </td>
+            <td>
+                <span style="color: gray">买入胜率: </span>
+                <span th:text="${#numbers.formatDecimal(statistics.winBuyRate, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+            <td>
+                <span style="color: gray">卖出胜率: </span>
+                <span th:text="${#numbers.formatDecimal(statistics.winSellRate, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+            <td>
+                <span style="color: gray">总胜率: </span>
+                <span th:text="${#numbers.formatDecimal(statistics.winRate, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<hr/>
+<div th:if="${kLines}">
+    <div id="klineChart" style="width: 100%;height:1000px;"></div>
+    <script th:inline="javascript">
+        const myChart = echarts.init(document.getElementById('klineChart'));
+        const upColor = '#00da3c';
+        const upBorderColor = '#008F28';
+        const downColor = '#ec0000';
+        const downBorderColor = '#8A0000';
+        const data = [[${kLines}]];
+        const limit = [[${param.signalLimitAbs}]]
+        const ema20 = [[${ema20}]]
+        const signals = [[${signals}]];
+
+        const signalsData = signals.map(item => {
+            return [item.date, item.value];
+        });
+
+        const ema20Data = ema20.map(item => {
+            return [item.date, item.value];
+        });
+
+
+        const option = {
+            dataset: {
+                source: data
+            },
+            title: {
+                text: 'Data Amount: ' + echarts.format.addCommas(data.length)
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
+                },
+                formatter: function (params) {
+                    const param = params[0];
+                    let dataParam;
+                    let other = ``;
+                    if (param.data.open) {
+                        dataParam = param.data;
+                    } else {
+                        dataParam = data[param.dataIndex]
+                        other = other + `${param.marker} ${param.value} <br/>`
+                    }
+                    console.log(params)
+                    const date = echarts.format.formatTime('yyyy-MM-dd', dataParam.date);
+                    const open = dataParam.open.toFixed(2);
+                    const close = dataParam.close.toFixed(2);
+                    const high = dataParam.high.toFixed(2);
+                    const low = dataParam.low.toFixed(2);
+                    const vol = (dataParam.volume / 1000000).toFixed(2);
+                    return `${param.marker} ${date}<br/>
+                            开盘: ${open}<br/>
+                            收盘: ${close}<br/>
+                            最高: ${high}<br/>
+                            最低: ${low}<br/>
+                            成交: ${vol}kk<br/>` + other;
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: false
+                    }
+                }
+            },
+            grid: [
+                {
+                    left: '2%',
+                    right: '2%',
+                    bottom: 80
+                },
+                {
+                    left: '2%',
+                    right: '2%',
+                    height: 80,
+                    bottom: 80
+                },
+                {
+                    left: '2%',
+                    right: '2%',
+                    height: 80,
+                    bottom: 80
+                },
+                {
+                    left: '2%',
+                    right: '2%',
+                    bottom: 80
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    // inverse: true,
+                    axisLine: {onZero: false},
+                    splitLine: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax',
+                    axisLabel: {
+                        formatter: function (value) {
+                            return echarts.format.formatTime('yyyy\nMM-dd', value)
+                        }
+                    }
+                },
+                {
+                    type: 'category',
+                    gridIndex: 1,
+                    boundaryGap: false,
+                    axisLine: {onZero: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 2,
+                    boundaryGap: false,
+                    axisLine: {onZero: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 3,
+                    boundaryGap: false,
+                    axisLine: {onZero: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax'
+                }
+            ],
+            yAxis: [
+                {
+                    scale: true,
+                    splitArea: {
+                        show: true
+                    }
+                },
+                {
+                    scale: true,
+                    gridIndex: 1,
+                    splitNumber: 2,
+                    axisLabel: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false}
+                },
+                {
+                    scale: true,
+                    gridIndex: 2,
+                    splitNumber: 2,
+                    axisLabel: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false}
+                },
+                {
+                    scale: true,
+                    gridIndex: 3,
+                    splitNumber: 2,
+                    axisLabel: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false}
+                }
+            ],
+            dataZoom: [
+                {
+                    type: 'inside',
+                    xAxisIndex: [0, 1, 2, 3],
+                    start: 10,
+                    end: 100
+                },
+                {
+                    show: true,
+                    xAxisIndex: [0, 1, 2, 3],
+                    type: 'slider',
+                    bottom: 10,
+                    start: 10,
+                    end: 100
+                }
+            ],
+            visualMap: [{
+                show: false,
+                seriesIndex: 1,
+                dimension: 6,
+                pieces: [
+                    {
+                        value: 1,
+                        color: upColor
+                    },
+                    {
+                        value: -1,
+                        color: downColor
+                    }
+                ]
+            }, {
+                show: false,
+                seriesIndex: 2,
+                pieces: [
+                    {
+                        lt: -limit,
+                        color: 'red'
+                    },
+                    {
+                        gt: -limit,
+                        lt: limit,
+                        color: 'gray'
+                    },
+                    {
+                        gt: limit,
+                        color: 'green'
+                    }
+                ]
+            }],
+            series: [
+                {
+                    type: 'candlestick',
+                    itemStyle: {
+                        color: upColor,
+                        color0: downColor,
+                        borderColor: upBorderColor,
+                        borderColor0: downBorderColor
+                    },
+                    encode: {
+                        x: 0,
+                        y: [1, 4, 3, 2]
+                    }
+                },
+                {
+                    name: 'Volumn',
+                    type: 'line',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    itemStyle: {
+                        color: 'gray'
+                    },
+                    large: true,
+                    showSymbol: false,
+                    encode: {
+                        x: 0,
+                        y: 5
+                    }
+                },
+                {
+                    name: 'Signals',
+                    type: 'bar',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    itemStyle: {
+                        color: '#03c9f8'
+                    },
+                    large: true,
+                    data:signalsData
+                },
+                {
+                    name: 'EMA20',
+                    type: 'line',
+                    itemStyle: {
+                        color: '#f87e03'
+                    },
+                    showSymbol: false,
+                    large: true,
+                    data: ema20Data
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    </script>
+</div>
+</body>
+</html>

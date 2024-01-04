@@ -24,6 +24,16 @@ public interface KNNService {
                 .limit(size).toList();
     }
 
+    default List<KNeighbor> searchHasFutureNodes(KNode node, @NonNull List<KNode> all, int size, int futureNum) {
+        return all.stream()
+                .map(kn -> KNeighbor.builder()
+                        .dist(distance(kn.subtractLast(futureNum).getKLines(),
+                                node.getKLines()))
+                        .kNode(kn).build())
+                .sorted(Comparator.comparingDouble(KNeighbor::getDist))
+                .limit(size).toList();
+    }
+
     default List<KNeighbor> search(KNode kNode, @NonNull List<KNode> all, int size) {
         return all.stream().map(kn -> KNeighbor.builder()
                         .dist(distance(kn.getKLines(), kNode.getKLines())).kNode(kn).build())
@@ -51,6 +61,10 @@ public interface KNNService {
                 .size(20)
                 .intervalEnum(IntervalEnum.DAY_1)
                 .build();
+    }
+
+    default void setParamSupport(Object param) {
+
     }
 
 }

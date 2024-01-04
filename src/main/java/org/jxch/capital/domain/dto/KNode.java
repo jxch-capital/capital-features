@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -30,6 +31,45 @@ public class KNode {
                 .code(code)
                 .kLines(kLines.subList(0, kLines.size() - num))
                 .build();
+    }
+
+    public KNode first(int num) {
+        return KNode.builder()
+                .code(code)
+                .kLines(kLines.subList(0, num))
+                .build();
+    }
+
+    public int size() {
+        return kLines.size();
+    }
+
+    public List<KNode> slice() {
+        List<KNode> kNodes = new ArrayList<>();
+        for (int i = 0; i < kLines.size(); i++) {
+            kNodes.add(KNode.builder().code(code)
+                    .kLines(kLines.subList(0, kLines.size())).build());
+        }
+        return kNodes;
+    }
+
+    public List<KNode> sliceOut0() {
+        List<KNode> slice = slice();
+        return slice.subList(1, slice.size());
+    }
+
+    public List<KNode> slice(int size) {
+        List<KNode> kNodes = new ArrayList<>();
+        for (int i = 0; i < kLines.size() - size + 1; i++) {
+            kNodes.add(KNode.builder().code(code)
+                    .kLines(kLines.subList(i, i + size)).build());
+        }
+        return kNodes;
+    }
+
+    public List<KNode> sliceOut0(int size) {
+        List<KNode> slice = slice(size);
+        return slice.subList(1, slice.size());
     }
 
 }
