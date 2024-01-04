@@ -46,12 +46,14 @@ public class SignalBackTestController {
         ModelAndView modelAndView = new ModelAndView("back_signal_knn_index");
 
         List<KLineSignal> kLineSignals = knnSignalBackTestService.backTestByCode(param);
+        kLineSignals.forEach(kLineSignal -> kLineSignal.actionSignal(param.getSignalLimitAbs()));
 
         List<KLineIndices> kLineIndices = indexService.index(kLineSignals.stream().map(KLineSignal::getKLine).toList(), Duration.ofDays(1),
                 Collections.singletonList(IndicatorWrapper.builder().name("EMA-20").indicatorFunc(barSeries -> new EMAIndicator(new ClosePriceIndicator(barSeries), 20)).build()));
 
         modelAndView.addObject("kLines", kLineSignals.stream().map(KLineSignal::getKLine).toList());
         modelAndView.addObject("signals", kLineSignals.stream().map(kLineSignal -> EChartsMainIndexDto.builder().date(kLineSignal.getKLine().getDate()).value(kLineSignal.getSignal()).build()).toList());
+        modelAndView.addObject("actionSignals", kLineSignals.stream().map(kLineSignal -> EChartsMainIndexDto.builder().date(kLineSignal.getKLine().getDate()).value(kLineSignal.getActionSignal()).build()).toList());
         modelAndView.addObject("ema20", kLineIndices.stream().map(ki -> EChartsMainIndexDto.builder().date(ki.getDate()).value(ki.get("EMA-20")).build()).toList());
         modelAndView.addObject("statistics", new KLineSignalStatistics(kLineSignals, param.getSignalLimitAbs()));
         modelAndView.addObject("param", param);

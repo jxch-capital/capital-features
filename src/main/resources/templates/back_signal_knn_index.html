@@ -41,7 +41,8 @@
     <label for="start">开始时间：</label>
     <input type="date" th:field="*{start}" id="start" placeholder="开始时间" required>
     <label for="size">片段大小：</label>
-    <input type="text" th:field="*{knnParam.kNodeParam.size}" id="size" placeholder="片段大小" style="width: 40px;" required>
+    <input type="text" th:field="*{knnParam.kNodeParam.size}" id="size" placeholder="片段大小" style="width: 40px;"
+           required>
     <label for="futureNum">预测数：</label>
     <input type="text" th:field="*{futureNum}" id="futureNum" placeholder="预测数" style="width: 40px;" required>
     <label for="neighborSize">近邻数：</label>
@@ -50,7 +51,8 @@
     <label for="code">股票代码：</label>
     <input type="text" th:field="*{code}" id="code" placeholder="股票代码" style="width: 40px;" required>
     <label for="signalLimitAbs">信号抑制：</label>
-    <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号限制" style="width: 40px;" required>
+    <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号限制" style="width: 40px;"
+           required>
 
     <input type="submit" value="查询">
 </form>
@@ -101,6 +103,11 @@
         const limit = [[${param.signalLimitAbs}]]
         const ema20 = [[${ema20}]]
         const signals = [[${signals}]];
+        const actionSignals = [[${actionSignals}]];
+
+        const actionSignalsData = actionSignals.map(item => {
+            return [item.date, item.value];
+        });
 
         const signalsData = signals.map(item => {
             return [item.date, item.value];
@@ -176,7 +183,8 @@
                 {
                     left: '2%',
                     right: '2%',
-                    bottom: 80
+                    height: 20,
+                    top: 10
                 }
             ],
             xAxis: [
@@ -311,6 +319,19 @@
                         color: 'green'
                     }
                 ]
+            }, {
+                show: false,
+                seriesIndex: 3,
+                pieces: [
+                    {
+                        lt: 0,
+                        color: 'red'
+                    },
+                    {
+                        gt: 0,
+                        color: 'green'
+                    }
+                ]
             }],
             series: [
                 {
@@ -347,10 +368,20 @@
                     xAxisIndex: 2,
                     yAxisIndex: 2,
                     itemStyle: {
-                        color: '#03c9f8'
+                        color: '#656869'
                     },
                     large: true,
-                    data:signalsData
+                    data: signalsData
+                }, {
+                    name: 'ActionSignals',
+                    type: 'bar',
+                    xAxisIndex: 3,
+                    yAxisIndex: 3,
+                    itemStyle: {
+                        color: 'rgba(16,13,13,0.75)'
+                    },
+                    large: true,
+                    data: actionSignals
                 },
                 {
                     name: 'EMA20',
