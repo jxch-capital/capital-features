@@ -1,4 +1,4 @@
-package org.jxch.capital.filter;
+package org.jxch.capital.filter.param;
 
 import org.jxch.capital.domain.dto.IndicatorWrapper;
 

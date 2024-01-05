@@ -3,6 +3,7 @@ package org.jxch.capital.filter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLineSignal;
+import org.jxch.capital.filter.param.FilterParam;
 
 import java.util.List;
 

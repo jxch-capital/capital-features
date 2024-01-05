@@ -4,6 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLineSignal;
+import org.jxch.capital.filter.param.EMAFilterParam;
+import org.jxch.capital.filter.param.FilterParam;
 import org.jxch.capital.server.IndexService;
 import org.springframework.stereotype.Service;
 

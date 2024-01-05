@@ -3,8 +3,9 @@ package org.jxch.capital.filter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLineSignal;
-import org.jxch.capital.filter.param.EMAFilterParam;
+import org.jxch.capital.filter.param.CCIFilterParam;
 import org.jxch.capital.filter.param.FilterParam;
+import org.jxch.capital.server.IndexService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,20 +13,17 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EMASignalFilter implements SignalFilter {
-    private final EMAUpSignalFilter emaUpSignalFilter;
-    private final EMADownSignalFilter emaDownSignalFilter;
+public class CCIDownSignalFilter implements SignalFilter {
+    private final IndexService indexService;
 
     @Override
     public List<KLineSignal> filter(List<KLineSignal> signals, FilterParam param) {
-        emaUpSignalFilter.filter(signals, param);
-        emaDownSignalFilter.filter(signals, param);
-        return signals;
+        return resetActionSignal((k, s) -> k.get(param.name()) < -((CCIFilterParam) param).getLimitAbs(), signals, param, indexService);
     }
 
     @Override
     public FilterParam getDefaultParam() {
-        return EMAFilterParam.builder().build();
+        return CCIFilterParam.builder().build();
     }
 
 }

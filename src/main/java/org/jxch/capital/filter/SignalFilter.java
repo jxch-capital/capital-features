@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KLineIndices;
 import org.jxch.capital.domain.dto.KLineSignal;
+import org.jxch.capital.filter.param.FilterParam;
 import org.jxch.capital.server.IndexService;
 
 import java.util.Collections;

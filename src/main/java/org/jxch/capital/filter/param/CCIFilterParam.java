@@ -1,35 +1,33 @@
-package org.jxch.capital.filter;
+package org.jxch.capital.filter.param;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jxch.capital.domain.dto.IndicatorWrapper;
-import org.ta4j.core.BarSeries;
-import org.ta4j.core.Indicator;
-import org.ta4j.core.indicators.EMAIndicator;
-import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
-import org.ta4j.core.num.Num;
+import org.ta4j.core.indicators.CCIIndicator;
 
 import java.time.Duration;
-import java.util.function.Function;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class EMAFilterParam implements FilterParam {
+public class CCIFilterParam implements FilterParam {
     @Builder.Default
     private int length = 20;
     @Builder.Default
-    private Function<BarSeries, Indicator<Num>> priceFunc = ClosePriceIndicator::new;
-    @Builder.Default
     private Duration duration = Duration.ofDays(1);
+    @Builder.Default
+    private double limitAbs = 120;
 
     @Override
     public IndicatorWrapper wrapper() {
         return IndicatorWrapper.builder()
                 .name(name())
-                .indicatorFunc(barSeries -> new EMAIndicator(priceFunc.apply(barSeries), length))
+                .indicatorFunc(barSeries -> new CCIIndicator(barSeries, length))
                 .build();
     }
 
@@ -40,7 +38,7 @@ public class EMAFilterParam implements FilterParam {
 
     @Override
     public String name() {
-        return "EMA-" + length;
+        return "CCI-" + length;
     }
 
 }
