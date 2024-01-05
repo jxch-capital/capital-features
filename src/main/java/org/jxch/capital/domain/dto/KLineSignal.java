@@ -43,6 +43,11 @@ public class KLineSignal {
         return this;
     }
 
+    public KLineSignal resetActionSignal() {
+        actionSignal = 0;
+        return this;
+    }
+
     public boolean isActionSignal() {
         return !Objects.equals(actionSignal, 0);
     }

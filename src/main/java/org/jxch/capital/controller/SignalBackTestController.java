@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.filter.SignalFilters;
 import org.jxch.capital.server.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class SignalBackTestController {
                 .setStart(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -1)));
         modelAndView.addObject("pools", stockPoolService.findAll());
         modelAndView.addObject("indices_com", indicesCombinationService.findAll());
+        modelAndView.addObject("all_filters", SignalFilters.allSignalFilterNames());
         return modelAndView;
     }
 
@@ -47,6 +49,7 @@ public class SignalBackTestController {
 
         List<KLineSignal> kLineSignals = knnSignalBackTestService.backTestByCode(param);
         kLineSignals.forEach(kLineSignal -> kLineSignal.actionSignal(param.getSignalLimitAbs()));
+        SignalFilters.chain(SignalFilters.getSignalFilterByName(param.getFilters()), kLineSignals);
 
         List<KLineIndices> kLineIndices = indexService.index(kLineSignals.stream().map(KLineSignal::getKLine).toList(), Duration.ofDays(1),
                 Collections.singletonList(IndicatorWrapper.builder().name("EMA-20").indicatorFunc(barSeries -> new EMAIndicator(new ClosePriceIndicator(barSeries), 20)).build()));
@@ -60,6 +63,7 @@ public class SignalBackTestController {
         modelAndView.addObject("pools", stockPoolService.findAll());
         modelAndView.addObject("knn_service_names", KNNs.getAllKNNServicesName());
         modelAndView.addObject("indices_com", indicesCombinationService.findAll());
+        modelAndView.addObject("all_filters", SignalFilters.allSignalFilterNames());
         return modelAndView;
     }
 
