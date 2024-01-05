@@ -31,6 +31,8 @@ public class KNodeParam {
     private Date end = Calendar.getInstance().getTime();
     @Builder.Default
     private long indicesComId = -1;
+    @Builder.Default
+    private Boolean normalized = false;
 
     // todo 删除 futureNum，与 KNodeService 行为不一致
     @Deprecated

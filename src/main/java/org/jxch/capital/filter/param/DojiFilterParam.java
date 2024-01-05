@@ -16,7 +16,7 @@ import java.time.Duration;
 @Accessors(chain = true)
 public class DojiFilterParam implements FilterParam {
     @Builder.Default
-    private double percent = (double) 1 / 4;
+    private double percent = (double) 1 / 6;
     @Builder.Default
     private Duration duration = Duration.ofDays(1);
 

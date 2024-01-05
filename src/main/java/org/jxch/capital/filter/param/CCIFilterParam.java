@@ -21,7 +21,7 @@ public class CCIFilterParam implements FilterParam {
     @Builder.Default
     private Duration duration = Duration.ofDays(1);
     @Builder.Default
-    private double limitAbs = 120;
+    private double limitAbs = 140;
 
     @Override
     public IndicatorWrapper wrapper() {

@@ -46,12 +46,6 @@
             <option th:each="item: ${indices_com}" th:value="${item.id}" th:text="${item.name}"></option>
         </select>
     </label>
-    <label for="filters">
-        <span>过滤器：</span>
-        <select id="filters" th:field="*{filters}" multiple class="selectpicker form-control" data-live-search="true">
-            <option th:each="item: ${all_filters}" th:value="${item}" th:text="${item}" th:selected="${item}"></option>
-        </select>
-    </label>
     <label for="start">开始时间：</label>
     <input type="date" th:field="*{start}" id="start" placeholder="开始时间" required>
     <label for="size">片段大小：</label>
@@ -67,11 +61,19 @@
     <label for="signalLimitAbs">信号抑制：</label>
     <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号限制" style="width: 40px;"
            required>
-
     <input type="submit" value="查询" class="btn-primary">
+
+    <br/>
+    <label for="filters">
+        <span>过滤器：</span>
+        <select id="filters" th:field="*{filters}" multiple class="selectpicker" data-live-search="true">
+            <option th:each="item: ${all_filters}" th:value="${item}" th:text="${item}" th:selected="${item}"></option>
+        </select>
+    </label>
 </form>
-<hr/>
+
 <div th:if="${statistics}">
+    <hr/>
     <table>
         <tr>
             <td>
@@ -104,8 +106,9 @@
         </tr>
     </table>
 </div>
-<hr/>
+
 <div th:if="${kLines}">
+    <hr/>
     <div id="klineChart" style="width: 100%;height:1000px;"></div>
     <script th:inline="javascript">
         const myChart = echarts.init(document.getElementById('klineChart'));

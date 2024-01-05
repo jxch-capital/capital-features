@@ -57,12 +57,21 @@ public class KNodeServiceImpl implements KNodeService {
     public List<KNode> kNodes(KNodeParam kNodeParam, List<KLine> kLines) {
         setIndicators(kNodeParam);
         if (kNodeParam.hasIndicatorWrappers()) {
-            kLines = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers()).stream()
-                    .map(kLineIns -> (KLine) kLineIns)
-                    .sorted(Comparator.comparing(KLine::getDate).reversed())
-                    .limit(kLines.size() - kNodeParam.getMaxLength())
-                    .sorted(Comparator.comparing(KLine::getDate))
-                    .toList();
+            if (kNodeParam.getNormalized()) {
+                kLines = indexService.indexAndNormalized(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers()).stream()
+                        .map(kLineIns -> (KLine) kLineIns)
+                        .sorted(Comparator.comparing(KLine::getDate).reversed())
+                        .limit(kLines.size() - kNodeParam.getMaxLength())
+                        .sorted(Comparator.comparing(KLine::getDate))
+                        .toList();
+            } else {
+                kLines = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers()).stream()
+                        .map(kLineIns -> (KLine) kLineIns)
+                        .sorted(Comparator.comparing(KLine::getDate).reversed())
+                        .limit(kLines.size() - kNodeParam.getMaxLength())
+                        .sorted(Comparator.comparing(KLine::getDate))
+                        .toList();
+            }
         }
 
         List<KLine> finalKLines = kLines;
@@ -85,13 +94,25 @@ public class KNodeServiceImpl implements KNodeService {
 
 
         if (kNodeParam.hasIndicatorWrappers()) {
-            List<KLine> kLineIndices = indexService.index(history, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
-                    .stream()
-                    .sorted(Comparator.comparing(KLine::getDate).reversed())
-                    .limit(kNodeParam.getSize())
-                    .sorted(Comparator.comparing(KLine::getDate))
-                    .map(kLineIns -> (KLine) kLineIns)
-                    .toList();
+            List<KLine> kLineIndices;
+            if (kNodeParam.getNormalized()) {
+                kLineIndices = indexService.indexAndNormalized(history, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                        .stream()
+                        .sorted(Comparator.comparing(KLine::getDate).reversed())
+                        .limit(kNodeParam.getSize())
+                        .sorted(Comparator.comparing(KLine::getDate))
+                        .map(kLineIns -> (KLine) kLineIns)
+                        .toList();
+            } else {
+                kLineIndices = indexService.index(history, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                        .stream()
+                        .sorted(Comparator.comparing(KLine::getDate).reversed())
+                        .limit(kNodeParam.getSize())
+                        .sorted(Comparator.comparing(KLine::getDate))
+                        .map(kLineIns -> (KLine) kLineIns)
+                        .toList();
+            }
+
             return KNode.builder()
                     .code(kNodeParam.getCode())
                     .kLines(kLineIndices)
@@ -114,8 +135,8 @@ public class KNodeServiceImpl implements KNodeService {
         return kNode(kNodeParam.setEnd(Calendar.getInstance().getTime()));
     }
 
-    @Override
-    public List<KNode> comparison(@NonNull KNodeParam kNodeParam) {
+
+    private List<KNode> getComparisonList(@NonNull KNodeParam kNodeParam) {
         if (kNodeParam.hasIndicesComId()) {
             kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
         }
@@ -125,8 +146,15 @@ public class KNodeServiceImpl implements KNodeService {
                     .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
                     .entrySet().stream().flatMap(entry -> {
                                 List<KLine> kLines = kLineMapper.toKLineByStockHistoryDto(entry.getValue());
-                                List<KLine> kLineIndices = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
-                                        .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
+
+                                List<KLine> kLineIndices;
+                                if (kNodeParam.getNormalized()) {
+                                    kLineIndices = indexService.indexAndNormalized(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                                            .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
+                                } else {
+                                    kLineIndices = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                                            .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
+                                }
 
                                 return IntStream.range(0, kLineIndices.size() - kNodeParam.getSize() + 1)
                                         .mapToObj(start -> kLineIndices.subList(start, start + kNodeParam.getSize()))
@@ -143,4 +171,10 @@ public class KNodeServiceImpl implements KNodeService {
                     ).toList();
         }
     }
+
+    @Override
+    public List<KNode> comparison(@NonNull KNodeParam kNodeParam) {
+        return getComparisonList(kNodeParam);
+    }
+
 }

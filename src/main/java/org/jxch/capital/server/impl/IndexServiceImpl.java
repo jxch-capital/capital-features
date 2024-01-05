@@ -1,5 +1,6 @@
 package org.jxch.capital.server.impl;
 
+import com.google.common.math.Stats;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,25 @@ public class IndexServiceImpl implements IndexService {
             Indicator<Num> indicator = wrapper.getIndicator(barSeries);
             IntStream.range(0, kLineIndices.size())
                     .forEach(i -> kLineIndices.get(i).setIndex(wrapper.getName(), indicator.getValue(i).doubleValue()));
+        });
+
+        return kLineIndices;
+    }
+
+    @Override
+    public List<KLineIndices> indexAndNormalized(List<KLine> kLines, Duration barDuration, @NonNull List<IndicatorWrapper> indicators) {
+        List<KLineIndices> kLineIndices = kLineMapper.toKLineIndices(kLines);
+        BarSeries barSeries = kLineMapper.toBarSeries(kLines, barDuration);
+
+        indicators.forEach(wrapper -> {
+            Indicator<Num> indicator = wrapper.getIndicator(barSeries);
+            List<Double> values = indicator.stream().map(Num::doubleValue).toList();
+            Stats stats = Stats.of(values);
+            values = values.stream().map(value -> (value - stats.min()) / (stats.max() - stats.min())).toList();
+
+            List<Double> finalValues = values;
+            IntStream.range(0, kLineIndices.size())
+                    .forEach(i -> kLineIndices.get(i).setIndex(wrapper.getName(), finalValues.get(i)));
         });
 
         return kLineIndices;

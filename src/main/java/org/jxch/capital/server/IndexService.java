@@ -15,4 +15,10 @@ public interface IndexService {
         return index(kLines, barDuration, indicators).subList(maxLength, kLines.size());
     }
 
+    List<KLineIndices> indexAndNormalized(List<KLine> kLines, Duration barDuration, List<IndicatorWrapper> indicators);
+
+    default List<KLineIndices> indexAndNormalized(List<KLine> kLines, Duration barDuration, List<IndicatorWrapper> indicators, int maxLength) {
+        return indexAndNormalized(kLines, barDuration, indicators).subList(maxLength, kLines.size());
+    }
+
 }
