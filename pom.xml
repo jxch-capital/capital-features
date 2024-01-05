@@ -27,6 +27,7 @@
         <tensorflow.version>0.5.0</tensorflow.version>
         <ejml.version>0.43.1</ejml.version>
         <dl4j.version>1.0.0-M2.1</dl4j.version>
+        <math3.version>3.6.1</math3.version>
     </properties>
 
     <dependencies>
@@ -156,6 +157,12 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>${math3.version}</version>
         </dependency>
 
     </dependencies>
