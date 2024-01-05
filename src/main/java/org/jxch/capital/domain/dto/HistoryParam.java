@@ -1,5 +1,7 @@
 package org.jxch.capital.domain.dto;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +21,9 @@ import java.util.Date;
 public class HistoryParam {
     private String code;
 
+    @Builder.Default
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date start;
+    private Date start = DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -1);
 
     @Builder.Default
     @DateTimeFormat(pattern = "yyyy-MM-dd")

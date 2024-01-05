@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <title>Capital-Features</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-zh_CN.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.0/chroma.min.js"></script>
 </head>
 <body>
+<div id="app_title"></div>
 <div>
     <span>
         <a th:href="@{/app/index}">首页</a>
@@ -22,18 +29,18 @@
 </div>
 
 <form th:action="@{/app/history}" th:object="${param}" method="post">
-    <label for="code">股票代码：</label>
-    <input type="text" th:field="*{code}" id="code" placeholder="股票代码">
+    <label for="interval">时间间隔：</label>
+    <input type="text" th:field="*{interval}" id="interval" placeholder="时间间隔">
     <label for="start">开始时间：</label>
     <input type="date" th:field="*{start}" id="start" placeholder="开始时间">
     <label for="end">结束时间：</label>
     <input type="date" th:field="*{end}" id="end" placeholder="结束时间">
-    <label for="interval">结束时间：</label>
-    <input type="text" th:field="*{interval}" id="interval" placeholder="时间间隔">
+    <label for="code">股票代码：</label>
+    <input type="text" th:field="*{code}" id="code" placeholder="股票代码">
     <input type="submit" value="查询">
 </form>
 
-<div id="klineChart" style="width: 100%;height:1000px;" th:if="${history}"></div>
+<div id="klineChart" style="width: 100%;height:1200px;" th:if="${history}"></div>
 <script th:inline="javascript" th:if="${history}">
     const myChart = echarts.init(document.getElementById('klineChart'));
     const upColor = '#00da3c';
@@ -41,6 +48,11 @@
     const downColor = '#ec0000';
     const downBorderColor = '#8A0000';
     const data = [[${history}]];
+    const ema20 = [[${ema20}]];
+
+    const ema20Data = ema20.map(item => {
+        return [item.date, item.value];
+    });
 
     const option = {
         dataset: {
@@ -83,7 +95,7 @@
             {
                 left: '2%',
                 right: '2%',
-                bottom: 200
+                bottom: 80
             },
             {
                 left: '2%',
@@ -187,18 +199,32 @@
                 xAxisIndex: 1,
                 yAxisIndex: 1,
                 itemStyle: {
-                    color: '#7fbe9e'
+                    color: '#575958'
                 },
                 large: true,
                 encode: {
                     x: 0,
                     y: 5
                 }
+            },
+            {
+                name: 'EMA20',
+                type: 'line',
+                itemStyle: {
+                    color: '#f87e03'
+                },
+                showSymbol: false,
+                large: true,
+                data: ema20Data
             }
         ]
     };
 
     myChart.setOption(option);
+</script>
+
+<script th:inline="javascript">
+    $("#app_title").load("app_title.html", function() { alert("加载完成"); });
 </script>
 </body>
 </html>
