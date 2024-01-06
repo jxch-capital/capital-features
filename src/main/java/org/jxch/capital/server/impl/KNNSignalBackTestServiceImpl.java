@@ -40,7 +40,6 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
         int futureSize = knnParam.getKNodeParam().getSize() + param.getFutureNum();
         KNNService distanceService = KNNs.getKNNService(knnParam.getDistanceName());
 
-        knnParam.getKNodeParam().setNormalized(true);
         List<KNode> futureKNodes = kNodeService.comparison(knnParam.getKNodeParam().setSize(futureSize));
         List<KNode> codeFutureKNodes = kNodeService.kNodes(param.getKnnParam().getKNodeParam().setSize(futureSize), param.getStart(), param.getEnd());
 

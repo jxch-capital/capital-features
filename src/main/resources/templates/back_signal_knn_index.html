@@ -46,6 +46,13 @@
             <option th:each="item: ${indices_com}" th:value="${item.id}" th:text="${item.name}"></option>
         </select>
     </label>
+    <label for="normalized">
+        <span>归一化：</span>
+        <select id="normalized" th:field="*{knnParam.kNodeParam.normalized}" class="selectpicker form-control">
+            <option th:value="false" th:text="不归一化"></option>
+            <option th:value="true" th:text="归一化"></option>
+        </select>
+    </label>
     <label for="start">开始时间：</label>
     <input type="date" th:field="*{start}" id="start" placeholder="开始时间" required>
     <label for="size">片段大小：</label>
@@ -62,6 +69,7 @@
     <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号限制" style="width: 40px;"
            required>
     <input type="submit" value="查询" class="btn-primary">
+<!--    Normalized-->
 
     <br/>
     <label for="filters">

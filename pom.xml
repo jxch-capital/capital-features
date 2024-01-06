@@ -28,6 +28,7 @@
         <ejml.version>0.43.1</ejml.version>
         <dl4j.version>1.0.0-M2.1</dl4j.version>
         <math3.version>3.6.1</math3.version>
+        <aparapi.version>3.0.0</aparapi.version>
     </properties>
 
     <dependencies>
@@ -163,6 +164,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
             <version>${math3.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.aparapi/aparapi -->
+        <dependency>
+            <groupId>com.aparapi</groupId>
+            <artifactId>aparapi</artifactId>
+            <version>${aparapi.version}</version>
         </dependency>
 
     </dependencies>
