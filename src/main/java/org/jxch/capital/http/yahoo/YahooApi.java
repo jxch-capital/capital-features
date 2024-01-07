@@ -1,4 +1,4 @@
-package org.jxch.capital.yahoo;
+package org.jxch.capital.http.yahoo;
 
 import cn.hutool.core.text.csv.CsvUtil;
 import com.alibaba.fastjson2.JSONObject;
@@ -9,7 +9,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.jxch.capital.yahoo.dto.*;
+import org.jxch.capital.http.yahoo.dto.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package org.jxch.capital.yahoo.dto;
+package org.jxch.capital.http.yahoo.dto;
 
 import cn.hutool.core.annotation.Alias;
 import lombok.Data;

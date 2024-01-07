@@ -6,6 +6,7 @@ yahoo:
   proxy-port: 10809
   use-proxy: true
 
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -24,3 +25,10 @@ logging:
     org.jxch.capital: debug
     sql: info
     web: info
+
+ai:
+  gemini:
+    proxy-host: 127.0.0.1
+    proxy-port: 10809
+    use-proxy: true
+    key: AIzaSyCzLBBh243bcKndgYuByv9PUygjMEaTSJk

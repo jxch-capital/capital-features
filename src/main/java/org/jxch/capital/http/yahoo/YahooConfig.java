@@ -1,4 +1,4 @@
-package org.jxch.capital.yahoo;
+package org.jxch.capital.http.yahoo;
 
 import lombok.Data;
 import lombok.NonNull;

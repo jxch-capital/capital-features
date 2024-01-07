@@ -29,6 +29,9 @@
         <dl4j.version>1.0.0-M2.1</dl4j.version>
         <math3.version>3.6.1</math3.version>
         <aparapi.version>3.0.0</aparapi.version>
+        <milvus.version>2.3.4</milvus.version>
+        <djl.version>0.14.0</djl.version>
+        <djl-pytorch-native.version>1.9.1</djl-pytorch-native.version>
     </properties>
 
     <dependencies>
@@ -166,12 +169,35 @@
             <version>${math3.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.aparapi/aparapi -->
-        <dependency>
-            <groupId>com.aparapi</groupId>
-            <artifactId>aparapi</artifactId>
-            <version>${aparapi.version}</version>
-        </dependency>
-
+<!--        <dependency>-->
+<!--            <groupId>com.aparapi</groupId>-->
+<!--            <artifactId>aparapi</artifactId>-->
+<!--            <version>${aparapi.version}</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/io.milvus/milvus-sdk-java -->
+<!--        <dependency>-->
+<!--            <groupId>io.milvus</groupId>-->
+<!--            <artifactId>milvus-sdk-java</artifactId>-->
+<!--            <version>${milvus.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; DJL API &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>ai.djl</groupId>-->
+<!--            <artifactId>api</artifactId>-->
+<!--            <version>${djl.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; DJL PyTorch Enginge &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>ai.djl.pytorch</groupId>-->
+<!--            <artifactId>pytorch-engine</artifactId>-->
+<!--            <version>${djl.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; DJL PyTorch native library &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>ai.djl.pytorch</groupId>-->
+<!--            <artifactId>pytorch-native-auto</artifactId>-->
+<!--            <version>${djl-pytorch-native.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

@@ -12,8 +12,20 @@ services:
       POSTGRES_DB: capital-features
       POSTGRES_USER: capital-features
       POSTGRES_PASSWORD: capital-features
-
+  milvus_cpu:
+    image: milvusdb/milvus:latest
+    container_name: milvus_cpu
+    volumes:
+      - milvus_cpu_data:/var/lib/milvus
+    ports:
+      - "19530:19530"
+      - "19121:19121"
+    environment:
+      - TZ=Asia/Shanghai
+    command: ["milvus", "run", "standalone"]
 
 volumes:
   pgsql_data:
+    driver: local
+  milvus_cpu_data:
     driver: local

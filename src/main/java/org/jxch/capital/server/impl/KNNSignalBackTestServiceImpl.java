@@ -46,6 +46,8 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
         List<KLineSignal> kLineSignals = codeFutureKNodes.parallelStream()
                 .map(futureKNode -> {
                     KNode kNode = futureKNode.subtractLast(param.getFutureNum());
+                    log.debug("进度：{}", DateUtil.format(kNode.getLastKLine().getDate(), "yyyy-MM-dd"));
+
                     return KLineSignal.builder()
                             .kLine(kNode.getLastKLine())
                             .signal(kNodeAnalyzeService.statisticsKNNHasFuture(

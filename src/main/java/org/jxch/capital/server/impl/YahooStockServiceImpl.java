@@ -6,8 +6,8 @@ import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.HistoryParam;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.server.StockService;
-import org.jxch.capital.yahoo.YahooApi;
-import org.jxch.capital.yahoo.dto.DownloadStockCsvParam;
+import org.jxch.capital.http.yahoo.YahooApi;
+import org.jxch.capital.http.yahoo.dto.DownloadStockCsvParam;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -6,7 +6,7 @@ import org.jxch.capital.domain.dto.KLineFeatures;
 import org.jxch.capital.domain.dto.KLineIndices;
 import org.jxch.capital.domain.dto.StockHistoryDto;
 import org.jxch.capital.domain.po.StockHistory;
-import org.jxch.capital.yahoo.dto.DownloadStockCsvRes;
+import org.jxch.capital.http.yahoo.dto.DownloadStockCsvRes;
 import org.mapstruct.Mapper;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.BaseBar;
