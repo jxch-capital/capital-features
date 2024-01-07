@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -34,6 +35,10 @@ public class GeminiRes implements TextAiRes {
 
     @JSONField(serialize = false)
     public String getResString() {
+        if (Objects.isNull(candidates) || candidates.isEmpty() || Objects.isNull(candidates.get(0).getContent())) {
+            return "NULL";
+        }
+
         return this.candidates.get(0).getContent().getParts().get(0).getText();
     }
 

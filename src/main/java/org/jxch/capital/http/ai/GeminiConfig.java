@@ -32,9 +32,9 @@ public class GeminiConfig {
         }
 
         return builder
-                .readTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .callTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.MINUTES)
+                .writeTimeout(10, TimeUnit.MINUTES)
+                .callTimeout(10, TimeUnit.MINUTES)
                 .build();
     }
 
