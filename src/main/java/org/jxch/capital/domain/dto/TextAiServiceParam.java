@@ -17,4 +17,6 @@ import java.util.List;
 public class TextAiServiceParam {
     private List<String> texts;
     private TextAiEnum textAiEnum;
+    @Builder.Default
+    private int length = 5;
 }

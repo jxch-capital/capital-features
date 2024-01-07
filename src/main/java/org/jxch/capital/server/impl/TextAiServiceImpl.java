@@ -22,8 +22,13 @@ public class TextAiServiceImpl implements TextAiService {
             throw new IllegalArgumentException("提问为空");
         }
 
+        List<String> texts = param.getTexts();
+        if (texts.size() > param.getLength()) {
+            texts = texts.subList(texts.size() - param.getLength(), texts.size() - 1);
+        }
+
         TextAiApi textAiApi = AppContextHolder.getContext().getBean(param.getTextAiEnum().getTextAiApi());
-        return textAiApi.questionTextToChainString(textAiApi.getParam(param.getTexts()));
+        return textAiApi.questionTextToChainString(textAiApi.getParam(texts));
     }
 
 }
