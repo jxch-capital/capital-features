@@ -24,4 +24,13 @@ class TextAiServiceImplTest {
         log.info(JSONObject.toJSONString(questions));
 
     }
+
+    @Test
+    void testQuestion() {
+        List<String> questions = textAiService.questionStream(Arrays.asList("你是谁"), log::info);
+        questions.add("为什么");
+        questions = textAiService.questionStream(questions, log::info);
+
+        log.info(JSONObject.toJSONString(questions));
+    }
 }

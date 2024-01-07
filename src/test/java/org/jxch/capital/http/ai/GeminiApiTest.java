@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.http.ai.dto.TextAiParam;
+import org.jxch.capital.http.ai.dto.TextAiRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,9 +14,11 @@ class GeminiApiTest {
     @Autowired
     private GeminiApi geminiApi;
 
-    @Test void t() {
+    @Test
+    void t() {
         log.info("test");
     }
+
     @Test
     void questionText() {
 
@@ -26,5 +29,14 @@ class GeminiApiTest {
         textAiParam = geminiApi.questionTextChain(textAiParam);
 
         log.info(JSONObject.toJSONString(textAiParam.chainText()));
+    }
+
+    @Test
+    void questionTextStream() {
+        TextAiRes textAiRes = geminiApi.questionTextStream(
+                geminiApi.getDefaultParam().addText("SpringBoot如何快速集成MIN-IO"),
+                log::info);
+
+        log.info(JSONObject.toJSONString(textAiRes.resText()));
     }
 }

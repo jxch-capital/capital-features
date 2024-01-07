@@ -25,7 +25,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 
     <style>
-        #form{
+        #form {
             margin-left: 50px;
             margin-right: 50px;
         }
@@ -96,18 +96,45 @@
     const ws = new WebSocket("ws://" + wsPath);
 
     ws.addEventListener("message", function (event) {
-        clearInterval(timer);
-        $("#counter").text("Success")
-        counter = 0
-        $("#msg").val("")
+        let strRes = event.data;
 
-        $("#content")
-            .append($("<div class='his ai' style='display: none'></div>").text(event.data))
-            .append($("<div class='ai'></div>").html(marked.marked(event.data)));
+        if (strRes.startsWith("ALL-")) {
+            strRes = strRes.replace(/^ALL-/, "");
 
-        $('pre code').each(function(i, block) {
-            hljs.highlightBlock(block);
-        });
+            clearInterval(timer);
+            $("#counter").text("Success")
+            counter = 0
+            $("#msg").val("")
+
+            $("#content")
+                .append($("<div class='his ai' style='display: none'></div>").text(strRes))
+                .append($("<div class='ai'></div>").html(marked.marked(strRes)));
+
+            $('pre code').each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+
+            $("#ai-current-text").remove();
+            $("#ai-current-markdown").remove();
+        } else if (strRes.startsWith("SUB-")) {
+            strRes = strRes.replace(/^SUB-/, "");
+
+            let element = $("#ai-current-text");
+            if (element.length) {
+                element.text(element.text() + strRes);
+            } else {
+                console.log("create")
+                element = $('<div id="ai-current-text" style="display: none"></div>').text(strRes);
+                $("#content").append(element)
+                    .append($("<div id='ai-current-markdown' class='ai'></div>"));
+            }
+
+            $("#ai-current-markdown").html(marked.marked(element.text()));
+
+            $('pre code').each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+        }
     });
 
     $("#run").click(function () {

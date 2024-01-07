@@ -23,10 +23,18 @@ public class TextAiWSHandler extends TextWebSocketHandler {
     public void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws IOException {
         TextAiServiceParam param = JSONObject.parseObject(message.getPayload(), TextAiServiceParam.class);
         log.debug(JSONObject.toJSONString(param));
-        TextMessage textMessage = new TextMessage(textAiService.questionLastRes(param));
+
+        TextMessage textMessage = new TextMessage(
+                "ALL-" + textAiService.questionLastResStream(param, (str) -> {
+                    try {
+                        session.sendMessage(new TextMessage("SUB-" + str));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }));
+
         session.sendMessage(textMessage);
         log.debug(textMessage.toString());
     }
-
 
 }
