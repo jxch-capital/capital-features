@@ -31,7 +31,7 @@
         }
 
         #content {
-            margin: 50px;
+            margin: 10px 50px 10px 50px;
             background-color: rgba(128, 128, 128, 0.4);
             height: 1000px;
             overflow: scroll;
@@ -73,17 +73,18 @@
 <div id="content"></div>
 
 <div id="form">
+    <label for="msg"></label>
+    <textarea id="msg" placeholder="请输入要请问的问题" required rows="3" cols="100"
+              class="text-primary form-control"></textarea>
+
     <label for="model">
-        <span>模型：</span>
+        <span></span>
         <select id="model" name="models" class="selectpicker form-control">
             <option th:each="item: ${models}" th:value="${item}" th:text="${item}"></option>
         </select>
     </label>
 
-    <label for="msg"></label>
-    <textarea id="msg" placeholder="请输入要请问的问题" required rows="2" cols="100"></textarea>
-
-    <button id="run">提问</button>
+    <button id="run" class="btn-primary" style="margin-left: 20px; margin-right: 20px; width: 100px">提问</button>
     <span id="counter"></span>
 </div>
 
@@ -94,6 +95,7 @@
     const scriptElement = document.querySelector('script[ai-ws-path]');
     const wsPath = scriptElement.getAttribute('ai-ws-path');
     const ws = new WebSocket("ws://" + wsPath);
+    const content = $("#content");
 
     ws.addEventListener("message", function (event) {
         let strRes = event.data;
@@ -106,7 +108,7 @@
             counter = 0
             $("#msg").val("")
 
-            $("#content")
+            content
                 .append($("<div class='his ai' style='display: none'></div>").text(strRes))
                 .append($("<div class='ai'></div>").html(marked.marked(strRes)));
 
@@ -123,9 +125,8 @@
             if (element.length) {
                 element.text(element.text() + strRes);
             } else {
-                console.log("create")
                 element = $('<div id="ai-current-text" style="display: none"></div>').text(strRes);
-                $("#content").append(element)
+                content.append(element)
                     .append($("<div id='ai-current-markdown' class='ai'></div>"));
             }
 
@@ -135,10 +136,14 @@
                 hljs.highlightBlock(block);
             });
         }
+
+        content.scrollTop(content[0].scrollHeight);
     });
 
-    $("#run").click(function () {
-        $("#content").append($("<div class='his user'></div>").text($("#msg").val()));
+    const submitEvent = function () {
+        content.append($("<div class='his user'></div>").text($("#msg").val()))
+        content.scrollTop(content[0].scrollHeight);
+
 
         const texts = [];
         $("#content .his").each(function () {
@@ -156,7 +161,16 @@
             counter++;
             $("#counter").text(counter + "s.");
         }, 1000);
+    }
 
+    $("#run").click(function () {
+        submitEvent()
+    });
+
+    $("#msg").keypress(function (event) {
+        if (event.shiftKey && event.keyCode === 13) {
+            submitEvent()
+        }
     });
 </script>
 
