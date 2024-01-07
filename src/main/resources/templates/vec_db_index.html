@@ -34,6 +34,20 @@
 </head>
 
 <body>
+<div>
+    <span>
+        <a th:href="@{/app/index}">首页</a>
+        <a th:href="@{/stock_base/index}">股票基础信息管理</a>
+        <a th:href="@{/stock_pool/index}">股票池管理</a>
+        <a th:href="@{/knn/index}">K近邻</a>
+        <a th:href="@{/real/index}">实时看板</a>
+        <a th:href="@{/indices/index}">指标管理</a>
+        <a th:href="@{/indices_com/index}">指标组合管理</a>
+        <a th:href="@{/back_signal/knn_index}">KNN信号回测</a>
+        <a th:href="@{/ai/index}">AI对话</a>
+        <a th:href="@{/vec_db/index}">知识库</a>
+    </span>
+</div>
 
 <form th:action="@{/vec_db/search}" th:object="${param}" method="post">
     <label for="num">近邻数：</label>
