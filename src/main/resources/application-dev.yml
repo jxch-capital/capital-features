@@ -32,3 +32,12 @@ ai:
     proxy-port: 10809
     use-proxy: true
     key: AIzaSyCzLBBh243bcKndgYuByv9PUygjMEaTSJk
+
+vec:
+  db:
+    scheme: http
+    host: 127.0.0.1
+    port: 5000
+    path: /search_api
+
+
