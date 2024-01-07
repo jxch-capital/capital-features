@@ -13,6 +13,7 @@ import org.jxch.capital.server.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,10 +44,13 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
         List<KNode> futureKNodes = kNodeService.comparison(knnParam.getKNodeParam().setSize(futureSize));
         List<KNode> codeFutureKNodes = kNodeService.kNodes(param.getKnnParam().getKNodeParam().setSize(futureSize), param.getStart(), param.getEnd());
 
+        List<KNode> proc = Collections.synchronizedList(new ArrayList<>(codeFutureKNodes));
+
         List<KLineSignal> kLineSignals = codeFutureKNodes.parallelStream()
                 .map(futureKNode -> {
                     KNode kNode = futureKNode.subtractLast(param.getFutureNum());
-                    log.debug("进度：{}", DateUtil.format(kNode.getLastKLine().getDate(), "yyyy-MM-dd"));
+                    proc.remove(futureKNode);
+                    log.debug("进度：{} / {}", codeFutureKNodes.size() - proc.size(), codeFutureKNodes.size());
 
                     return KLineSignal.builder()
                             .kLine(kNode.getLastKLine())
