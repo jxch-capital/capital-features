@@ -5,14 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.server.KNNService;
 import org.jxch.capital.server.KNNs;
-import org.springframework.stereotype.Service;
 import smile.math.MathEx;
 import smile.math.distance.MahalanobisDistance;
 
 import java.util.List;
 
 @Slf4j
-@Service
+//@Service
 @RequiredArgsConstructor
 public class MahalanobisKNNServiceImpl implements KNNService {
 
