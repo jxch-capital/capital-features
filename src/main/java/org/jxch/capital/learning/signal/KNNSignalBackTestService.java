@@ -2,7 +2,6 @@ package org.jxch.capital.learning.signal;
 
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.SignalBackTestKNNParam;
-import org.jxch.capital.server.SignalBackTestService;
 
 import java.util.List;
 
