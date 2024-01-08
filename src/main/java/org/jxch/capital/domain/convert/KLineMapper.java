@@ -8,6 +8,7 @@ import org.jxch.capital.domain.dto.StockHistoryDto;
 import org.jxch.capital.domain.po.StockHistory;
 import org.jxch.capital.http.yahoo.dto.DownloadStockCsvRes;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.BaseBar;
 import org.ta4j.core.BaseBarSeries;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface KLineMapper {
+    KLineMapper K_LINE_MAPPER = Mappers.getMapper(KLineMapper.class);
 
     KLine toKLine(DownloadStockCsvRes stock);
 
