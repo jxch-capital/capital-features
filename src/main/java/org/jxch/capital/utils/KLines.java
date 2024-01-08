@@ -3,12 +3,13 @@ package org.jxch.capital.utils;
 import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLine;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class KLines {
 
-    @NonNull
-    public static List<KLine> normalized(@NonNull List<KLine> kLines) {
+    public static double[] normalizedArrH(@NonNull List<KLine> kLines) {
         List<Double> close = kLines.stream().map(KLine::getClose).toList();
         List<Double> open = kLines.stream().map(KLine::getOpen).toList();
         List<Double> high = kLines.stream().map(KLine::getHigh).toList();
@@ -19,14 +20,17 @@ public class KLines {
         List<Double> highN = MathU.normalized(high);
         List<Double> lowN = MathU.normalized(low);
 
-        for (int i = 0; i < kLines.size(); i++) {
-            kLines.get(i).setClose(closeN.get(i));
-            kLines.get(i).setOpen(openN.get(i));
-            kLines.get(i).setHigh(highN.get(i));
-            kLines.get(i).setLow(lowN.get(i));
-        }
+        return Stream.of(closeN, openN, highN, lowN)
+                .flatMap(List::stream)
+                .mapToDouble(Double::doubleValue)
+                .toArray();
+    }
 
-        return kLines;
+    public static double[] normalizedArrV(@NonNull List<KLine> kLines) {
+        return kLines.stream()
+                .flatMap(kLine -> Arrays.stream(new Double[]{kLine.getClose(), kLine.getOpen(), kLine.getHigh(), kLine.getLow()}))
+                .mapToDouble(value -> value)
+                .toArray();
     }
 
 }

@@ -90,7 +90,7 @@ public class KNodeParam {
     }
 
     public boolean hasIndicesComId() {
-        return !Objects.equals(this.indicesComId, -1);
+        return this.indicesComId != -1;
     }
 
     @Override

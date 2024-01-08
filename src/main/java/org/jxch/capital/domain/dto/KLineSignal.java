@@ -13,8 +13,8 @@ import java.util.function.Function;
 @AllArgsConstructor
 public class KLineSignal {
     private KLine kLine;
-    private Integer signal;
-
+    @Builder.Default
+    private Integer signal = null;
     @Builder.Default
     private Integer actionSignal = 0;
     @Builder.Default

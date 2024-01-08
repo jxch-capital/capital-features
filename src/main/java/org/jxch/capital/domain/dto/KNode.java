@@ -18,6 +18,14 @@ public class KNode {
     private String code;
     private List<KLine> kLines;
 
+    public KLine get(int index) {
+        return kLines.get(index);
+    }
+
+    public KLine getBehind(int index) {
+        return kLines.get(kLines.size() - index);
+    }
+
     public KLine getFristKLine() {
         return kLines.get(0);
     }
