@@ -31,6 +31,8 @@
         <aparapi.version>3.0.0</aparapi.version>
         <milvus.version>2.3.4</milvus.version>
         <djl.version>0.14.0</djl.version>
+        <openblas.version>0.3.23-1.5.9</openblas.version>
+        <bytedeco.version>1.5.9</bytedeco.version>
         <djl-pytorch-native.version>1.9.1</djl-pytorch-native.version>
     </properties>
 
@@ -168,6 +170,31 @@
             <artifactId>commons-math3</artifactId>
             <version>${math3.version}</version>
         </dependency>
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/openblas &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco</groupId>-->
+<!--            <artifactId>openblas</artifactId>-->
+<!--            <version>${openblas.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/javacpp &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco</groupId>-->
+<!--            <artifactId>javacpp</artifactId>-->
+<!--            <version>${bytedeco.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/javacpp-platform &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco</groupId>-->
+<!--            <artifactId>javacpp-platform</artifactId>-->
+<!--            <version>${bytedeco.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/javacv &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco</groupId>-->
+<!--            <artifactId>javacv</artifactId>-->
+<!--            <version>${bytedeco.version}</version>-->
+<!--        </dependency>-->
+
         <!-- https://mvnrepository.com/artifact/com.aparapi/aparapi -->
 <!--        <dependency>-->
 <!--            <groupId>com.aparapi</groupId>-->
