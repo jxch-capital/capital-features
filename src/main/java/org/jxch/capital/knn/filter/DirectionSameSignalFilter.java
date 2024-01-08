@@ -8,7 +8,6 @@ import org.jxch.capital.knn.filter.param.FilterParam;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -18,14 +17,8 @@ public class DirectionSameSignalFilter implements SignalFilter {
     @Override
     public List<KLineSignal> filter(@NonNull List<KLineSignal> signals, FilterParam param) {
         signals.forEach(kLineSignal -> {
-            if (Objects.nonNull(kLineSignal.getTureSignal())) {
-                if (kLineSignal.getTureSignal() * kLineSignal.getSignal() < 0) {
-                    kLineSignal.resetActionSignal();
-                }
-            } else {
-                if ((kLineSignal.getKLine().getClose() - kLineSignal.getKLine().getOpen()) * kLineSignal.getSignal() < 0) {
-                    kLineSignal.resetActionSignal();
-                }
+            if ((kLineSignal.getKLine().getClose() - kLineSignal.getKLine().getOpen()) * kLineSignal.getSignal() < 0) {
+                kLineSignal.resetActionSignal();
             }
         });
         return signals;
