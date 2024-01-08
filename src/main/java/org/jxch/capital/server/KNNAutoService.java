@@ -1,4 +1,4 @@
-package org.jxch.capital.knn;
+package org.jxch.capital.server;
 
 import lombok.NonNull;
 import org.jxch.capital.domain.dto.KNNParam;

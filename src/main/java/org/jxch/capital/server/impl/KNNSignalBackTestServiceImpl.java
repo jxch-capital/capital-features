@@ -1,4 +1,4 @@
-package org.jxch.capital.knn;
+package org.jxch.capital.server.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
@@ -9,6 +9,9 @@ import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNNParam;
 import org.jxch.capital.domain.dto.KNNSignalBackTestParam;
 import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.server.KNNSignalBackTestService;
+import org.jxch.capital.knn.distance.KNNService;
+import org.jxch.capital.knn.distance.KNNs;
 import org.jxch.capital.server.KNodeAnalyzeService;
 import org.jxch.capital.server.KNodeService;
 import org.springframework.stereotype.Service;

@@ -2,8 +2,6 @@ package org.jxch.capital.knn.distance;
 
 import lombok.RequiredArgsConstructor;
 import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.knn.KNNService;
-import org.jxch.capital.knn.KNNs;
 import org.springframework.stereotype.Service;
 import smile.math.distance.DynamicTimeWarping;
 

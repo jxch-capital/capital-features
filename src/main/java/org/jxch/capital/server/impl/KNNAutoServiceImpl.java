@@ -1,4 +1,4 @@
-package org.jxch.capital.knn;
+package org.jxch.capital.server.impl;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,9 @@ import org.jxch.capital.domain.dto.KNNParam;
 import org.jxch.capital.domain.dto.KNeighbor;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
+import org.jxch.capital.knn.distance.KNNService;
+import org.jxch.capital.knn.distance.KNNs;
+import org.jxch.capital.server.KNNAutoService;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.utils.AppContextHolder;
 import org.springframework.stereotype.Service;

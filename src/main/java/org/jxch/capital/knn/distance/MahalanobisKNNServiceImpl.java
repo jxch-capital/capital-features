@@ -3,8 +3,6 @@ package org.jxch.capital.knn.distance;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.knn.KNNService;
-import org.jxch.capital.knn.KNNs;
 import smile.math.MathEx;
 import smile.math.distance.MahalanobisDistance;
 

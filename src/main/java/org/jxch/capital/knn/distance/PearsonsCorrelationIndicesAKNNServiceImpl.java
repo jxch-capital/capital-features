@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.knn.KNNService;
-import org.jxch.capital.knn.KNNs;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

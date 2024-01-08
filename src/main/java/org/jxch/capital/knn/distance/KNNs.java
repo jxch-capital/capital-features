@@ -1,9 +1,10 @@
-package org.jxch.capital.knn;
+package org.jxch.capital.knn.distance;
 
 import lombok.NonNull;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KLineIndices;
+import org.jxch.capital.knn.distance.KNNService;
 import org.jxch.capital.utils.AppContextHolder;
 import org.jxch.capital.utils.MathU;
 
