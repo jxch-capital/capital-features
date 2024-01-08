@@ -10,6 +10,7 @@ import org.jxch.capital.domain.dto.KLineSignalStatistics;
 import org.jxch.capital.domain.dto.KNNParam;
 import org.jxch.capital.domain.dto.KNNSignalBackTestParam;
 import org.jxch.capital.knn.distance.LorentzianKNNServiceImpl;
+import org.jxch.capital.knn.signal.KNNSignalBackTestServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

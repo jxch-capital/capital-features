@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.knn.filter.SignalFilters;
-import org.jxch.capital.server.KNNSignalBackTestService;
+import org.jxch.capital.knn.signal.KNNSignalBackTestService;
 import org.jxch.capital.knn.distance.KNNs;
 import org.jxch.capital.server.*;
 import org.springframework.stereotype.Controller;

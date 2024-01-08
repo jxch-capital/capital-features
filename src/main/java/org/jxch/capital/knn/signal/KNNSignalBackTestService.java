@@ -1,4 +1,4 @@
-package org.jxch.capital.server;
+package org.jxch.capital.knn.signal;
 
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNNSignalBackTestParam;
