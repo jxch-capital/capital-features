@@ -32,6 +32,6 @@ public class ManhattanKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "曼哈顿距离-结构优先";
+        return "曼哈顿距离";
     }
 }

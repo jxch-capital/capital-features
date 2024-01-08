@@ -50,7 +50,7 @@ public class LorentzianKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "洛伦兹距离-结构优先";
+        return "洛伦兹距离";
     }
 
     @Override

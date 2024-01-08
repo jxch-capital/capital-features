@@ -24,6 +24,6 @@ public class DTWKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "DTW-结构优先";
+        return "DTW";
     }
 }
