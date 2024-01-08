@@ -37,7 +37,7 @@ public class SignalBackTestController {
     public ModelAndView knnIndex() {
         ModelAndView modelAndView = new ModelAndView("back_signal_knn_index");
         modelAndView.addObject("knn_service_names", KNNs.getAllKNNServicesName());
-        modelAndView.addObject("param", new KNNSignalBackTestParam().setCode("QQQ")
+        modelAndView.addObject("param", new SignalBackTestKNNParam().setCode("QQQ")
                 .setStart(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -1)));
         modelAndView.addObject("pools", stockPoolService.findAll());
         modelAndView.addObject("indices_com", indicesCombinationService.findAll());
@@ -46,7 +46,7 @@ public class SignalBackTestController {
     }
 
     @RequestMapping("/knn_back")
-    public ModelAndView knnBack(@NonNull @ModelAttribute KNNSignalBackTestParam param) {
+    public ModelAndView knnBack(@NonNull @ModelAttribute SignalBackTestKNNParam param) {
         ModelAndView modelAndView = new ModelAndView("back_signal_knn_index");
 
         List<KLineSignal> kLineSignals = knnSignalBackTestService.backTestByCode(param);

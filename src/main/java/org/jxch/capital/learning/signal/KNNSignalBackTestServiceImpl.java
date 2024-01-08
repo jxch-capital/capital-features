@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNNParam;
-import org.jxch.capital.domain.dto.KNNSignalBackTestParam;
+import org.jxch.capital.domain.dto.SignalBackTestKNNParam;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.learning.knn.KNNService;
 import org.jxch.capital.learning.knn.KNNs;
@@ -28,13 +28,13 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
     private final KNodeAnalyzeService kNodeAnalyzeService;
 
     @Override
-    public Integer signal(KNode kNode, KNNSignalBackTestParam param) {
+    public Integer signal(KNode kNode, SignalBackTestKNNParam param) {
         // todo 删除接口的这个方法，或者用 ThreadLocal
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<KLineSignal> backTestByCode(@NonNull KNNSignalBackTestParam param) {
+    public List<KLineSignal> backTestByCode(@NonNull SignalBackTestKNNParam param) {
         TimeInterval timer = DateUtil.timer();
 
         param.getKnnParam().getKNodeParam().setCode(param.getCode());

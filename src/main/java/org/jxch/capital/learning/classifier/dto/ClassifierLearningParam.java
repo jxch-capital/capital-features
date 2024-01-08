@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.learning.classifier.ClassifierLearnings;
 import smile.classification.Classifier;
 import smile.math.kernel.MercerKernel;
 
@@ -53,6 +54,14 @@ public class ClassifierLearningParam {
                 .tol(1E-3)
                 .epochs(10)
                 .build();
+    }
+
+    public ClassifierLearningParam toLearningParamByKLineH() {
+        return ClassifierLearnings.toLearningParamByKLineH(this);
+    }
+
+    public ClassifierLearningParam toLearningParamByKLineV() {
+        return ClassifierLearnings.toLearningParamByKLineV(this);
     }
 
 }

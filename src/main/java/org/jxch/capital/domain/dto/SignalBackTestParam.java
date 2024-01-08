@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -29,4 +30,6 @@ public class SignalBackTestParam {
     private Date end = Calendar.getInstance().getTime();
     @Builder.Default
     private Integer signalLimitAbs = 5;
+    @Builder.Default
+    private List<String> filters = null;
 }

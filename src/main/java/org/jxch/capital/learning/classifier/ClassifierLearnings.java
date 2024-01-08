@@ -2,9 +2,13 @@ package org.jxch.capital.learning.classifier;
 
 import lombok.NonNull;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;
+import org.jxch.capital.utils.AppContextHolder;
 import org.jxch.capital.utils.KNodes;
 import smile.classification.SVM;
 import smile.math.kernel.GaussianKernel;
+
+import java.util.List;
+import java.util.Objects;
 
 public class ClassifierLearnings {
 
@@ -26,6 +30,19 @@ public class ClassifierLearnings {
                 .setYT(KNodes.futures(emptyParam.getKNodesT(), emptyParam.getFutureNum()))
                 .setXT(KNodes.normalizedKArrV(KNodes.subtractLast(emptyParam.getKNodesT(), emptyParam.getFutureNum())))
                 .setXP(KNodes.normalizedKArrV(KNodes.sliceLastFuture(emptyParam.getKNodesP(), emptyParam.getFutureNum(), emptyParam.getSize())));
+    }
+
+    public static List<ClassifierLearningService> allClassifierLearningService() {
+        return AppContextHolder.getContext().getBeansOfType(ClassifierLearningService.class).values().stream().toList();
+    }
+
+    public static List<String> allClassifierLearningServiceNames() {
+        return allClassifierLearningService().stream().map(ClassifierLearningService::name).toList();
+    }
+
+    public static ClassifierLearningService getClassifierLearningService(String name) {
+        return allClassifierLearningService().stream().filter(service -> Objects.equals(name, service.name()))
+                .findAny().orElseThrow(() -> new IllegalArgumentException("没有这个分类器：" + name));
     }
 
 }

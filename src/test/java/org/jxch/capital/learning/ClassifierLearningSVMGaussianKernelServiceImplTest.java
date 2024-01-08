@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
-import org.jxch.capital.learning.classifier.AutoClassifierLearningServiceImpl;
-import org.jxch.capital.learning.classifier.ClassifierLearnings;
+import org.jxch.capital.learning.classifier.ClassifierLearningSVMGaussianKernelServiceImpl;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningRes;
 import org.jxch.capital.server.IntervalEnum;
@@ -23,9 +22,9 @@ import java.util.List;
 
 @Slf4j
 @SpringBootTest
-class AutoClassifierLearningServiceImplTest {
+class ClassifierLearningSVMGaussianKernelServiceImplTest {
     @Autowired
-    private AutoClassifierLearningServiceImpl autoLearningService;
+    private ClassifierLearningSVMGaussianKernelServiceImpl kernelService;
     @Autowired
     private KNodeServiceImpl kNodeService;
 
@@ -43,15 +42,15 @@ class AutoClassifierLearningServiceImplTest {
         List<KNode> kNodesP = kNodeService.kNodes(kNodeParam, DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -2), Calendar.getInstance().getTime());
         List<KLineSignal> kLineSignals = KLineSignals.setTrueSignalHasLastNull(kNodesP, 6, 20);
 
-        ClassifierLearningParam param = ClassifierLearnings.SVMGaussianKernel()
+
+        ClassifierLearningParam param = kernelService.defaultParam()
                 .setKNodesT(kNodesT)
                 .setKNodesP(kNodesP)
                 .setFutureNum(6)
-                .setSize(20);
+                .setSize(20)
+                .toLearningParamByKLineH();
 
-        param = ClassifierLearnings.toLearningParamByKLineH(param);
-
-        ClassifierLearningRes predict = autoLearningService.fitAndPredict(param);
+        ClassifierLearningRes predict = kernelService.fitAndPredict(param);
 
         for (int i = 0; i < kLineSignals.size(); i++) {
             kLineSignals.get(i).setSignal(predict.getSignal(i));
