@@ -7,7 +7,7 @@ import org.jxch.capital.domain.dto.KLineAnalyzeStatistics;
 import org.jxch.capital.domain.dto.KNNParam;
 import org.jxch.capital.domain.dto.KNeighbor;
 import org.jxch.capital.server.KNNAutoService;
-import org.jxch.capital.knn.distance.KNNs;
+import org.jxch.capital.learning.knn.KNNs;
 import org.jxch.capital.server.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.HistoryParam;
 import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.knn.distance.LorentzianKNNServiceImpl;
+import org.jxch.capital.learning.knn.distance.LorentzianKNNServiceImpl;
 import org.jxch.capital.server.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

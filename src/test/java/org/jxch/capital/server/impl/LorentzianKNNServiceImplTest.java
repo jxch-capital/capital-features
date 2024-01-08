@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.*;
-import org.jxch.capital.knn.distance.LorentzianKNNServiceImpl;
+import org.jxch.capital.learning.knn.distance.LorentzianKNNServiceImpl;
 import org.jxch.capital.server.KNodeParams;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.server.StockService;
