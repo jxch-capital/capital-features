@@ -1,4 +1,4 @@
-package org.jxch.capital.server.impl;
+package org.jxch.capital.knn;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
@@ -9,7 +9,8 @@ import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNNParam;
 import org.jxch.capital.domain.dto.KNNSignalBackTestParam;
 import org.jxch.capital.domain.dto.KNode;
-import org.jxch.capital.server.*;
+import org.jxch.capital.server.KNodeAnalyzeService;
+import org.jxch.capital.server.KNodeService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import java.util.List;
 public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
     private final KNodeService kNodeService;
     private final KNodeAnalyzeService kNodeAnalyzeService;
-    private final IndicesCombinationService indicesCombinationService;
 
     @Override
     public Integer signal(KNode kNode, KNNSignalBackTestParam param) {

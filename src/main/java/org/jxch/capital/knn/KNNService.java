@@ -1,10 +1,12 @@
-package org.jxch.capital.server;
+package org.jxch.capital.knn;
 
 import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KNeighbor;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
+import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.utils.AppContextHolder;
 
 import java.util.Comparator;

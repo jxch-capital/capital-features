@@ -1,7 +1,8 @@
-package org.jxch.capital.server;
+package org.jxch.capital.knn;
 
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNNSignalBackTestParam;
+import org.jxch.capital.server.SignalBackTestService;
 
 import java.util.List;
 

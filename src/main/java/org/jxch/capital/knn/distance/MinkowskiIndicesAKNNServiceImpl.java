@@ -1,10 +1,10 @@
-package org.jxch.capital.server.impl;
+package org.jxch.capital.knn.distance;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.server.KNNService;
-import org.jxch.capital.server.KNNs;
+import org.jxch.capital.knn.KNNService;
+import org.jxch.capital.knn.KNNs;
 import org.springframework.stereotype.Service;
 import smile.math.distance.MinkowskiDistance;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MinkowskiIndicesKNNServiceImpl implements KNNService {
+public class MinkowskiIndicesAKNNServiceImpl implements KNNService {
     private final MinkowskiDistance minkowskiDistance = new MinkowskiDistance(2);
 
     @Override

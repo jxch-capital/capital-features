@@ -1,4 +1,4 @@
-package org.jxch.capital.server;
+package org.jxch.capital.knn;
 
 import lombok.NonNull;
 import org.jxch.capital.domain.convert.KLineMapper;

@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.knn.distance.ManhattanKNNServiceImpl;
 import org.jxch.capital.server.IntervalEnum;
 import org.jxch.capital.server.KNodeParams;
 import org.jxch.capital.server.KNodeService;

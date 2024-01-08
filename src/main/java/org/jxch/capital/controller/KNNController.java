@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLineAnalyzeStatistics;
 import org.jxch.capital.domain.dto.KNNParam;
 import org.jxch.capital.domain.dto.KNeighbor;
+import org.jxch.capital.knn.KNNAutoService;
+import org.jxch.capital.knn.KNNs;
 import org.jxch.capital.server.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
