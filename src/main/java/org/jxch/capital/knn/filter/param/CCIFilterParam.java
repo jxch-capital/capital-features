@@ -1,4 +1,4 @@
-package org.jxch.capital.filter.param;
+package org.jxch.capital.knn.filter.param;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

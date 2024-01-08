@@ -1,4 +1,4 @@
-package org.jxch.capital.filter;
+package org.jxch.capital.knn.filter;
 
 import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLineSignal;

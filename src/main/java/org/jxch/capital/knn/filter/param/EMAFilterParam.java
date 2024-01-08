@@ -1,4 +1,4 @@
-package org.jxch.capital.filter.param;
+package org.jxch.capital.knn.filter.param;
 
 import lombok.*;
 import lombok.experimental.Accessors;

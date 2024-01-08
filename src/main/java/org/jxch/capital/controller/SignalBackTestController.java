@@ -6,7 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.*;
-import org.jxch.capital.filter.SignalFilters;
+import org.jxch.capital.knn.filter.SignalFilters;
 import org.jxch.capital.knn.KNNSignalBackTestService;
 import org.jxch.capital.knn.KNNs;
 import org.jxch.capital.server.*;
