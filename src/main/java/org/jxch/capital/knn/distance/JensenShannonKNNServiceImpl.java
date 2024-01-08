@@ -21,6 +21,6 @@ public class JensenShannonKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "詹森香农距离-平均";
+        return "詹森香农距离-K线-平均";
     }
 }

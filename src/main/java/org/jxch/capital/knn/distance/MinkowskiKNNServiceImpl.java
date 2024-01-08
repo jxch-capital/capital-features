@@ -22,7 +22,7 @@ public class MinkowskiKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "闵可夫斯基距离-平均";
+        return "闵可夫斯基距离-K线-平均";
     }
 
 }

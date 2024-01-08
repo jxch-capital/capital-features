@@ -24,6 +24,6 @@ public class CosKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "余弦相似度-平均";
+        return "余弦相似度-K线-平均";
     }
 }

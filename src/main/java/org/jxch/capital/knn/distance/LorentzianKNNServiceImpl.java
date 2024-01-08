@@ -49,7 +49,7 @@ public class LorentzianKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "洛伦兹距离";
+        return "洛伦兹距离-指标序列-平均";
     }
 
     @Override

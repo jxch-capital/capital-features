@@ -21,6 +21,6 @@ public class EuclideanKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "欧氏距离-平均";
+        return "欧氏距离-K线-平均";
     }
 }

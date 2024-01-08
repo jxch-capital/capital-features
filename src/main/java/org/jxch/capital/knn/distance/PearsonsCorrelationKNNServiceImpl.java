@@ -21,6 +21,6 @@ public class PearsonsCorrelationKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "皮尔逊相关系数";
+        return "皮尔逊相关系数-K线-平均";
     }
 }
