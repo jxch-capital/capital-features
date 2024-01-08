@@ -21,18 +21,18 @@ public class KLineSignal {
     private Double tureSignal = null;
 
     public KLineSignal actionSignal() {
-        if (signal > 0 && kLine.getClose() > kLine.getOpen()) {
+        if (signal > 0) {
             actionSignal = 1;
-        } else if (signal < 0 && kLine.getClose() < kLine.getOpen()) {
+        } else if (signal < 0) {
             actionSignal = -1;
         }
         return this;
     }
 
     public KLineSignal actionSignal(double limitAbs) {
-        if (signal > limitAbs && kLine.getClose() > kLine.getOpen()) {
+        if (signal > limitAbs) {
             actionSignal = 1;
-        } else if (signal < -limitAbs && kLine.getClose() < kLine.getOpen()) {
+        } else if (signal < -limitAbs) {
             actionSignal = -1;
         }
         return this;
