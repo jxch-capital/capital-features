@@ -18,11 +18,11 @@ public class JensenShannonIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, jensenShannonDistance::d);
+        return KNNs.distanceIndicesHAverage(a, b, jensenShannonDistance::d);
     }
 
     @Override
     public String getName() {
-        return "詹森香农距离-指标序列-横向";
+        return "詹森香农距离-指标序列-平均";
     }
 }

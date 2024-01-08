@@ -16,12 +16,12 @@ public class DTWIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(@NonNull List<KLine> a, @NonNull List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, DynamicTimeWarping::d);
+        return KNNs.distanceIndicesHAverage(a, b, DynamicTimeWarping::d);
     }
 
     @Override
     public String getName() {
-        return "DTW-指标序列-横向";
+        return "DTW-指标序列-平均";
     }
 
 }

@@ -20,11 +20,11 @@ public class CosIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, this::distance);
+        return KNNs.distanceIndicesHAverage(a, b, this::distance);
     }
 
     @Override
     public String getName() {
-        return "余弦相似度-指标序列-横向";
+        return "余弦相似度-指标序列-平均";
     }
 }

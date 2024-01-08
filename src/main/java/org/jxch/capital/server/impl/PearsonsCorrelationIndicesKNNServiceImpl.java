@@ -18,11 +18,11 @@ public class PearsonsCorrelationIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, pearsons::correlation);
+        return KNNs.distanceIndicesHAverage(a, b, pearsons::correlation);
     }
 
     @Override
     public String getName() {
-        return "皮尔逊相关系数-指标序列-横向";
+        return "皮尔逊相关系数-指标序列-平均";
     }
 }

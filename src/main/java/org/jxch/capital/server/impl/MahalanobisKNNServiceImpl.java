@@ -27,6 +27,6 @@ public class MahalanobisKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "马哈拉诺比斯距离 (不支持)";
+        return "马哈拉诺比斯距离-平均 (不支持)";
     }
 }

@@ -18,11 +18,11 @@ public class ManhattanIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, manhattanDistance::d);
+        return KNNs.distanceIndicesHAverage(a, b, manhattanDistance::d);
     }
 
     @Override
     public String getName() {
-        return "曼哈顿距离-指标序列-横向";
+        return "曼哈顿距离-指标序列-平均";
     }
 }

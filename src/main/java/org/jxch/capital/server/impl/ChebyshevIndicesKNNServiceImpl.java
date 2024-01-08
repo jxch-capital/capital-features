@@ -19,11 +19,11 @@ public class ChebyshevIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, chebyshevDistance::d);
+        return KNNs.distanceIndicesHAverage(a, b, chebyshevDistance::d);
     }
 
     @Override
     public String getName() {
-        return "切比雪夫距离-指标序列-横向";
+        return "切比雪夫距离-指标序列-平均";
     }
 }

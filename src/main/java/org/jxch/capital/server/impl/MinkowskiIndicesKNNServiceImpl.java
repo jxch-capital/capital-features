@@ -18,11 +18,11 @@ public class MinkowskiIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, minkowskiDistance::d);
+        return KNNs.distanceIndicesHAverage(a, b, minkowskiDistance::d);
     }
 
     @Override
     public String getName() {
-        return "闵可夫斯基距离-指标序列-横向";
+        return "闵可夫斯基距离-指标序列-平均";
     }
 }

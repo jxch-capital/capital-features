@@ -20,6 +20,6 @@ public class DTWKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "DTW";
+        return "DTW-平均";
     }
 }

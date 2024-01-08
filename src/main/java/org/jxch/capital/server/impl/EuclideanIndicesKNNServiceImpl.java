@@ -18,11 +18,11 @@ public class EuclideanIndicesKNNServiceImpl implements KNNService {
 
     @Override
     public double distance(List<KLine> a, List<KLine> b) {
-        return KNNs.distanceIndicesH(a, b, euclideanDistance::d);
+        return KNNs.distanceIndicesHAverage(a, b, euclideanDistance::d);
     }
 
     @Override
     public String getName() {
-        return "欧氏距离-指标序列-横向";
+        return "欧氏距离-指标序列-平均";
     }
 }

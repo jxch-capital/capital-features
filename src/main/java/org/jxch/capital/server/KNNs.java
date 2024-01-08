@@ -7,6 +7,7 @@ import org.jxch.capital.domain.dto.KLineIndices;
 import org.jxch.capital.utils.AppContextHolder;
 import org.jxch.capital.utils.MathU;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -33,19 +34,30 @@ public class KNNs {
                 + func.d(MathU.normalized(kLineMapper.toLowArr(a)), MathU.normalized(kLineMapper.toLowArr(b)))) / 4;
     }
 
-    public static double[][] indicesH(@NonNull List<KLineIndices> indices) {
+    public static double[][] indicesH2(@NonNull List<KLineIndices> indices) {
         return MathU.transpose(indices.stream().map(kLineIndices ->
                         kLineIndices.getIndices().values().stream().mapToDouble(value -> value).toArray())
                 .toArray(double[][]::new));
     }
 
-    public static double distanceIndicesH(@NonNull List<KLine> a, @NonNull List<KLine> b, @NonNull DistanceFunc func) {
-        double[][] aIndicesArr = indicesH(a.stream().map(kLine -> (KLineIndices) kLine).toList());
-        double[][] bIndicesArr = indicesH(b.stream().map(kLine -> (KLineIndices) kLine).toList());
+    public static double[] indicesH(@NonNull List<KLineIndices> indices) {
+        return indices.stream().flatMapToDouble(kLineIndices ->
+                        Arrays.stream(kLineIndices.getIndices().values().stream().mapToDouble(value -> value).toArray()))
+                .toArray();
+    }
+
+    public static double distanceIndicesHAverage(@NonNull List<KLine> a, @NonNull List<KLine> b, @NonNull DistanceFunc func) {
+        double[][] aIndicesArr = indicesH2(a.stream().map(kLine -> (KLineIndices) kLine).toList());
+        double[][] bIndicesArr = indicesH2(b.stream().map(kLine -> (KLineIndices) kLine).toList());
 
         return IntStream.range(0, aIndicesArr.length)
                 .mapToDouble(i -> func.d(aIndicesArr[i], bIndicesArr[i]))
                 .average().orElseThrow();
+    }
+
+    public static double distanceIndicesH(@NonNull List<KLine> a, @NonNull List<KLine> b, @NonNull DistanceFunc func) {
+        return func.d(indicesH(a.stream().map(kLine -> (KLineIndices) kLine).toList()),
+                indicesH(b.stream().map(kLine -> (KLineIndices) kLine).toList()));
     }
 
     @FunctionalInterface

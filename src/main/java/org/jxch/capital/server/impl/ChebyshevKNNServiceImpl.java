@@ -23,6 +23,6 @@ public class ChebyshevKNNServiceImpl implements KNNService {
 
     @Override
     public String getName() {
-        return "切比雪夫距离";
+        return "切比雪夫距离-平均";
     }
 }
