@@ -1,4 +1,4 @@
-package org.jxch.capital.learning.classifier;
+package org.jxch.capital.learning.classifier.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Data;

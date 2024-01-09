@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;
+import org.jxch.capital.learning.classifier.model.ClassifierLearningService;
 import org.jxch.capital.utils.AppContextHolder;
 import org.jxch.capital.utils.KNodes;
 import smile.classification.Classifier;

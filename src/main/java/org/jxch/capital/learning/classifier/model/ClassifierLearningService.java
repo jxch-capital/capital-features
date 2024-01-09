@@ -1,6 +1,7 @@
-package org.jxch.capital.learning.classifier;
+package org.jxch.capital.learning.classifier.model;
 
 import lombok.NonNull;
+import org.jxch.capital.learning.classifier.ClassifierLearnings;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningRes;
 

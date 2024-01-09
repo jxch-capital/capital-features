@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
-import org.jxch.capital.learning.classifier.ClassifierLearningService;
+import org.jxch.capital.learning.classifier.model.ClassifierLearningService;
 import org.jxch.capital.learning.classifier.ClassifierLearnings;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningRes;
 import org.jxch.capital.learning.signal.dto.SignalBackTestClassifierParam;

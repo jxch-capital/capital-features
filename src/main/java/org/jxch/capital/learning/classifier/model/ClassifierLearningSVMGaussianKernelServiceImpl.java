@@ -1,4 +1,4 @@
-package org.jxch.capital.learning.classifier;
+package org.jxch.capital.learning.classifier.model;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;

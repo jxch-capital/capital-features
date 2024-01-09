@@ -19,7 +19,7 @@ import java.util.function.Function;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClassifierLearningParam {
+public class ClassifierLearningParam { // todo 继承接口强制类型转换，以适应不同的分类器
     @Builder.Default
     private double[][] xT = null;
     @Builder.Default
