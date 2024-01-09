@@ -14,12 +14,14 @@ public class ClassifierLearningSVMGaussianKernelServiceImpl implements Classifie
     public ClassifierLearningParam defaultParam() {
         return ClassifierLearningParam.defaultParam()
                 .setKernel(new GaussianKernel(2.0))
-                .setClassifierFitFunc(param -> SVM.fit(param.getXT(), param.getYT(), param.getC(), param.getTol(), param.getEpochs()));
+                .setClassifierFitFunc(param -> SVM.fit(param.getXT(), param.getYT(), param.getC(), param.getTol(), param.getEpochs()))
+                .setDataFunc(ClassifierLearningParam::setAllDataByKLineH)
+                .setModelName(name());
     }
 
     @Override
     public String name() {
-        return "SVM+GaussianKernel";
+        return "SVM+GaussianKernel-H";
     }
 
 }

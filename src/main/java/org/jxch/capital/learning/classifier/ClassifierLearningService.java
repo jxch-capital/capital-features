@@ -9,6 +9,7 @@ public interface ClassifierLearningService {
     ClassifierLearningParam defaultParam();
 
     default ClassifierLearningParam fit(@NonNull ClassifierLearningParam param) {
+        param.getDataFunc().accept(param);
         return param.fitClassifier();
     }
 
@@ -19,12 +20,25 @@ public interface ClassifierLearningService {
                 .build();
     }
 
-    default ClassifierLearningRes fitAndPredict(ClassifierLearningParam param) {
+    default ClassifierLearningRes fitAndPredict(@NonNull ClassifierLearningParam param) {
         return predict(fit(param));
     }
 
     default String name() {
         return getClass().getSimpleName();
+    }
+
+    default ClassifierLearningParam save(@NonNull ClassifierLearningParam param) {
+        ClassifierLearnings.save(param.getClassifier(), param.getModelName());
+        return param;
+    }
+
+    default ClassifierLearningParam load(@NonNull ClassifierLearningParam param) {
+        return param.setClassifier(ClassifierLearnings.load(param.getModelName()));
+    }
+
+    default ClassifierLearningParam fitAndSave(@NonNull ClassifierLearningParam param) {
+        return save(fit(param));
     }
 
 }

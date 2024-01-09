@@ -6,11 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jxch.capital.domain.dto.KNode;
-import org.jxch.capital.learning.classifier.ClassifierLearnings;
+import org.jxch.capital.utils.KNodes;
 import smile.classification.Classifier;
 import smile.math.kernel.MercerKernel;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Data
@@ -42,6 +43,11 @@ public class ClassifierLearningParam {
     private List<KNode> kNodesT = null;
     @Builder.Default
     private List<KNode> kNodesP = null;
+    @Builder.Default
+    private Consumer<ClassifierLearningParam> dataFunc = null;
+    @Builder.Default
+    private String modelName = null;
+
 
     public ClassifierLearningParam fitClassifier() {
         classifier = classifierFitFunc.apply(this);
@@ -56,12 +62,30 @@ public class ClassifierLearningParam {
                 .build();
     }
 
-    public ClassifierLearningParam toLearningParamByKLineH() {
-        return ClassifierLearnings.toLearningParamByKLineH(this);
+    public ClassifierLearningParam setTDataByKLineH() {
+        return this.setYT(KNodes.futures(this.getKNodesT(), this.getFutureNum()))
+                .setXT(KNodes.normalizedKArrH(KNodes.subtractLast(this.getKNodesT(), this.getFutureNum())));
     }
 
-    public ClassifierLearningParam toLearningParamByKLineV() {
-        return ClassifierLearnings.toLearningParamByKLineV(this);
+    public ClassifierLearningParam setPDataByKLineH() {
+        return this.setXP(KNodes.normalizedKArrH(KNodes.sliceLastFuture(this.getKNodesP(), this.getFutureNum(), this.getSize())));
+    }
+
+    public ClassifierLearningParam setAllDataByKLineH() {
+        return this.setTDataByKLineH().setPDataByKLineH();
+    }
+
+    public ClassifierLearningParam setTDataByKLineV() {
+        return this.setYT(KNodes.futures(this.getKNodesT(), this.getFutureNum()))
+                .setXT(KNodes.normalizedKArrV(KNodes.subtractLast(this.getKNodesT(), this.getFutureNum())));
+    }
+
+    public ClassifierLearningParam setPDataByKLineV() {
+        return this.setXP(KNodes.normalizedKArrV(KNodes.sliceLastFuture(this.getKNodesP(), this.getFutureNum(), this.getSize())));
+    }
+
+    public ClassifierLearningParam setAllDataByKLineV() {
+        return this.setTDataByKLineV().setPDataByKLineV();
     }
 
 }

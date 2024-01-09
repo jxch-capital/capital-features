@@ -1,4 +1,4 @@
-package org.jxch.capital.domain.dto;
+package org.jxch.capital.learning.signal.dto;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;

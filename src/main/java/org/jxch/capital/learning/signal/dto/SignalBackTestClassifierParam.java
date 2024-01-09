@@ -1,10 +1,11 @@
-package org.jxch.capital.domain.dto;
+package org.jxch.capital.learning.signal.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jxch.capital.domain.dto.KNodeParam;
 
 @Data
 @AllArgsConstructor

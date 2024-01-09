@@ -1,9 +1,9 @@
 package org.jxch.capital.learning.signal;
 
 import org.jxch.capital.domain.dto.KLineSignal;
-import org.jxch.capital.domain.dto.SignalBackTestKNNParam;
 import org.jxch.capital.domain.dto.KNode;
-import org.jxch.capital.domain.dto.SignalBackTestParam;
+import org.jxch.capital.learning.signal.dto.SignalBackTestKNNParam;
+import org.jxch.capital.learning.signal.dto.SignalBackTestParam;
 
 import java.util.List;
 

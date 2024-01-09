@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KLineSignalStatistics;
 import org.jxch.capital.domain.dto.KNNParam;
-import org.jxch.capital.domain.dto.SignalBackTestKNNParam;
+import org.jxch.capital.learning.signal.dto.SignalBackTestKNNParam;
 import org.jxch.capital.learning.knn.distance.LorentzianKNNServiceImpl;
 import org.jxch.capital.learning.signal.KNNSignalBackTestServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

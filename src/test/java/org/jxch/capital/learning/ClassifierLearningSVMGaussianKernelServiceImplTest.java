@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
+import org.jxch.capital.learning.classifier.ClassifierLearningConfig;
 import org.jxch.capital.learning.classifier.ClassifierLearningSVMGaussianKernelServiceImpl;
+import org.jxch.capital.learning.classifier.ClassifierLearnings;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningRes;
 import org.jxch.capital.server.IntervalEnum;
@@ -16,6 +18,7 @@ import org.jxch.capital.server.impl.KNodeServiceImpl;
 import org.jxch.capital.utils.KLineSignals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import smile.classification.Classifier;
 
 import java.util.Calendar;
 import java.util.List;
@@ -27,6 +30,8 @@ class ClassifierLearningSVMGaussianKernelServiceImplTest {
     private ClassifierLearningSVMGaussianKernelServiceImpl kernelService;
     @Autowired
     private KNodeServiceImpl kNodeService;
+    @Autowired
+    private ClassifierLearningConfig classifierLearningConfig;
 
     @Test
     void predict() {
@@ -48,7 +53,7 @@ class ClassifierLearningSVMGaussianKernelServiceImplTest {
                 .setKNodesP(kNodesP)
                 .setFutureNum(6)
                 .setSize(20)
-                .toLearningParamByKLineH();
+                .setAllDataByKLineH();
 
         ClassifierLearningRes predict = kernelService.fitAndPredict(param);
 
@@ -57,5 +62,21 @@ class ClassifierLearningSVMGaussianKernelServiceImplTest {
         }
 
         log.info(JSONObject.toJSONString(predict.getYP()));
+
+        kernelService.save(param.setModelName(param.getModelName() + "TEST"));
     }
+
+
+    @Test
+    void load() {
+        List<String> allLocalModel = ClassifierLearnings.allLocalModel(classifierLearningConfig.getModelPath());
+        log.info(JSONObject.toJSONString(allLocalModel));
+
+        Classifier<double[]> load = ClassifierLearnings.load(classifierLearningConfig.getModelPath() + allLocalModel.get(0));
+
+
+
+
+    }
+
 }
