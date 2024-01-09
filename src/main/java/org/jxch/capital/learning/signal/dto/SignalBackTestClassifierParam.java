@@ -1,11 +1,7 @@
 package org.jxch.capital.learning.signal.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
-import org.jxch.capital.domain.dto.KNodeParam;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +9,5 @@ import org.jxch.capital.domain.dto.KNodeParam;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SignalBackTestClassifierParam extends SignalBackTestParam {
-    private String classifierName;
-    private KNodeParam kNodeParam = new KNodeParam();
+    private Long classifierModelId;
 }

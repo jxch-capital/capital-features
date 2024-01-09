@@ -68,7 +68,7 @@ public class ClassifierLearningParam { // todo 继承接口强制类型转换，
     }
 
     public ClassifierLearningParam setPDataByKLineH() {
-        return this.setXP(KNodes.normalizedKArrH(KNodes.sliceLastFuture(this.getKNodesP(), this.getFutureNum(), this.getSize())));
+        return this.setXP(KNodes.normalizedKArrH(KNodes.sliceAndSubtractLastFuture(this.getKNodesP(), this.getFutureNum(), this.getSize())));
     }
 
     public ClassifierLearningParam setAllDataByKLineH() {
@@ -81,7 +81,7 @@ public class ClassifierLearningParam { // todo 继承接口强制类型转换，
     }
 
     public ClassifierLearningParam setPDataByKLineV() {
-        return this.setXP(KNodes.normalizedKArrV(KNodes.sliceLastFuture(this.getKNodesP(), this.getFutureNum(), this.getSize())));
+        return this.setXP(KNodes.normalizedKArrV(KNodes.sliceAndSubtractLastFuture(this.getKNodesP(), this.getFutureNum(), this.getSize())));
     }
 
     public ClassifierLearningParam setAllDataByKLineV() {

@@ -32,5 +32,8 @@ public class KLineSignals {
         return kLineSignals;
     }
 
+    public static List<KLineSignal> setActionSignal(@NonNull List<KLineSignal> signals) {
+        return signals.stream().map(KLineSignal::actionSignal).toList();
+    }
 
 }

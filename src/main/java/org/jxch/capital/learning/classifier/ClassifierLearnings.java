@@ -53,14 +53,14 @@ public class ClassifierLearnings {
         return emptyParam
                 .setYT(KNodes.futures(emptyParam.getKNodesT(), emptyParam.getFutureNum()))
                 .setXT(KNodes.normalizedKArrH(KNodes.subtractLast(emptyParam.getKNodesT(), emptyParam.getFutureNum())))
-                .setXP(KNodes.normalizedKArrH(KNodes.sliceLastFuture(emptyParam.getKNodesP(), emptyParam.getFutureNum(), emptyParam.getSize())));
+                .setXP(KNodes.normalizedKArrH(KNodes.sliceAndSubtractLastFuture(emptyParam.getKNodesP(), emptyParam.getFutureNum(), emptyParam.getSize())));
     }
 
     public static ClassifierLearningParam setDataByKLineV(@NonNull ClassifierLearningParam emptyParam) {
         return emptyParam
                 .setYT(KNodes.futures(emptyParam.getKNodesT(), emptyParam.getFutureNum()))
                 .setXT(KNodes.normalizedKArrV(KNodes.subtractLast(emptyParam.getKNodesT(), emptyParam.getFutureNum())))
-                .setXP(KNodes.normalizedKArrV(KNodes.sliceLastFuture(emptyParam.getKNodesP(), emptyParam.getFutureNum(), emptyParam.getSize())));
+                .setXP(KNodes.normalizedKArrV(KNodes.sliceAndSubtractLastFuture(emptyParam.getKNodesP(), emptyParam.getFutureNum(), emptyParam.getSize())));
     }
 
     public static List<ClassifierLearningService> allClassifierLearningService() {

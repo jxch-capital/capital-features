@@ -61,6 +61,7 @@
         <tr th:each="item,iter: ${db_classifier}">
             <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
             <td th:text="${item.name}"></td>
+            <td th:text="${item.classifierFullName}"></td>
             <td th:text="${item.classifierName}"></td>
             <td th:text="${item.classifierParamTypes}"></td>
             <td th:text="${item.classifierParams}"></td>

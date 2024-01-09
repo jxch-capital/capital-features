@@ -61,10 +61,19 @@ public class KNodes {
     }
 
     @NotNull
-    public static List<KNode> sliceLastFuture(@NonNull List<KNode> nodes, int futureNum, int size) {
+    public static List<KNode> sliceAndSubtractLastFuture(@NonNull List<KNode> nodes, int futureNum, int size) {
         KNode lastKNode = nodes.get(nodes.size() - 1);
         List<KNode> lastKNodes = lastKNode.sliceOut0(size);
         List<KNode> all = new ArrayList<>(KNodes.subtractLast(nodes, futureNum));
+        all.addAll(lastKNodes);
+        return all;
+    }
+
+    @NotNull
+    public static List<KNode> sliceLastFuture(@NonNull List<KNode> nodes, int futureNum, int size) {
+        KNode lastKNode = nodes.get(nodes.size() - 1);
+        List<KNode> lastKNodes = lastKNode.sliceOut0(size);
+        List<KNode> all = new ArrayList<>(nodes);
         all.addAll(lastKNodes);
         return all;
     }

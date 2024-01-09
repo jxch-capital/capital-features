@@ -33,7 +33,7 @@ class KNNSignalBackTestServiceImplTest {
                         .distanceName(lorentzianKNNService.getName())
                         .kNodeParam(lorentzianKNNService.getDefaultKNodeParam()
                                 .setStockPoolId(340054)
-                                .setIndicesComId(69951))
+                                .setIndicesComId(69951L))
                         .build())
                 .setFutureNum(2)
                 .setCode("QQQ")

@@ -8,8 +8,6 @@ import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 @Data
 @Builder
@@ -17,16 +15,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClassifierPredictParam {
-    private String modeName;
+    private Long classifierModelId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date start;
     private String code;
-
-    @Builder.Default
-    private List<String> filters = null;
-
-    public boolean hasFilter() {
-        return Objects.nonNull(filters) && !filters.isEmpty();
-    }
-
 }

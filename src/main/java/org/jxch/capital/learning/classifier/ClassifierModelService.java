@@ -11,6 +11,7 @@ public interface ClassifierModelService {
     String XT_PARAM_NAME = "x";
     String YT_PARAM_NAME = "y";
 
+    List<ClassifierModelConfigDto> findModelConfigsHasLocal();
     List<ClassifierModelConfigDto> findAllModelConfig();
 
     ClassifierModelConfigDto findModelConfigById(Long id);

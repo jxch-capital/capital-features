@@ -2,64 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>KNN买卖信号回测</title>
+    <title>模型信号回测</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
 </head>
 <body>
-
-<form th:action="@{/back_signal/knn_back}" th:object="${param}" method="post">
-    <label for="distanceName">
-        <span>距离算法：</span>
-        <select id="distanceName" th:field="*{knnParam.distanceName}" class="selectpicker form-control" data-live-search="true">
-            <option th:each="item: ${knn_service_names}" th:value="${item}" th:text="${item}"></option>
+<form th:action="@{/classifier_model_signal/signal}" th:object="${param}" method="post">
+    <label for="classifierModelId">
+        <span>模型选择：</span>
+        <select id="classifierModelId" th:field="*{classifierModelId}" class="selectpicker" data-live-search="true">
+            <option th:each="item: ${all_local_models}" th:value="${item.id}" th:text="${item.name}"></option>
         </select>
     </label>
-    <label for="stockPoolId">
-        <span>股票池：</span>
-        <select id="stockPoolId" th:field="*{knnParam.kNodeParam.stockPoolId}" class="selectpicker form-control" data-live-search="true">
-            <option th:each="item: ${pools}" th:value="${item.id}" th:text="${item.poolName}"></option>
-        </select>
-    </label>
-    <label for="indicesComId">
-        <span>指标组合：</span>
-        <select id="indicesComId" th:field="*{knnParam.kNodeParam.indicesComId}" class="selectpicker form-control" data-live-search="true">
-            <option th:each="item: ${indices_com}" th:value="${item.id}" th:text="${item.name}"></option>
-        </select>
-    </label>
-    <label for="normalized">
-        <span>指标归一化：</span>
-        <select id="normalized" th:field="*{knnParam.kNodeParam.normalized}" class="selectpicker form-control">
-            <option th:value="false" th:text="不归一化"></option>
-            <option th:value="true" th:text="归一化"></option>
-        </select>
-    </label>
-    <label for="start">开始时间：</label>
-    <input type="date" th:field="*{start}" id="start" placeholder="开始时间" required>
-    <label for="size">片段大小：</label>
-    <input type="text" th:field="*{knnParam.kNodeParam.size}" id="size" placeholder="片段大小" style="width: 40px;"
-           required>
-    <label for="futureNum">预测数：</label>
-    <input type="text" th:field="*{futureNum}" id="futureNum" placeholder="预测数" style="width: 40px;" required>
-    <label for="neighborSize">近邻数：</label>
-    <input type="text" th:field="*{knnParam.neighborSize}" id="neighborSize" placeholder="近邻数" style="width: 40px;"
-           required>
-    <label for="code" >股票代码：</label>
-    <input type="text" th:field="*{code}" id="code" placeholder="股票代码" style="width: 80px;" required>
-    <label for="signalLimitAbs">信号抑制：</label>
-    <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号限制" style="width: 40px;"
-           required>
-    <input type="submit" value="查询" class="btn-primary">
-<!--    Normalized-->
-
-    <br/>
     <label for="filters">
         <span>过滤器：</span>
         <select id="filters" th:field="*{filters}" multiple class="selectpicker" data-live-search="true">
             <option th:each="item: ${all_filters}" th:value="${item}" th:text="${item}" th:selected="${item}"></option>
         </select>
     </label>
+    <label for="start">开始时间：</label>
+    <input type="date" th:field="*{start}" id="start" placeholder="开始时间" required>
+    <label for="code" >股票代码：</label>
+    <input type="text" th:field="*{code}" id="code" placeholder="股票代码" style="width: 80px;" required>
+    <label for="signalLimitAbs">信号抑制：</label>
+    <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号限制" style="width: 40px;"
+           required>
+    <input type="submit" value="查询" class="btn-primary">
 </form>
 
 <div th:if="${statistics}">
@@ -405,9 +375,5 @@
         myChart.setOption(option);
     </script>
 </div>
-
-<script th:inline="javascript">
-
-</script>
 </body>
 </html>

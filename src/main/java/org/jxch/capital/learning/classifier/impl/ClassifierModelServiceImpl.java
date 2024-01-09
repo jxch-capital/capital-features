@@ -14,6 +14,7 @@ import org.jxch.capital.learning.classifier.dto.ClassifierFitInfoDto;
 import org.jxch.capital.learning.classifier.dto.ClassifierFitParam;
 import org.jxch.capital.server.IntervalEnum;
 import org.jxch.capital.server.KNodeService;
+import org.jxch.capital.utils.KLineSignals;
 import org.jxch.capital.utils.KNodes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -34,6 +34,11 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
     private final ClassifierModelConfigService classifierModelConfigService;
     private final ClassifierConfigService classifierConfigService;
     private final KNodeService kNodeService;
+
+    @Override
+    public List<ClassifierModelConfigDto> findModelConfigsHasLocal() {
+        return findAllModelConfig().stream().filter(ClassifierModelConfigDto::isHasLocalModel).toList();
+    }
 
     @Override
     public List<ClassifierModelConfigDto> findAllModelConfig() {
@@ -60,8 +65,27 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
         return classifierModelConfigService.findByName(names);
     }
 
+    private void renameModel(String oldModelName, String newModelName) {
+        if (hasLocalModel(oldModelName)) {
+            File oldFile = new File(ClassifierLearnings.getModePath(oldModelName));
+            File newFile = new File(ClassifierLearnings.getModePath(newModelName));
+            if (oldFile.renameTo(newFile)) {
+                log.debug("模型重命名：{} -> {}", newModelName, newModelName);
+            } else {
+                log.error("模型重命名失败：{} -> {}", oldModelName, newModelName);
+            }
+        }
+    }
+
     @Override
-    public Integer saveModelConfig(List<ClassifierModelConfigDto> dto) {
+    @Transactional
+    public Integer saveModelConfig(@NonNull List<ClassifierModelConfigDto> dto) {
+        dto.forEach(d -> {
+            String oldName = findModelConfigById(d.getClassifierId()).getName();
+            if (!oldName.equals(d.getName())) {
+                renameModel(oldName, d.getName());
+            }
+        });
         return classifierModelConfigService.save(dto);
     }
 
@@ -115,15 +139,16 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
         ClassifierFitInfoDto classifierFitInfoDto = classifierConfigService.findClassifierFitInfoDto(
                 classifierConfig.getClassifierName(), classifierConfig.getClassifierParamTypes());
 
-        List<String> typesList = classifierConfig.getClassifierParmaTypesList();
+
+        Class<?>[] types = classifierFitInfoDto.getFitMethod().getParameterTypes();
         List<String> paramsList = classifierConfig.getClassifierParamsList();
-        Object[] params = new Object[typesList.size()];
+        Object[] params = new Object[types.length];
 
         ClassifierFitParam fitParam = new ClassifierFitParam();
-        for (int i = 0; i < typesList.size(); i++) {
+        for (int i = 0; i < types.length; i++) {
             if (this.isXT(paramsList.get(i))) {
                 KNodeParam kNodeParam = KNodeParam.builder()
-                        .size(classifierModelConfig.getSize())
+                        .size(classifierModelConfig.getSize() + classifierModelConfig.getFutureNum())
                         .stockPoolId(classifierModelConfig.getStockPoolId())
                         .indicesComId(classifierModelConfig.getIndicesComId())
                         .normalized(true)
@@ -142,7 +167,15 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
             } else if (this.isYT(paramsList.get(i))) {
                 params[i] = fitParam.getYT();
             } else {
-                params[i] = paramsList.get(i);
+                Class<?> typeClazz = types[i];
+                String param = paramsList.get(i);
+                if (typeClazz.getName().equals(double.class.getName())) {
+                    params[i] = Double.parseDouble(param);
+                } else if (typeClazz.getName().equals(int.class.getName())) {
+                    params[i] = Integer.parseInt(param);
+                } else {
+                    params[i] = types[i].cast(paramsList.get(i));
+                }
             }
         }
 
@@ -153,29 +186,30 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
 
     @Override
     public List<KLineSignal> predict(@NonNull ClassifierPredictParam param) {
-        ClassifierModelConfigDto config = classifierModelConfigService.findByName(param.getModeName());
+        ClassifierModelConfigDto config = classifierModelConfigService.findById(param.getClassifierModelId());
 
+        // todo 支持其他时间间隔
         KNodeParam kNodeParam = KNodeParam.builder()
                 .normalized(true)
                 .code(param.getCode())
-                .size(config.getSize())
+                .size(config.getSize() + config.getFutureNum())
                 .intervalEnum(IntervalEnum.DAY_1)
                 .indicesComId(config.getIndicesComId())
                 .build();
 
-        List<KNode> kNodes = KNodes.sliceLastFuture(
-                kNodeService.kNodes(kNodeParam, param.getStart(), Calendar.getInstance().getTime()),
-                config.getFutureNum(), config.getSize());
+        List<KNode> sourceKNodes = kNodeService.kNodes(kNodeParam, param.getStart(), Calendar.getInstance().getTime());
+        List<KLineSignal> kLineSignals = KLineSignals.setTrueSignalHasLastNull(sourceKNodes, config.getFutureNum(), config.getSize());
 
-        Classifier<double[]> model = findModel(param.getModeName());
+        List<KNode> kNodes = KNodes.sliceAndSubtractLastFuture(sourceKNodes, config.getFutureNum(), config.getSize());
+        Classifier<double[]> model = findModel(config.getName());
         int[] predictSignal = config.hasIndicesCombination() ?
                 model.predict(KNodes.normalizedIndicesArrH(kNodes)) : model.predict(KNodes.normalizedKArrH(kNodes));
 
-        return IntStream.of(predictSignal.length - 1).mapToObj(i -> KLineSignal.builder()
-                .kLine(kNodes.get(i).getLastKLine())
-                .tureSignal(KNodes.futureSignal(kNodes.get(i), config.getFutureNum(), config.getSize()))
-                .signal(predictSignal[i])
-                .build()).toList();
+        for (int i = 0; i < predictSignal.length; i++) {
+            kLineSignals.get(i).setSignal(predictSignal[i]);
+        }
+
+        return kLineSignals;
     }
 
     @Override

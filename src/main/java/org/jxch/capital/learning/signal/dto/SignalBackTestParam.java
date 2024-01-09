@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -19,12 +20,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignalBackTestParam {
-    private String code;
+    private String code = "SPY";
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date start = DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -3);
-
-    @Builder.Default
-    private Integer futureNum = 4;
     @Builder.Default
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date end = Calendar.getInstance().getTime();
@@ -32,4 +30,9 @@ public class SignalBackTestParam {
     private Integer signalLimitAbs = 5;
     @Builder.Default
     private List<String> filters = null;
+
+    public boolean hasFilter() {
+        return Objects.nonNull(filters) && !filters.isEmpty();
+    }
+
 }

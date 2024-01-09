@@ -49,7 +49,7 @@ public class KLineSignal {
     }
 
     public boolean isActionSignal() {
-        return !Objects.equals(actionSignal, 0);
+        return actionSignal != 0;
     }
 
     public boolean hasTureSignal() {
