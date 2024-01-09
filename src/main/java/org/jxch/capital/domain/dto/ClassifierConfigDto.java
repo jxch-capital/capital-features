@@ -24,11 +24,11 @@ public class ClassifierConfigDto {
     private String classifierFullName;
 
     public List<String> getClassifierParmaTypesList() {
-        return Arrays.stream(this.classifierParamTypes.split(",")).toList();
+        return Arrays.stream(this.classifierParamTypes.split(",")).map(String::trim).toList();
     }
 
     public List<String> getClassifierParamsList() {
-        return Arrays.stream(this.classifierParams.split(",")).toList();
+        return Arrays.stream(this.classifierParams.split(",")).map(String::trim).toList();
     }
 
 }

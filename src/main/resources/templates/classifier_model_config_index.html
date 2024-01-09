@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模型配置</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/classifier_model_config/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>模型名称</th>
+            <th>分类器</th>
+            <th>股票池</th>
+            <th>指标组合</th>
+            <th>片段大小</th>
+            <th>预测数目</th>
+            <th>备注</th>
+            <th>已经训练</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="name"></label>
+                <input type="text" th:field="*{name}" id="name" placeholder="模型名称" class="text-primary" required>
+            </td>
+            <td>
+                <label for="classifierId">
+                    <select id="classifierId" th:field="*{classifierId}" class="selectpicker" required>
+                        <option th:each="item: ${all_classifier_configs}" th:value="${item.id}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="stockPoolId">
+                    <select id="stockPoolId" th:field="*{stockPoolId}" class="selectpicker" required>
+                        <option th:each="item: ${all_stock_pool}" th:value="${item.id}"
+                                th:text="${item.poolName}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="indicesCombinationId">
+                    <select id="indicesCombinationId" th:field="*{indicesComId}" class="selectpicker" required>
+                        <option th:each="item: ${all_combination_indices}" th:value="${item.id}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="size"></label>
+                <input type="text" th:field="*{size}" id="size" placeholder="片段大小"
+                       class="text-primary">
+            </td>
+            <td>
+                <label for="futureNum"></label>
+                <input type="text" th:field="*{futureNum}" id="futureNum" placeholder="预测数目"
+                       class="text-primary">
+            </td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注"
+                       class="text-primary">
+            </td>
+            <td th:text="*{hasLocalModel}"></td>
+            <td>
+                <input type="submit" value="添加" class="btn-primary">
+            </td>
+        </tr>
+        <tr th:each="config,iter: ${all_model_configs}">
+            <td th:text="${config.id}" style="color: gray; margin-left: 4px"></td>
+            <td>
+                <label th:for="'name' + ${config.id}">
+                    <input th:id="'name' + ${config.id}" type="text" th:value="${config.name}" placeholder="模型名称"
+                           class="text-primary" disabled>
+                </label>
+            </td>
+            <td>
+                <label th:for="'classifierId' + ${config.id}">
+                    <select th:id="'classifierId' + ${config.id}" class="selectpicker" disabled>
+                        <option th:each="itemOp: ${all_classifier_configs}" th:value="${itemOp.id}"
+                                th:text="${itemOp.name}" th:selected="${config.classifierId == itemOp.id}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'stockPoolId' + ${config.id}">
+                    <select th:id="'stockPoolId' + ${config.id}" class="selectpicker" disabled>
+                        <option th:each="itemOp: ${all_stock_pool}" th:value="${itemOp.id}"
+                                th:text="${itemOp.poolName}" th:selected="${config.stockPoolId == itemOp.id}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'indicesCombinationId' + ${config.id}">
+                    <select th:id="'indicesCombinationId' + ${config.id}" class="selectpicker" disabled>
+                        <option th:each="itemOp: ${all_combination_indices}" th:value="${itemOp.id}"
+                                th:text="${itemOp.name}" th:selected="${config.indicesComId == itemOp.id}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'size' + ${config.id}">
+                    <input th:id="'size' + ${config.id}" type="text" th:value="${config.size}" placeholder="片段大小"
+                           class="text-primary" disabled>
+                </label>
+            </td>
+            <td>
+                <label th:for="'futureNum' + ${config.id}">
+                    <input th:id="'futureNum' + ${config.id}" type="text" th:value="${config.futureNum}"
+                           placeholder="预测数目"
+                           class="text-primary" disabled>
+                </label>
+            </td>
+            <td>
+                <label th:for="'remark' + ${config.id}">
+                    <input th:id="'remark' + ${config.id}" type="text" th:value="${config.remark}" placeholder="备注"
+                           class="text-primary" disabled>
+                </label>
+            </td>
+            <td th:text="${config.hasLocalModel}"></td>
+            <td>
+                <a th:href="@{'/classifier_model_config/edit/' + ${config.id}}">修改</a>
+                <a th:href="@{'/classifier_model_config/del/' + ${config.id}}">删除</a>
+                <a th:href="@{'/classifier_model_config/fit/' + ${config.id}}">训练</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

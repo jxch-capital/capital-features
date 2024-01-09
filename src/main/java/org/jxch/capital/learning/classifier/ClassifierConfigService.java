@@ -13,6 +13,8 @@ public interface ClassifierConfigService {
 
     List<ClassifierConfigDto> findById(List<Long> ids);
 
+    ClassifierConfigDto findByName(String name);
+
     Integer save(List<ClassifierConfigDto> dto);
 
     void del(List<Long> ids);

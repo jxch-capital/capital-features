@@ -30,7 +30,7 @@ public class KNodeParam {
     @Builder.Default
     private Date end = Calendar.getInstance().getTime();
     @Builder.Default
-    private long indicesComId = -1;
+    private Long indicesComId = -1L;
     @Builder.Default
     private Boolean normalized = false;
 
@@ -90,7 +90,7 @@ public class KNodeParam {
     }
 
     public boolean hasIndicesComId() {
-        return this.indicesComId != -1;
+        return Objects.nonNull(indicesComId) && this.indicesComId != -1L;
     }
 
     @Override

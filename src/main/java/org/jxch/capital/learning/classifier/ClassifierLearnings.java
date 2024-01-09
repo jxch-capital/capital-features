@@ -1,13 +1,17 @@
 package org.jxch.capital.learning.classifier;
 
+import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jxch.capital.learning.classifier.config.ClassifierLearningConfig;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;
 import org.jxch.capital.learning.classifier.model.ClassifierLearningService;
 import org.jxch.capital.utils.AppContextHolder;
 import org.jxch.capital.utils.KNodes;
+import org.springframework.stereotype.Component;
 import smile.classification.Classifier;
 import smile.classification.SVM;
 import smile.math.kernel.GaussianKernel;
@@ -19,7 +23,25 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class ClassifierLearnings {
+    private final ClassifierLearningConfig classifierLearningConfig;
+    private static ClassifierLearningConfig CONFIG;
+
+    @PostConstruct
+    public void init() {
+        CONFIG = classifierLearningConfig;
+    }
+
+    @NotNull
+    public static String getModePath(String modeName) {
+        return CONFIG.getModelPath() + modeName + CONFIG.getModelSuffix();
+    }
+
+    public static boolean hasLocalModel(String modeName) {
+        return new File(ClassifierLearnings.getModePath(modeName)).exists();
+    }
 
     public static ClassifierLearningParam SVMGaussianKernel() {
         return ClassifierLearningParam.defaultParam()

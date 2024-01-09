@@ -1,34 +1,20 @@
 server:
   port: 18088
 
-yahoo:
-  proxy-host: 127.0.0.1
-  proxy-port: 10809
-  use-proxy: true
-
-
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:15432/capital-features
-    username: capital-features
-    password: capital-features
-  thymeleaf:
-    cache: false
-    prefix: classpath:/templates/
-    encoding: UTF-8
-    suffix: .html
-    mode: HTML
-  mvc:
-    static-path-pattern: /static/**
-  web:
-    resources:
-      static-locations: classpath:/static/
+
 logging:
   level:
     org.jxch.capital: debug
     sql: info
     web: info
+
+yahoo:
+  proxy-host: 127.0.0.1
+  proxy-port: 10809
+  use-proxy: true
 
 ai:
   gemini:
@@ -48,5 +34,4 @@ model:
   smile:
     model_path: D:\\jxch-capital\\capital-features\\src\\main\\resources\\model\\classifier_smile\\
     model-suffix: .model
-
 

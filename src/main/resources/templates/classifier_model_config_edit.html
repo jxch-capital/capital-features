@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模型编辑</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/classifier_model_config/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <td><label for="id">ID</label></td>
+            <td><input type="text" th:field="*{id}" id="id" placeholder="ID" required readonly></td>
+        </tr>
+        <tr>
+            <td><label for="name">模型名称</label></td>
+            <td><input type="text" th:field="*{name}" id="name" placeholder="名称" required></td>
+        </tr>
+        <tr>
+            <td><label for="classifierId">分类器</label></td>
+            <td>
+                <select id="classifierId" th:field="*{classifierId}" class="selectpicker" required>
+                    <option th:each="item: ${all_classifier_configs}" th:value="${item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="stockPoolId">股票池</label></td>
+            <td>
+                <label for="stockPoolId">
+                    <select id="stockPoolId" th:field="*{stockPoolId}" class="selectpicker" required>
+                        <option th:each="item: ${all_stock_pool}" th:value="${item.id}"
+                                th:text="${item.poolName}"></option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="indicesCombinationId">指标组合</label></td>
+            <td>
+                <label for="indicesCombinationId">
+                    <select id="indicesCombinationId" th:field="*{indicesComId}" class="selectpicker" required>
+                        <option th:each="item: ${all_combination_indices}" th:value="${item.id}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="size">片段大小</label></td>
+            <td><input type="text" th:field="*{size}" id="size" placeholder="片段大小" class="text-primary"></td>
+        </tr>
+        <tr>
+            <td><label for="futureNum">预测数目</label></td>
+            <td><input type="text" th:field="*{futureNum}" id="futureNum" placeholder="预测数目" class="text-primary"></td>
+        </tr>
+        <tr>
+            <td><label for="remark">备注</label></td>
+            <td><input type="text" th:field="*{remark}" id="remark" placeholder="备注" class="text-primary"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><a th:href="@{'/classifier_model_config/index'}">取消</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

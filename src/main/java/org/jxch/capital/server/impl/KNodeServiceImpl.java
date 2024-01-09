@@ -38,6 +38,7 @@ public class KNodeServiceImpl implements KNodeService {
     private void setIndicators(@NonNull KNodeParam kNodeParam) {
         if (kNodeParam.hasIndicesComId()) {
             kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
+            kNodeParam.setMaxLength(indicesCombinationService.findById(kNodeParam.getIndicesComId()).getMaxLength());
         }
     }
 

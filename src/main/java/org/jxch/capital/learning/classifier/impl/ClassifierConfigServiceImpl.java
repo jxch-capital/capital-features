@@ -1,4 +1,4 @@
-package org.jxch.capital.learning.classifier;
+package org.jxch.capital.learning.classifier.impl;
 
 import com.google.common.reflect.ClassPath;
 import jakarta.annotation.PostConstruct;
@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.ClassifierConfigRepository;
 import org.jxch.capital.domain.convert.ClassifierConfigMapper;
 import org.jxch.capital.domain.dto.ClassifierConfigDto;
+import org.jxch.capital.learning.classifier.ClassifierConfigService;
 import org.jxch.capital.learning.classifier.dto.ClassifierFitInfoDto;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,11 @@ public class ClassifierConfigServiceImpl implements ClassifierConfigService {
     @Override
     public List<ClassifierConfigDto> findById(List<Long> ids) {
         return classifierConfigMapper.toClassifierConfigDto(classifierConfigRepository.findAllById(ids));
+    }
+
+    @Override
+    public ClassifierConfigDto findByName(String name) {
+        return classifierConfigMapper.toClassifierConfigDto(classifierConfigRepository.findByName(name));
     }
 
     @Override
