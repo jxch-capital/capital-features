@@ -20,4 +20,6 @@ public interface ClassifierModelConfigService {
 
     void del(List<Long> ids);
 
+    boolean hasId(Long id);
+
 }

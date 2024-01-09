@@ -9,6 +9,7 @@ import org.jxch.capital.learning.classifier.ClassifierModelConfigService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -51,6 +52,11 @@ public class ClassifierModelConfigServiceImpl implements ClassifierModelConfigSe
     @Override
     public void del(List<Long> ids) {
         classifierModelConfigRepository.deleteAllById(ids);
+    }
+
+    @Override
+    public boolean hasId(Long id) {
+        return Objects.nonNull(classifierModelConfigRepository.findById(id).orElse(null));
     }
 
 }

@@ -81,9 +81,11 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
     @Transactional
     public Integer saveModelConfig(@NonNull List<ClassifierModelConfigDto> dto) {
         dto.forEach(d -> {
-            String oldName = findModelConfigById(d.getClassifierId()).getName();
-            if (!oldName.equals(d.getName())) {
-                renameModel(oldName, d.getName());
+            if (classifierModelConfigService.hasId(d.getId())) {
+                String oldName = findModelConfigById(d.getClassifierId()).getName();
+                if (!oldName.equals(d.getName())) {
+                    renameModel(oldName, d.getName());
+                }
             }
         });
         return classifierModelConfigService.save(dto);
