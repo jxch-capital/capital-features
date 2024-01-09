@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分类器编辑</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/classifier_config/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <td><label for="id">ID</label></td>
+            <td><input type="text" th:field="*{id}" id="id" placeholder="ID" required readonly></td>
+        </tr>
+        <tr>
+            <td><label for="name">名称</label></td>
+            <td><input type="text" th:field="*{name}" id="name" placeholder="名称" required></td>
+        </tr>
+        <tr>
+            <td><label for="classifierFullName">分类器</label></td>
+            <td>
+                <select id="classifierFullName" th:field="*{classifierFullName}" class="selectpicker" required>
+                    <option th:each="item: ${all_classifier}" th:value="${item.classifierFullName}"
+                            th:text="${item.classifierFullName}"
+                            th:attr="types=${item.classifierParamTypes},name=${item.classifierName}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="classifierName">分类器名称</label></td>
+            <td>
+                <textarea th:field="*{classifierName}" id="classifierName" rows="5" cols="100"
+                          placeholder="分类器名称" required readonly></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="classifierParamTypes">参数类型</label></td>
+            <td>
+                <textarea th:field="*{classifierParamTypes}" id="classifierParamTypes" rows="5" cols="100"
+                          placeholder="参数类型, 使用逗号分割" required readonly></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="classifierParams">参数列表</label></td>
+            <td><textarea th:field="*{classifierParams}" id="classifierParams" placeholder="参数列表, 使用逗号分割" rows="5" cols="100" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="remark">备注</label></td>
+            <td><textarea th:field="*{remark}" id="remark" placeholder="备注" rows="5" cols="100"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><a th:href="@{'/classifier_config/index'}">取消</a></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

@@ -105,12 +105,12 @@
                             pieces: [
                                 {
                                     gt: 0,
-                                    lt: 40,
+                                    lt: [[${item.closeArr}]].length - 40,
                                     color: 'gray'
                                 },
                                 {
-                                    gt: 40,
-                                    color: 'black'
+                                    gt: [[${item.closeArr}]].length - 40,
+                                    color: 'rgba(9,116,203,0.82)'
                                 }
                             ]
                         },
