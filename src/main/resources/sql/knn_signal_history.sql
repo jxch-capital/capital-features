@@ -32,3 +32,6 @@ create index knn_signal_history_date_index
 create index knn_signal_history_knn_signal_config_id_index
     on public.knn_signal_history (knn_signal_config_id);
 
+create index knn_signal_history_knn_signal_config_id_code_index
+    on public.knn_signal_history (knn_signal_config_id, code);
+
