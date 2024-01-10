@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.server.AiRoleService;
+import org.jxch.capital.server.KnowledgeServices;
 import org.jxch.capital.server.TextAiEnum;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class TextAiController {
         modelAndView.addObject("wsUrl", wsUrl);
         modelAndView.addObject("models", TextAiEnum.values());
         modelAndView.addObject("all_role", aiRoleService.findAll());
+        modelAndView.addObject("all_knowledge", KnowledgeServices.allKnowledgeServiceNames());
         return modelAndView;
     }
 

@@ -56,6 +56,12 @@
         </select>
     </label>
 
+    <label for="knowledge">
+        <select id="knowledge" name="knowledges" class="selectpicker form-control">
+            <option th:each="item: ${all_knowledge}" th:value="${item}" th:text="${item}"></option>
+        </select>
+    </label>
+
     <button id="run" class="btn-primary" style="margin-left: 20px; margin-right: 20px; width: 100px">提问</button>
     <span id="counter"></span>
 </div>
@@ -126,6 +132,7 @@
         ws.send(JSON.stringify({
             textAiEnum: $("#model").val(),
             roleId: $("#role").val(),
+            knowledge: $("#knowledge").val(),
             texts: texts
         }));
 

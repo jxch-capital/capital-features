@@ -22,6 +22,13 @@ public class VecDbRes implements VecRes {
         return VecDbRes.builder().documents(JSON.parseArray(text, Document.class)).build();
     }
 
+    @Override
+    public List<String> getTexts() {
+        return documents.stream()
+                .map(document -> document.getPageContent() + " 参考文献：" + document.getMetadata().getSource())
+                .toList();
+    }
+
     @Data
     @Builder
     @NoArgsConstructor
