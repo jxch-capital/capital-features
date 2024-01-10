@@ -17,6 +17,13 @@ import java.util.List;
 public class TextAiServiceParam {
     private List<String> texts;
     private TextAiEnum textAiEnum;
+    private Long roleId;
     @Builder.Default
     private int length = 5;
+
+    public TextAiServiceParam addFirstText(String text) {
+        texts.add(0, text);
+        return this;
+    }
+
 }

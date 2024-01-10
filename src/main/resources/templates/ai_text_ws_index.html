@@ -45,9 +45,14 @@
               class="text-primary form-control"></textarea>
 
     <label for="model">
-        <span></span>
         <select id="model" name="models" class="selectpicker form-control">
             <option th:each="item: ${models}" th:value="${item}" th:text="${item}"></option>
+        </select>
+    </label>
+
+    <label for="role">
+        <select id="role" name="roles" class="selectpicker form-control">
+            <option th:each="item: ${all_role}" th:value="${item.id}" th:text="${item.name}"></option>
         </select>
     </label>
 
@@ -120,6 +125,7 @@
 
         ws.send(JSON.stringify({
             textAiEnum: $("#model").val(),
+            roleId: $("#role").val(),
             texts: texts
         }));
 

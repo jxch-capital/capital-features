@@ -4,7 +4,9 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jxch.capital.domain.dto.AiRoleDto;
 import org.jxch.capital.domain.dto.TextAiServiceParam;
+import org.jxch.capital.server.AiRoleService;
 import org.jxch.capital.server.TextAiService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -18,11 +20,15 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class TextAiWSHandler extends TextWebSocketHandler {
     private final TextAiService textAiService;
+    private final AiRoleService aiRoleService;
 
     @Override
     public void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws IOException {
         TextAiServiceParam param = JSONObject.parseObject(message.getPayload(), TextAiServiceParam.class);
         log.debug(JSONObject.toJSONString(param));
+
+        AiRoleDto roleDto = aiRoleService.findById(param.getRoleId());
+        param.addFirstText(roleDto.getText());
 
         TextMessage textMessage = new TextMessage(
                 "ALL-" + textAiService.questionLastResStream(param, (str) -> {

@@ -8,6 +8,7 @@ import org.jxch.capital.domain.dto.AiRoleDto;
 import org.jxch.capital.server.AiRoleService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -19,7 +20,7 @@ public class AiRoleServiceImpl implements AiRoleService {
 
     @Override
     public List<AiRoleDto> findAll() {
-        return aiRoleMapper.toAiRoleDto(aiRoleRepository.findAll());
+        return aiRoleMapper.toAiRoleDto(aiRoleRepository.findAll()).stream().sorted(Comparator.comparing(AiRoleDto::getName)).toList();
     }
 
     @Override
