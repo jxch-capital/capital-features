@@ -12,6 +12,8 @@ import java.util.function.Function;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KLineSignal {
+    @Builder.Default
+    private String code = null;
     private KLine kLine;
     @Builder.Default
     private Integer signal = null;

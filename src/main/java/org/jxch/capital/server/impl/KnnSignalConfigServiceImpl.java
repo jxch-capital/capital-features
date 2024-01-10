@@ -18,21 +18,6 @@ public class KnnSignalConfigServiceImpl implements KnnSignalConfigService {
     private final KnnSignalConfigMapper knnSignalConfigMapper;
 
     @Override
-    public void update(Long id) {
-
-    }
-
-    @Override
-    public void updateAll(Long id) {
-
-    }
-
-    @Override
-    public void updateToToday(Long id) {
-
-    }
-
-    @Override
     public List<KnnSignalConfigDto> findAll() {
         return knnSignalConfigMapper.toKnnSignalConfigDto(knnSignalConfigRepository.findAll());
     }

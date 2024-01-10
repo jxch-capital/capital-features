@@ -83,12 +83,14 @@
             </td>
             <td>
                 <label for="futureSize"></label>
-                <input type="text" th:field="*{futureSize}" id="futureSize" placeholder="预测大小" style="max-width: 60px"
+                <input type="text" th:field="*{futureSize}" id="futureSize" placeholder="预测大小"
+                       style="max-width: 60px"
                        required>
             </td>
             <td>
                 <label for="neighborSize"></label>
-                <input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数" style="max-width: 60px"
+                <input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数"
+                       style="max-width: 60px"
                        required>
             </td>
             <td>
@@ -164,10 +166,29 @@
                 <a th:href="@{'/knn_signal_config/del/' + ${item.id}}" title="同时删除计算结果">删除</a>
                 <a th:href="@{'/knn_signal_config/update_all/' + ${item.id}}" title="重新计算">全更新</a>
                 <a th:href="@{'/knn_signal_config/update/' + ${item.id}}" title="更新时间范围和股票代码">更新</a>
-                <a th:href="@{'/knn_signal_config/update_to_today/' + ${item.id}}" title="终止时间改为今天并更新时间范围和股票代码">更新至今日</a>
+                <a th:href="@{'/knn_signal_config/update_to_today/' + ${item.id}}"
+                   title="终止时间改为今天并更新时间范围和股票代码">更新至今日</a>
             </td>
         </tr>
     </table>
 </form>
+
+<div id="server_msg" style="color: greenyellow; margin-top: 100px; margin-left: 20px"></div>
+<script th:inline="javascript" th:attr="ai-ws-path=${wsUrl}">
+    const ws = new WebSocket(document.querySelector('script[ai-ws-path]').getAttribute('ai-ws-path'));
+
+    ws.addEventListener("message", function (event) {
+        const eventData = JSON.parse(event.data)
+        $('#server_msg').text(eventData['title'] + " : " + eventData['detail'] + "  [" + (eventData['progress'] * 100).toFixed(2) + "%]")
+    })
+
+    ws.onopen = function () {
+        ws.send(JSON.stringify({
+            type: "subscribe",
+            channel: "ServerJobProgressEvent",
+        }));
+    }
+
+</script>
 </body>
 </html>

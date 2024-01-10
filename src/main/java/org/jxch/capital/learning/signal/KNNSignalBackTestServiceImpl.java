@@ -8,11 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KNNParam;
 import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.event.ServerJobProgressEvent;
+import org.jxch.capital.event.dto.ServerJobProgressEventDto;
 import org.jxch.capital.learning.knn.KNNService;
 import org.jxch.capital.learning.knn.KNNs;
 import org.jxch.capital.learning.signal.dto.SignalBackTestKNNParam;
 import org.jxch.capital.server.KNodeAnalyzeService;
 import org.jxch.capital.server.KNodeService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import java.util.List;
 public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
     private final KNodeService kNodeService;
     private final KNodeAnalyzeService kNodeAnalyzeService;
+    private final ApplicationEventPublisher publisher;
 
     @Override
     public Integer signal(KNode kNode, SignalBackTestKNNParam param) {
@@ -52,7 +56,13 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
                 .map(futureKNode -> {
                     KNode kNode = futureKNode.subtractLast(param.getFutureNum());
                     proc.remove(futureKNode);
-                    log.debug("进度：{} / {}", codeFutureKNodes.size() - proc.size(), codeFutureKNodes.size());
+                    log.debug("{} 进度：{} / {}", param.getCode(), codeFutureKNodes.size() - proc.size(), codeFutureKNodes.size());
+                    publisher.publishEvent(new ServerJobProgressEvent(ServerJobProgressEventDto.builder()
+                            .title("KNN信号回测")
+                            .source(super.getClass().getSimpleName())
+                            .progress((codeFutureKNodes.size() - proc.size()) / (double) codeFutureKNodes.size())
+                            .detail(param.getCode() + " 进度：" + (codeFutureKNodes.size() - proc.size()) + " / " + codeFutureKNodes.size())
+                            .build()));
 
                     return KLineSignal.builder()
                             .kLine(kNode.getLastKLine())
@@ -61,6 +71,7 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
                                             , param.getFutureNum())
                                     .getFutureSignal())
                             .tureSignal(futureKNode.getLastKLine().getClose() - kNode.getLastKLine().getClose())
+                            .code(param.getCode())
                             .build();
                 })
                 .sorted(Comparator.comparing(kLineSignal -> kLineSignal.getKLine().getDate()))
@@ -76,6 +87,7 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
                         .signal(kNodeAnalyzeService.statisticsKNNHasFuture(
                                 distanceService.searchHasFutureNodes(kNode, futureKNodes, param.getKnnParam().getNeighborSize(), param.getFutureNum()),
                                 param.getFutureNum()).getFutureSignal())
+                        .code(param.getCode())
                         .build())
                 .sorted(Comparator.comparing(kLineSignal -> kLineSignal.getKLine().getDate()))
                 .toList();
