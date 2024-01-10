@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KNN配置管理</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/knn_signal_config/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>距离算法</th>
+            <th>股票池</th>
+            <th>指标序列</th>
+            <th>归一化</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>片段大小</th>
+            <th>预测大小</th>
+            <th>近邻数</th>
+            <th>股票代码</th>
+            <th>股票引擎</th>
+            <th>备注</th>
+            <th>版本号</th>
+            <th>更新版本</th>
+            <th>耗时(s.)</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="name"></label>
+                <input type="text" th:field="*{name}" id="name" placeholder="模型名称" required>
+            </td>
+            <td>
+                <label for="distance">
+                    <select id="distance" th:field="*{distance}"
+                            data-live-search="true">
+                        <option th:each="item: ${all_knn}" th:value="${item}" th:text="${item}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="stockPoolId">
+                    <select id="stockPoolId" th:field="*{stockPoolId}"
+                            data-live-search="true">
+                        <option th:each="item: ${all_pools}" th:value="${item.id}" th:text="${item.poolName}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="indicesComId">
+                    <select id="indicesComId" th:field="*{indicesComId}"
+                            data-live-search="true">
+                        <option th:each="item: ${all_indices_com}" th:value="${item.id}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="isNormalized">
+                    <select id="isNormalized" th:field="*{isNormalized}">
+                        <option th:value="false" th:text="不归一化"></option>
+                        <option th:value="true" th:text="归一化"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="startDate"></label>
+                <input type="date" th:field="*{startDate}" id="startDate" placeholder="开始时间" required>
+            </td>
+            <td>
+                <label for="endDate"></label>
+                <input type="date" th:field="*{endDate}" id="endDate" placeholder="结束时间" required>
+            </td>
+            <td>
+                <label for="size"></label>
+                <input type="text" th:field="*{size}" id="size" placeholder="片段大小" style="max-width: 60px" required>
+            </td>
+            <td>
+                <label for="futureSize"></label>
+                <input type="text" th:field="*{futureSize}" id="futureSize" placeholder="预测大小" style="max-width: 60px"
+                       required>
+            </td>
+            <td>
+                <label for="neighborSize"></label>
+                <input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数" style="max-width: 60px"
+                       required>
+            </td>
+            <td>
+                <label for="codes"></label>
+                <input type="text" th:field="*{codes}" id="codes" placeholder="股票代码，使用英文逗号分割" required>
+            </td>
+            <td>
+                <label for="stockEngine"></label>
+                <input type="text" th:field="*{stockEngine}" id="stockEngine"
+                       placeholder="股票查询引擎, 不填默认采用股票池的引擎"
+                >
+            </td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <input type="submit" value="添加" class="btn-primary">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${all_config}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td th:text="${item.name}"></td>
+            <td>
+                <label th:for="'distance'+${iter.index}">
+                    <select th:id="'distance'+${iter.index}" disabled>
+                        <option th:each="itemOp: ${all_knn}" th:value="${itemOp}" th:text="${itemOp}"
+                                th:selected="${itemOp == item.distance}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'stockPoolId'+${iter.index}">
+                    <select th:id="'stockPoolId'+${iter.index}" disabled>
+                        <option th:each="itemOp: ${all_pools}" th:value="${itemOp.id}" th:text="${itemOp.poolName}"
+                                th:selected="${itemOp.id == item.stockPoolId}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'indicesComId'+${iter.index}">
+                    <select th:id="'indicesComId'+${iter.index}" disabled>
+                        <option th:each="itemOp: ${all_indices_com}" th:value="${itemOp.id}" th:text="${itemOp.name}"
+                                th:selected="${itemOp.id == item.indicesComId}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'isNormalized'+${iter.index}">
+                    <select th:id="'isNormalized'+${iter.index}" disabled>
+                        <option th:value="false" th:text="不归一化"
+                                th:selected="${false == item.isNormalized}"></option>
+                        <option th:value="true" th:text="归一化" th:selected="${true == item.isNormalized}"></option>
+                    </select>
+                </label>
+            </td>
+            <td th:text="${#dates.format(item.startDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#dates.format(item.endDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${item.size}"></td>
+            <td th:text="${item.futureSize}"></td>
+            <td th:text="${item.neighborSize}"></td>
+            <td th:text="${#strings.abbreviate(item.codes, 20)}" th:title="${item.codes}"></td>
+            <td th:text="${item.stockEngine}"></td>
+            <td th:text="${item.remark}"></td>
+            <td th:text="${item.version}"></td>
+            <td th:text="${item.lastUpdateVersion}"></td>
+            <td th:text="${item.lastUpdateTimeConsumingSecond}"></td>
+            <td>
+                <a th:href="@{'/knn_signal_config/edit/' + ${item.id}}" title="修改配置信息，并且版本号自增">修改</a>
+                <a th:href="@{'/knn_signal_config/del/' + ${item.id}}" title="同时删除计算结果">删除</a>
+                <a th:href="@{'/knn_signal_config/update/' + ${item.id}}" title="重新计算">全更新</a>
+                <a th:href="@{'/knn_signal_config/update_to_today/' + ${item.id}}" title="更新时间范围和股票代码">更新</a>
+                <a th:href="@{'/knn_signal_config/update_to_today/' + ${item.id}}" title="终止时间改为今天并更新时间范围和股票代码">更新至今日</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

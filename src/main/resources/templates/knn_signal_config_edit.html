@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KNN配置编辑</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/knn_signal_config/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <td><label for="id">ID</label></td>
+            <td><input type="text" th:field="*{id}" id="id" placeholder="ID" required readonly></td>
+        </tr>
+        <tr>
+            <td><label for="name">配置名称</label></td>
+            <td><input type="text" th:field="*{name}" id="name" placeholder="配置名称" required></td>
+        </tr>
+        <tr>
+            <td><label for="distance">距离算法</label></td>
+            <td>
+                <select id="distance" th:field="*{distance}" class="selectpicker form-control"
+                        data-live-search="true">
+                    <option th:each="item: ${all_knn}" th:value="${item}" th:text="${item}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="stockPoolId">股票池 </label></td>
+            <td>
+                <select id="stockPoolId" th:field="*{stockPoolId}" class="selectpicker form-control"
+                        data-live-search="true">
+                    <option th:each="item: ${all_pools}" th:value="${item.id}" th:text="${item.poolName}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="indicesComId">指标序列</label></td>
+            <td>
+                <select id="indicesComId" th:field="*{indicesComId}" class="selectpicker form-control"
+                        data-live-search="true">
+                    <option th:each="item: ${all_indices_com}" th:value="${item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="isNormalized">归一化</label></td>
+            <td>
+                <select id="isNormalized" th:field="*{isNormalized}" class="selectpicker form-control">
+                    <option th:value="false" th:text="不归一化"></option>
+                    <option th:value="true" th:text="归一化"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="startDate">开始时间</label></td>
+            <td><input type="date" th:field="*{startDate}" id="startDate" placeholder="开始时间" required></td>
+        </tr>
+        <tr>
+            <td><label for="endDate">结束时间</label></td>
+            <td><input type="date" th:field="*{endDate}" id="endDate" placeholder="结束时间" required></td>
+        </tr>
+        <tr>
+            <td><label for="size">片段大小</label></td>
+            <td><input type="text" th:field="*{size}" id="size" placeholder="片段大小" class="text-primary" required>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="futureSize">预测大小</label></td>
+            <td><input type="text" th:field="*{futureSize}" id="futureSize" placeholder="预测大小" class="text-primary"
+                       required></td>
+        </tr>
+        <tr>
+            <td><label for="neighborSize">近邻数</label></td>
+            <td><input type="text" th:field="*{neighborSize}" id="neighborSize" placeholder="近邻数"
+                       class="text-primary" required></td>
+        </tr>
+        <tr>
+            <td><label for="codes">股票代码（使用英文逗号分割）</label></td>
+            <td>
+                <textarea th:field="*{codes}" id="codes" placeholder="股票代码, 使用英文逗号分割" rows="5" cols="100" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="stockEngine">股票查询引擎</label></td>
+            <td><input type="text" th:field="*{stockEngine}" id="stockEngine"
+                       placeholder="股票查询引擎, 不填默认采用股票池的引擎"
+                       class="text-primary"></td>
+        </tr>
+        <tr>
+            <td><label for="lastUpdateTimeConsumingSecond">上次更新耗时（秒）</label></td>
+            <td><input type="text" th:field="*{lastUpdateTimeConsumingSecond}" id="lastUpdateTimeConsumingSecond"
+                       placeholder="上次更新耗时" class="text-primary" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="remark">备注</label></td>
+            <td><input type="text" th:field="*{remark}" id="remark" placeholder="备注" class="text-primary"></td>
+        </tr>
+        <tr>
+            <td><label for="version">版本号</label></td>
+            <td><input type="text" th:field="*{version}" id="version" placeholder="版本号" class="text-primary" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="lastUpdateVersion">上次更新版本</label></td>
+            <td><input type="text" th:field="*{lastUpdateVersion}" id="lastUpdateVersion" placeholder="上次更新版本" class="text-primary" readonly></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><a th:href="@{'/knn_signal_config/index'}">取消</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
