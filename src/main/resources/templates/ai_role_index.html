@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI角色管理</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/ai_role/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>角色</th>
+            <th>提示词</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="name"></label>
+                <input type="text" th:field="*{name}" id="name" placeholder="角色" required>
+            </td>
+            <td>
+                <label for="text"></label>
+                <input type="text" th:field="*{text}" id="text" placeholder="提示词" required>
+            </td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
+            </td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${ai_roles}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td th:text="${item.name}"></td>
+            <td th:text="${#strings.abbreviate(item.text, 20)}" th:title="${item.text}"></td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
+            <td>
+                <a th:href="@{'/ai_role/edit/' + ${item.id}}">修改</a>
+                <a th:href="@{'/ai_role/del/' + ${item.id}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

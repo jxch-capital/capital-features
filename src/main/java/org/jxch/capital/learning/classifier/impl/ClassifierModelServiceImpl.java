@@ -81,8 +81,8 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
     @Transactional
     public Integer saveModelConfig(@NonNull List<ClassifierModelConfigDto> dto) {
         dto.forEach(d -> {
-            if (classifierModelConfigService.hasId(d.getId())) {
-                String oldName = findModelConfigById(d.getClassifierId()).getName();
+            if (Objects.nonNull(d.getId())) {
+                String oldName = findModelConfigById(d.getId()).getName();
                 if (!oldName.equals(d.getName())) {
                     renameModel(oldName, d.getName());
                 }
@@ -109,6 +109,7 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ClassifierLearnings.getModePath(modeName)))) {
             oos.writeObject(classifier);
+            log.debug("模型保存成功：{}", ClassifierLearnings.getModePath(modeName));
         }
     }
 

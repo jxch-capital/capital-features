@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI角色编辑</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+
+<form th:action="@{/ai_role/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <td><label for="id">ID</label></td>
+            <td><input type="text" th:field="*{id}" id="id" placeholder="ID" required readonly></td>
+        </tr>
+        <tr>
+            <td><label for="name">角色</label></td>
+            <td><input type="text" th:field="*{name}" id="name" placeholder="角色" required></td>
+        </tr>
+        <tr>
+            <td><label for="text">提示词</label></td>
+            <td>
+                <textarea th:field="*{text}" id="text" rows="10" cols="200"
+                          placeholder="提示词" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="remark">备注</label></td>
+            <td>
+                <textarea th:field="*{remark}" id="remark" rows="5" cols="200"
+                          placeholder="备注"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="确定"></td>
+            <td><a th:href="@{'/ai_role/index'}">取消</a></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>
