@@ -23,6 +23,11 @@ public class KnnSignalConfigServiceImpl implements KnnSignalConfigService {
     }
 
     @Override
+    public void updateAll(Long id) {
+
+    }
+
+    @Override
     public void updateToToday(Long id) {
 
     }

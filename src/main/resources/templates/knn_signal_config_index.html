@@ -23,7 +23,7 @@
             <th>预测大小</th>
             <th>近邻数</th>
             <th>股票代码</th>
-            <th>股票引擎</th>
+            <th title="股票查询引擎, 不填默认采用股票池的引擎">股票引擎</th>
             <th>备注</th>
             <th>版本号</th>
             <th>更新版本</th>
@@ -98,7 +98,7 @@
             <td>
                 <label for="stockEngine"></label>
                 <input type="text" th:field="*{stockEngine}" id="stockEngine"
-                       placeholder="股票查询引擎, 不填默认采用股票池的引擎"
+                       placeholder="股票查询引擎, 不填默认采用股票池的引擎" style="max-width: 60px"
                 >
             </td>
             <td>
@@ -155,15 +155,15 @@
             <td th:text="${item.neighborSize}"></td>
             <td th:text="${#strings.abbreviate(item.codes, 20)}" th:title="${item.codes}"></td>
             <td th:text="${item.stockEngine}"></td>
-            <td th:text="${item.remark}"></td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
             <td th:text="${item.version}"></td>
             <td th:text="${item.lastUpdateVersion}"></td>
             <td th:text="${item.lastUpdateTimeConsumingSecond}"></td>
             <td>
                 <a th:href="@{'/knn_signal_config/edit/' + ${item.id}}" title="修改配置信息，并且版本号自增">修改</a>
                 <a th:href="@{'/knn_signal_config/del/' + ${item.id}}" title="同时删除计算结果">删除</a>
-                <a th:href="@{'/knn_signal_config/update/' + ${item.id}}" title="重新计算">全更新</a>
-                <a th:href="@{'/knn_signal_config/update_to_today/' + ${item.id}}" title="更新时间范围和股票代码">更新</a>
+                <a th:href="@{'/knn_signal_config/update_all/' + ${item.id}}" title="重新计算">全更新</a>
+                <a th:href="@{'/knn_signal_config/update/' + ${item.id}}" title="更新时间范围和股票代码">更新</a>
                 <a th:href="@{'/knn_signal_config/update_to_today/' + ${item.id}}" title="终止时间改为今天并更新时间范围和股票代码">更新至今日</a>
             </td>
         </tr>

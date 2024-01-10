@@ -19,10 +19,16 @@ public interface KnnSignalConfigService {
 
     void update(Long id);
 
+    void updateAll(Long id);
+
     void updateToToday(Long id);
 
     default void update(@NonNull List<Long> ids) {
         ids.forEach(this::update);
+    }
+
+    default void updateAll(@NonNull List<Long> ids) {
+        ids.forEach(this::updateAll);
     }
 
     default void updateToToday(@NonNull List<Long> ids) {

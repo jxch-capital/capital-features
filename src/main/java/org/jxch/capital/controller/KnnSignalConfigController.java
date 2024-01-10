@@ -65,6 +65,12 @@ public class KnnSignalConfigController {
         return Controllers.redirect("/knn_signal_config/index");
     }
 
+    @GetMapping("/update_all/{id}")
+    public String updateAll(@PathVariable(value = "id") Long id) {
+        knnSignalConfigService.updateAll(id);
+        return Controllers.redirect("/knn_signal_config/index");
+    }
+
     @GetMapping("/update_to_today/{id}")
     public String updateToToday(@PathVariable(value = "id") Long id) {
         knnSignalConfigService.updateToToday(id);
