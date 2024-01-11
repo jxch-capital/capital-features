@@ -8,6 +8,8 @@ public interface KnnSignalConfigService {
 
     List<KnnSignalConfigDto> findAll();
 
+    List<KnnSignalConfigDto> findAllUpdated();
+
     KnnSignalConfigDto findById(Long id);
 
     List<KnnSignalConfigDto> findById(List<Long> ids);

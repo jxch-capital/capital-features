@@ -34,4 +34,13 @@ public class SignalFilters {
         return signals;
     }
 
+    public static List<KLineSignal> chainByFilterNames(List<String> filterNames, List<KLineSignal> signals) {
+        if (Objects.nonNull(filterNames) && !filterNames.isEmpty()) {
+            List<SignalFilter> filters = getSignalFilterByName(filterNames);
+            filters.forEach(filter -> filter.filter(signals, filter.getDefaultParam()));
+            return signals;
+        }
+        return signals;
+    }
+
 }

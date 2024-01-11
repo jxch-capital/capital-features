@@ -1,9 +1,9 @@
 package org.jxch.capital.utils;
 
 import lombok.NonNull;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jxch.capital.domain.dto.KLineSignal;
-import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.domain.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,24 @@ public class KLineSignals {
 
     public static List<KLineSignal> setActionSignal(@NonNull List<KLineSignal> signals) {
         return signals.stream().map(KLineSignal::actionSignal).toList();
+    }
+
+    public static List<KLine> toKLines(@NonNull List<KLineSignal> kLineSignals) {
+        return kLineSignals.stream().map(KLineSignal::getKLine).toList();
+    }
+
+    public static List<EChartsMainIndexDto<Integer>> toEChartDtoSignals(@NonNull List<KLineSignal> kLineSignals) {
+        return kLineSignals.stream().map(kLineSignal -> new EChartsMainIndexDto<>(kLineSignal.getKLine().getDate(), kLineSignal.getSignal())).toList();
+    }
+
+    public static List<EChartsMainIndexDto<Integer>> toEChartDtoActionSignals(@NonNull List<KLineSignal> kLineSignals) {
+        return kLineSignals.stream().map(kLineSignal -> new EChartsMainIndexDto<>(kLineSignal.getKLine().getDate(), kLineSignal.getActionSignal())).toList();
+    }
+
+    @NotNull
+    @Contract("_, _ -> new")
+    public static KLineSignalStatistics toKLineSignalStatistics(@NonNull List<KLineSignal> kLineSignals, int limitAbs) {
+        return new KLineSignalStatistics(kLineSignals, limitAbs);
     }
 
 }

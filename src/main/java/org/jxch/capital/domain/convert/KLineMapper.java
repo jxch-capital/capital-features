@@ -1,10 +1,7 @@
 package org.jxch.capital.domain.convert;
 
 import lombok.NonNull;
-import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.domain.dto.KLineFeatures;
-import org.jxch.capital.domain.dto.KLineIndices;
-import org.jxch.capital.domain.dto.StockHistoryDto;
+import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.domain.po.StockHistory;
 import org.jxch.capital.http.yahoo.dto.DownloadStockCsvRes;
 import org.mapstruct.Mapper;
@@ -17,6 +14,7 @@ import org.ta4j.core.num.DecimalNum;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -87,6 +85,23 @@ public interface KLineMapper {
 
     default List<KLineFeatures> toKLineFeatures(@NonNull List<KLineIndices> kLineIndices) {
         return kLineIndices.stream().map(this::toKLineFeatures).toList();
+    }
+
+    default KLineSignal toKLineSignal(KLine kLine) {
+        return KLineSignal.builder().kLine(kLine).build();
+    }
+
+    default List<KLineSignal> toKLineSignal(@NonNull List<KLine> kLines, int futureSize, String code) {
+        List<KLineSignal> kLineSignals = new ArrayList<>();
+        for (int i = 0; i < kLines.size(); i++) {
+            KLineSignal kLineSignal = toKLineSignal(kLines.get(i));
+            kLineSignal.setCode(code);
+            if (i + futureSize < kLines.size()) {
+                kLineSignal.setTureSignal(kLines.get(i + futureSize).getClose() - kLines.get(i).getClose());
+            }
+            kLineSignals.add(kLineSignal);
+        }
+        return kLineSignals;
     }
 
 }

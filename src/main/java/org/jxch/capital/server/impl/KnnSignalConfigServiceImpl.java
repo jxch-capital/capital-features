@@ -9,6 +9,7 @@ import org.jxch.capital.server.KnnSignalConfigService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -20,6 +21,11 @@ public class KnnSignalConfigServiceImpl implements KnnSignalConfigService {
     @Override
     public List<KnnSignalConfigDto> findAll() {
         return knnSignalConfigMapper.toKnnSignalConfigDto(knnSignalConfigRepository.findAll());
+    }
+
+    @Override
+    public List<KnnSignalConfigDto> findAllUpdated() {
+        return findAll().stream().filter(dto -> Objects.nonNull(dto.getLastUpdateVersion())).toList();
     }
 
     @Override
