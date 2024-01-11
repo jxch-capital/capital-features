@@ -12,7 +12,7 @@ ai:
 
 model:
   smile:
-    model_path: /var/model/
+    model_path: /capital/features/
     model-suffix: .model
 
 spring:
