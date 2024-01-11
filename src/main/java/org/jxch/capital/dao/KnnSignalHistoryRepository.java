@@ -12,6 +12,11 @@ public interface KnnSignalHistoryRepository extends JpaRepository<KnnSignalHisto
 
     List<KnnSignalHistory> findKnnSignalHistoriesByKnnSignalConfigIdAndCode(Long knnSignalConfigId, String code);
 
+    List<KnnSignalHistory> findKnnSignalHistoriesByKnnSignalConfigId(Long knnSignalConfigId);
+
+    @Query("select k from knn_signal_history k where k.knnSignalConfigId in ?1")
+    List<KnnSignalHistory> findAllByKnnSignalConfigId(List<Long> knnSignalConfigIds);
+
     List<KnnSignalHistory> findKnnSignalHistoriesByKnnSignalConfigIdAndCodeAndDateBetween(Long knnSignalConfigId, String code, Date start, Date end);
 
     void deleteAllByKnnSignalConfigId(Long knnSignalConfigId);
@@ -23,7 +28,7 @@ public interface KnnSignalHistoryRepository extends JpaRepository<KnnSignalHisto
     void delByConfigId(List<Long> configIds);
 
     @Modifying
-    @Query("delete from knn_signal_history k where k.knnSignalConfigId in ?1 and k.code in ?2")
-    void delByConfigIdAndCode(List<Long> configIds, List<String> codes);
+    @Query("delete from knn_signal_history k where k.knnSignalConfigId = ?1 and k.code in ?2")
+    void delByConfigIdAndCode(Long configId, List<String> codes);
 
 }

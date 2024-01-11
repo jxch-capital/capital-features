@@ -8,6 +8,8 @@ public interface KnnSignalHistoryService {
 
     List<KnnSignalHistoryDto> findAllByConfigIdAndCode(Long configId, String code);
 
+    List<KnnSignalHistoryDto> findAllByConfigId(Long configId);
+
     Integer save(List<KnnSignalHistoryDto> dto);
 
     void delByConfigId(Long configId);
@@ -15,6 +17,6 @@ public interface KnnSignalHistoryService {
     void delByConfigAndCode(Long configId, String code);
 
     void delByConfigId(List<Long> configIds);
-    void delByConfigAndCode(List<Long> configIds, List<String> codes);
+    void delByConfigAndCode(Long configId, List<String> codes);
 
 }

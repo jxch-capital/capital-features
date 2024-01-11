@@ -7,10 +7,20 @@ import org.jxch.capital.domain.dto.KnnSignalConfigDto;
 import org.jxch.capital.learning.signal.dto.SignalBackTestKNNParam;
 import org.mapstruct.Mapper;
 
+import java.util.Date;
+
 @Mapper(componentModel = "spring")
 public interface SignalBackTestParamMapper {
 
     default SignalBackTestKNNParam toSignalBackTestKNNParam(@NonNull KnnSignalConfigDto config, String code) {
+        return toSignalBackTestKNNParam(config, code, config.getStartDate());
+    }
+
+    default SignalBackTestKNNParam toSignalBackTestKNNParam(@NonNull KnnSignalConfigDto config, String code, Date startOffset) {
+        return toSignalBackTestKNNParam(config, code, startOffset, config.getEndDate());
+    }
+
+    default SignalBackTestKNNParam toSignalBackTestKNNParam(@NonNull KnnSignalConfigDto config, String code, Date startOffset, Date end) {
         return (SignalBackTestKNNParam) SignalBackTestKNNParam.emptyParam()
                 .setFutureNum(config.getFutureSize())
                 .setKnnParam(KNNParam.builder()
@@ -23,8 +33,8 @@ public interface SignalBackTestParamMapper {
                                 .normalized(config.getIsNormalized())
                                 .build()
                         ).build())
-                .setStart(config.getStartDate())
-                .setEnd(config.getEndDate())
+                .setStart(startOffset)
+                .setEnd(end)
                 .setSignalLimitAbs(0)
                 .setCode(code);
     }

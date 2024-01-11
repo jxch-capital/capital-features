@@ -17,10 +17,12 @@ import java.util.List;
 @Primary
 public class StockServerImpl implements StockService {
 
-    @Cacheable(value = "history",  unless = "#result == null")
+    @Cacheable(value = "history", unless = "#result == null")
     public List<KLine> history(@NonNull HistoryParam param) {
         return AppContextHolder.getContext().getBean(param.getEngine().getService())
                 .history(param);
     }
+
+
 
 }

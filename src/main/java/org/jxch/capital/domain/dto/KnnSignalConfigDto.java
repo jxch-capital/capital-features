@@ -45,4 +45,8 @@ public class KnnSignalConfigDto {
         return Objects.nonNull(stockEngine);
     }
 
+    public boolean hasIndicesComId() {
+        return Objects.nonNull(indicesComId) && indicesComId > 0;
+    }
+
 }

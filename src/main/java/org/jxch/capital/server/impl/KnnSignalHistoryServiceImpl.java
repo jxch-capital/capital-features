@@ -7,6 +7,7 @@ import org.jxch.capital.domain.convert.KnnSignalHistoryMapper;
 import org.jxch.capital.domain.dto.KnnSignalHistoryDto;
 import org.jxch.capital.server.KnnSignalHistoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,11 @@ public class KnnSignalHistoryServiceImpl implements KnnSignalHistoryService {
     public List<KnnSignalHistoryDto> findAllByConfigIdAndCode(Long configId, String code) {
         return knnSignalHistoryMapper.toKnnSignalConfigDto(
                 knnSignalHistoryRepository.findKnnSignalHistoriesByKnnSignalConfigIdAndCode(configId, code));
+    }
+
+    @Override
+    public List<KnnSignalHistoryDto> findAllByConfigId(Long configId) {
+        return knnSignalHistoryMapper.toKnnSignalConfigDto(knnSignalHistoryRepository.findKnnSignalHistoriesByKnnSignalConfigId(configId));
     }
 
     @Override
@@ -44,8 +50,9 @@ public class KnnSignalHistoryServiceImpl implements KnnSignalHistoryService {
     }
 
     @Override
-    public void delByConfigAndCode(List<Long> configIds, List<String> codes) {
-        knnSignalHistoryRepository.delByConfigIdAndCode(configIds, codes);
+    @Transactional
+    public void delByConfigAndCode(Long configId, List<String> codes) {
+        knnSignalHistoryRepository.delByConfigIdAndCode(configId, codes);
     }
 
 }
