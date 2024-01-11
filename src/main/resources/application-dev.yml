@@ -4,6 +4,9 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:15432/capital-features
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 
 logging:
   level:
@@ -33,4 +36,6 @@ model:
   smile:
     model_path: D:\\jxch-capital\\capital-features\\src\\main\\resources\\model\\classifier_smile\\
     model-suffix: .model
+
+
 

@@ -40,6 +40,14 @@ public class KLineSignals {
         return kLineSignals.stream().map(KLineSignal::getKLine).toList();
     }
 
+    public static List<KLine> toKLinesByStacks(@NonNull List<KLineSignalStackDto> kLineSignalStacks) {
+        return kLineSignalStacks.stream().map(stackDto ->  stackDto.getKLineSignal().getKLine()).toList();
+    }
+
+    public static List<KLineSignal> toKLineSignalByStacks(@NonNull List<KLineSignalStackDto> kLineSignalStacks) {
+        return kLineSignalStacks.stream().map(KLineSignalStackDto::getKLineSignal).toList();
+    }
+
     public static List<EChartsMainIndexDto<Integer>> toEChartDtoSignals(@NonNull List<KLineSignal> kLineSignals) {
         return kLineSignals.stream().map(kLineSignal -> new EChartsMainIndexDto<>(kLineSignal.getKLine().getDate(), kLineSignal.getSignal())).toList();
     }

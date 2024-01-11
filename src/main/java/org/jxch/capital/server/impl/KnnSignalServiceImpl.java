@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.convert.KnnSignalHistoryMapper;
+import org.jxch.capital.domain.convert.KnnSignalParamMapper;
 import org.jxch.capital.domain.convert.SignalBackTestParamMapper;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.learning.signal.KNNSignalBackTestService;
@@ -33,6 +34,7 @@ public class KnnSignalServiceImpl implements KnnSignalService {
     private final StockService stockService;
     private final KLineMapper kLineMapper;
     private final IndicesCombinationService indicesCombinationService;
+    private final KnnSignalParamMapper knnSignalParamMapper;
 
     @Override
     @Transactional(rollbackOn = Throwable.class)
@@ -239,6 +241,14 @@ public class KnnSignalServiceImpl implements KnnSignalService {
         List<KLineSignal> kLineSignal = findSignalHistoryToKLineSignal(param.getConfigId(), param.getCode());
         kLineSignal.forEach(ks -> ks.actionSignal(param.getSignalLimitAbs()));
         return SignalFilters.chainByFilterNames(param.getFilters(), kLineSignal);
+    }
+
+    @Override
+    public List<KLineSignalStackDto> findNKLineSignal(@NonNull NKnnSignalParam param) {
+        return NKnnSignalStackers.getNKnnSignalStackerServiceByName(param.getStackName())
+                .stack(knnSignalParamMapper.toNKnnSignalParam(param).stream()
+                        .collect(Collectors.toMap(KnnSignalParam::getConfigId, this::findKLineSignal))
+                );
     }
 
 }

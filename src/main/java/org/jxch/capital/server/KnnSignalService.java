@@ -1,7 +1,9 @@
 package org.jxch.capital.server;
 
 import org.jxch.capital.domain.dto.KLineSignal;
+import org.jxch.capital.domain.dto.KLineSignalStackDto;
 import org.jxch.capital.domain.dto.KnnSignalParam;
+import org.jxch.capital.domain.dto.NKnnSignalParam;
 
 import java.util.List;
 
@@ -18,5 +20,7 @@ public interface KnnSignalService {
     List<KLineSignal> findSignalHistoryToKLineSignal(Long configId, String code);
 
     List<KLineSignal> findKLineSignal(KnnSignalParam param);
+
+    List<KLineSignalStackDto> findNKLineSignal(NKnnSignalParam param);
 
 }
