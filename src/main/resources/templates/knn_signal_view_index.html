@@ -395,6 +395,10 @@
         codes.split(",").forEach(function (item, index, arr) {
             $("#code").append($("<option>").val(item).text(item))
         })
+        const param = [[${param}]]
+        if (param['code']) {
+            $("#code").find("option:contains('" + param['code'] + "')").attr("selected", true)
+        }
     })
 </script>
 </body>
