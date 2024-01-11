@@ -5,12 +5,14 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableCaching
+@EnableScheduling
 @EnableTransactionManagement
 public class AppConfig {
 

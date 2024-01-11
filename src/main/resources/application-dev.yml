@@ -8,7 +8,7 @@ spring:
 logging:
   level:
     org.jxch.capital: debug
-    sql: debug
+    sql: info
     web: info
 
 yahoo:

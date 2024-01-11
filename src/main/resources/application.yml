@@ -29,3 +29,17 @@ spring:
     encoding: UTF-8
     suffix: .html
     mode: HTML
+  mail:
+    username: xicheng_jiang@outlook.com
+    password: xch_Jiang.outlook-A
+    host: smtp.office365.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+  security:
+    user:
+      name: jxch
+      password: jxch
