@@ -14,7 +14,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class KNodeParam {
+public class KNodeParam implements Cloneable {
     @Builder.Default
     private String code = "SPY";
     @Builder.Default
@@ -123,4 +123,14 @@ public class KNodeParam {
         result = 31 * result + futureNum;
         return result;
     }
+
+    @Override
+    public KNodeParam clone() {
+        try {
+            return (KNodeParam) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

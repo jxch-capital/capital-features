@@ -63,6 +63,73 @@
                 <th>信号强度</th>
                 <th>简图</th>
             </tr>
+            <tr th:if="${current_close}">
+                <td>-</td>
+                <td>current</td>
+                <td>current</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <div id="current_kline" style="width: 200px;height:30px;"></div>
+                    <script th:inline="javascript">
+                        const currentClose = [[${current_close}]]
+                        const param = [[${param}]]
+                        const size = param['kNodeParam.size'][0]
+
+                        echarts.init(document.getElementById('current_kline')).setOption({
+                            xAxis: {
+                                show: false,
+                                type: 'category',
+                            },
+                            yAxis: {
+                                show: false,
+                                type: 'value',
+                                max: Math.max(...currentClose),
+                                min: Math.min(...currentClose),
+                            },
+                            grid: {
+                                top: 0,
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                            },
+                            visualMap: {
+                                type: 'piecewise',
+                                show: false,
+                                dimension: 0,
+                                seriesIndex: 0,
+                                pieces: [
+                                    {
+                                        gt: 0,
+                                        lt: currentClose.length - size,
+                                        color: 'gray'
+                                    },
+                                    {
+                                        gt: currentClose.length - size,
+                                        color: 'red'
+                                    },
+                                ]
+                            },
+                            series: [
+                                {
+                                    data: currentClose,
+                                    type: 'line',
+                                    symbol: 'none',
+                                    itemStyle: {
+                                        color: 'black'
+                                    },
+                                    lineStyle: {
+                                        width: 1
+                                    },
+                                }
+                            ]
+                        })
+                    </script>
+                </td>
+            </tr>
             <tr th:each="item,iter: ${neighbors}">
                 <td th:text="${iter.index}"></td>
                 <td th:text="${item.kNode.code}"></td>
@@ -158,8 +225,8 @@
 
             const neighbors = [[${neighbors}]];
             const data = [[${statistics.analyzes}]].map((item, index, arr) => [
-                ((item['closeArr'][item['endIndex']] - item['closeArr'][item['startIndex']]) / item['closeArr'][item['startIndex']]).toFixed(2),
-                ((item['closeArr'][item['futureIndex']] - item['closeArr'][item['endIndex']]) / item['closeArr'][item['endIndex']]).toFixed(2),
+                ((item['closeArr'][item['endIndex']] - item['closeArr'][item['startIndex']]) / item['closeArr'][item['startIndex']] * 100).toFixed(2),
+                ((item['closeArr'][item['futureIndex']] - item['closeArr'][item['endIndex']]) / item['closeArr'][item['endIndex']] * 100).toFixed(2),
                 neighbors[index]['dist'],
                 item['futureSignal'],
                 item['code'],
@@ -231,6 +298,22 @@
                         symbolSize: function (data) {
                             return Math.min(Math.max((distMax - data[2]) * 4, 4), 40);
                         },
+                    },
+                    {
+                        type: 'line',
+                        data: [],
+                        markLine: {
+                            silent: true,
+                            data: [{
+                                xAxis: [[${current_start_x}]].toFixed(2)
+                            }],
+                            lineStyle: {
+                                type: 'dashed'
+                            },
+                            label: {
+                                color: 'white'
+                            }
+                        }
                     }
                 ]
             };

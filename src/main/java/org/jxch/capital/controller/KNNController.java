@@ -3,10 +3,7 @@ package org.jxch.capital.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.domain.dto.KLineAnalyzeStatistics;
-import org.jxch.capital.domain.dto.KNNParam;
-import org.jxch.capital.domain.dto.KNeighbor;
-import org.jxch.capital.server.KNNAutoService;
+import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.learning.knn.KNNs;
 import org.jxch.capital.server.*;
 import org.springframework.stereotype.Controller;
@@ -26,6 +23,7 @@ public class KNNController {
     private final KNodeAnalyzeService kNodeAnalyzeService;
     private final StockPoolService stockPoolService;
     private final IndicesCombinationService indicesCombinationService;
+    private final KNodeService kNodeService;
 
     @GetMapping("/index")
     public ModelAndView index() {
@@ -53,6 +51,14 @@ public class KNNController {
         modelAndView.addObject("all_knn", knnAutoService.allKNNParams());
         modelAndView.addObject("param", knnParam);
         modelAndView.addObject("indices_com", indicesCombinationService.findAll());
+
+        KNodeParam currentKNodeParam = knnParam.getKNodeParam().clone().setSize(knnParam.getKNodeParam().getMaxLength() + knnParam.getKNodeParam().getSize());
+        List<KLine> kLines = kNodeService.current(currentKNodeParam).getKLines();
+        modelAndView.addObject("current_close", kLines.stream().map(KLine::getClose).toList());
+        modelAndView.addObject("current_start_x",
+                100 * (kLines.get(kLines.size() - 1).getClose() - kLines.get(kLines.size() - knnParam.getKNodeParam().getSize()).getClose()) / kLines.get(kLines.size() - knnParam.getKNodeParam().getSize()).getClose());
+
+
         return modelAndView;
     }
 
