@@ -62,4 +62,10 @@ public class KLineSignals {
         return new KLineSignalStatistics(kLineSignals, limitAbs);
     }
 
+    @NotNull
+    @Contract("_, _ -> new")
+    public static KLineSignalStatistics toKLineSignalStatistics(@NonNull List<KLineSignal> kLineSignals, int limitAbs, int futureSize) {
+        return new KLineSignalStatistics(kLineSignals, limitAbs).resetTureSignalByFutureSize(futureSize);
+    }
+
 }

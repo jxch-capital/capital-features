@@ -1,5 +1,6 @@
 package org.jxch.capital.server;
 
+import org.jxch.capital.learning.signal.stack.NKnnSignalStackerService;
 import org.jxch.capital.utils.AppContextHolder;
 
 import java.util.List;

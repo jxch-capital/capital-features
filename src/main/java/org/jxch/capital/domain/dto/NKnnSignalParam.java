@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -21,4 +22,11 @@ public class NKnnSignalParam {
     private Integer signalLimitAbs = 5;
     @Builder.Default
     private List<String> filters = null;
+    @Builder.Default
+    private Integer futureSize = null;
+
+    public boolean needResetFutureSize() {
+        return Objects.nonNull(futureSize) && futureSize > 0;
+    }
+
 }

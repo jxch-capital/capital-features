@@ -55,8 +55,12 @@ public class NKnnSignalViewController {
         modelAndView.addObject("kLines", kLines);
         modelAndView.addObject("signals", KLineSignals.toEChartDtoSignals(kLineSignal));
         modelAndView.addObject("actionSignals", KLineSignals.toEChartDtoActionSignals(kLineSignal));
-        modelAndView.addObject("statistics", KLineSignals.toKLineSignalStatistics(kLineSignal, param.getSignalLimitAbs()));
         modelAndView.addObject("ema20", IndicesU.emaXEChartsDto(indexService, kLines, 20));
+        if (param.needResetFutureSize()) {
+            modelAndView.addObject("statistics", KLineSignals.toKLineSignalStatistics(kLineSignal, param.getSignalLimitAbs(), param.getFutureSize()));
+        } else {
+            modelAndView.addObject("statistics", KLineSignals.toKLineSignalStatistics(kLineSignal, param.getSignalLimitAbs()));
+        }
 
         return modelAndView;
     }

@@ -20,7 +20,7 @@
 
     <label for="stackName">
         <span>叠加器：</span>
-        <select id="stackName" th:field="*{stackName}" multiple class="selectpicker" data-live-search="true">
+        <select id="stackName" th:field="*{stackName}" class="selectpicker">
             <option th:each="item: ${all_stackers}" th:value="${item}" th:text="${item}"></option>
         </select>
     </label>
@@ -33,7 +33,11 @@
     </label>
 
     <label for="signalLimitAbs">信号抑制</label>
-    <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号抑制" required>
+    <input type="text" th:field="*{signalLimitAbs}" id="signalLimitAbs" placeholder="信号抑制" style="max-width: 40px"
+           required>
+    <label for="futureSize">统计预测数</label>
+    <input type="text" th:field="*{futureSize}" id="futureSize" placeholder="填写重置的预测数，仅用于统计"
+           style="max-width: 40px">
 
     <label for="code">
         <span>Code：</span>
@@ -393,7 +397,7 @@
         codeSelect.empty();
 
         let codes = $('#configId option:selected').first().attr('codes').split(",");
-        $('#configId option:selected').each(function() {
+        $('#configId option:selected').each(function () {
             const currentCodes = $(this).attr('codes').split(",");
             codes = codes.filter(code => currentCodes.includes(code));
         });

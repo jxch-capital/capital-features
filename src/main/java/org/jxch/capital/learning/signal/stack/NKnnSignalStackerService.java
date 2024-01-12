@@ -1,9 +1,10 @@
-package org.jxch.capital.server;
+package org.jxch.capital.learning.signal.stack;
 
 import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLineSignal;
 import org.jxch.capital.domain.dto.KLineSignalStackDto;
 import org.jxch.capital.domain.dto.KnnSignalConfigDto;
+import org.jxch.capital.server.KnnSignalConfigService;
 import org.jxch.capital.utils.AppContextHolder;
 import org.jxch.capital.utils.CollU;
 

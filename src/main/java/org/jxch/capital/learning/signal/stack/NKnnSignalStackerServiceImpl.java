@@ -1,8 +1,7 @@
-package org.jxch.capital.server.impl;
+package org.jxch.capital.learning.signal.stack;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.server.NKnnSignalStackerService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 

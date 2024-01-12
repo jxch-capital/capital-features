@@ -46,6 +46,15 @@ public class KLineSignalStatistics {
         this.winSellRate = Double.valueOf(this.successSellNum) / (this.sellNum) * 100;
     }
 
+    public KLineSignalStatistics resetTureSignalByFutureSize(int futureSize) {
+        kLineSignals.forEach(kLineSignal -> kLineSignal.setTureSignal(null));
+        for (int i = 0; i < kLineSignals.size() - futureSize; i++) {
+            kLineSignals.get(i).setTureSignal(kLineSignals.get(i + futureSize).getKLine().getClose() - kLineSignals.get(i).getKLine().getClose());
+        }
+        statistics();
+        return this;
+    }
+
     @Override
     public String toString() {
         return "KLineSignalStatistics{" +
