@@ -156,7 +156,6 @@
         <div id="klineChart" style="width: 800px; height: 500px"></div>
         <script th:inline="javascript">
             function getTipColor(value) {
-                console.log(value)
                 return chroma.scale([chroma("#ff0000"), chroma("gray"), chroma("#00ff00")]).domain([-16, 16])(value).hex();
             }
 

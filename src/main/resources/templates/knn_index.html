@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>KNN</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
 </head>
 <body>
@@ -40,107 +42,203 @@
     <input type="submit" value="查询">
 </form>
 <hr/>
-<div th:if="${neighbors}">
-    <div th:if="${statistics}">
-        <span>信号强度：</span>
-        <span th:text="${statistics.futureSignal}"></span>
-    </div>
-    <table>
-        <tr>
-            <th>NO.</th>
-            <th>股票代码</th>
-            <th>片段长度</th>
-            <th>开始时间</th>
-            <th>结束时间</th>
-            <th>相似度</th>
-            <th>信号</th>
-            <th>信号强度</th>
-            <th>简图</th>
-        </tr>
-        <tr th:each="item,iter: ${neighbors}">
-            <td th:text="${iter.index}"></td>
-            <td th:text="${item.kNode.code}"></td>
-            <td th:text="${#lists.size(item.kNode.kLines)}"></td>
-            <td th:text="${#dates.format(item.kNode.kLines[0].date, 'yyyy-MM-dd')}"></td>
-            <td th:text="${#dates.format(item.kNode.kLines[#lists.size(item.kNode.kLines)-1].date, 'yyyy-MM-dd')}"></td>
-            <td th:text="${#numbers.formatDecimal(item.dist, 1, 'COMMA', 2, 'POINT')}" style="text-align: right"></td>
-            <td style="text-align: right">
+<div th:if="${neighbors}" style="display: flex">
+    <div style="float: left">
+        <div th:if="${statistics}">
+            <span>信号强度：</span>
+            <span th:text="${statistics.futureSignal}"></span>
+            <span>百分比：</span>
+            <span th:text="${statistics.futureSignal} / ${#numbers.formatDecimal(param.neighborSize, 1, 'COMMA', 2, 'POINT')} * 100"></span>
+            <span>%</span>
+        </div>
+        <table>
+            <tr>
+                <th>NO.</th>
+                <th>股票代码</th>
+                <th>片段长度</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>相似度</th>
+                <th>信号</th>
+                <th>信号强度</th>
+                <th>简图</th>
+            </tr>
+            <tr th:each="item,iter: ${neighbors}">
+                <td th:text="${iter.index}"></td>
+                <td th:text="${item.kNode.code}"></td>
+                <td th:text="${#lists.size(item.kNode.kLines)}"></td>
+                <td th:text="${#dates.format(item.kNode.kLines[0].date, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#dates.format(item.kNode.kLines[#lists.size(item.kNode.kLines)-1].date, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#numbers.formatDecimal(item.dist, 1, 'COMMA', 2, 'POINT')}"
+                    style="text-align: right"></td>
+                <td style="text-align: right">
                 <span th:if="${statistics.analyzes[iter.index].hasFutureSignal}"
                       th:text="${statistics.analyzes[iter.index].futureSignal}"></span>
-                <span th:unless="${statistics.analyzes[iter.index].hasFutureSignal}">-</span>
-            </td>
-            <td style="text-align: right">
+                    <span th:unless="${statistics.analyzes[iter.index].hasFutureSignal}">-</span>
+                </td>
+                <td style="text-align: right">
                 <span th:if="${statistics.analyzes[iter.index].hasFutureSignal}">
                     <span th:text="${#numbers.formatDecimal(statistics.analyzes[iter.index].futurePercent, 1, 'COMMA', 2, 'POINT')}"></span>
                     <span>%</span>
                 </span>
-                <span th:unless="${statistics.analyzes[iter.index].hasFutureSignal}">-</span>
-            </td>
-            <td>
-                <div th:id="'KLineChart'+${iter.index}" style="width: 200px;height:30px;"></div>
-                <script th:inline="javascript">
-                    echarts.init(document.getElementById('KLineChart' + [[${iter.index}]])).setOption({
-                        xAxis: {
-                            show: false,
-                            type: 'category',
-                        },
-                        yAxis: {
-                            show: false,
-                            type: 'value',
-                            max: [[${statistics.analyzes[iter.index].maxPrice}]],
-                            min: [[${statistics.analyzes[iter.index].minPrice}]],
-                        },
-                        grid: {
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                        },
-                        visualMap: {
-                            type: 'piecewise',
-                            show: false,
-                            dimension: 0,
-                            seriesIndex: 0,
-                            pieces: [
+                    <span th:unless="${statistics.analyzes[iter.index].hasFutureSignal}">-</span>
+                </td>
+                <td>
+                    <div th:id="'KLineChart'+${iter.index}" style="width: 200px;height:30px;"></div>
+                    <script th:inline="javascript">
+                        echarts.init(document.getElementById('KLineChart' + [[${iter.index}]])).setOption({
+                            xAxis: {
+                                show: false,
+                                type: 'category',
+                            },
+                            yAxis: {
+                                show: false,
+                                type: 'value',
+                                max: [[${statistics.analyzes[iter.index].maxPrice}]],
+                                min: [[${statistics.analyzes[iter.index].minPrice}]],
+                            },
+                            grid: {
+                                top: 0,
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                            },
+                            visualMap: {
+                                type: 'piecewise',
+                                show: false,
+                                dimension: 0,
+                                seriesIndex: 0,
+                                pieces: [
+                                    {
+                                        gt: 0,
+                                        lt: [[${statistics.analyzes[iter.index].startIndex}]],
+                                        color: 'gray'
+                                    },
+                                    {
+                                        gt: [[${statistics.analyzes[iter.index].startIndex}]],
+                                        lt: [[${statistics.analyzes[iter.index].endIndex}]],
+                                        color: 'red'
+                                    },
+                                    {
+                                        gt: [[${statistics.analyzes[iter.index].endIndex}]],
+                                        lt: [[${statistics.analyzes[iter.index].futureIndex}]],
+                                        color: 'blue'
+                                    },
+                                    {
+                                        gt: [[${statistics.analyzes[iter.index].futureIndex}]],
+                                        color: 'gray'
+                                    }
+                                ]
+                            },
+                            series: [
                                 {
-                                    gt:0,
-                                    lt: [[${statistics.analyzes[iter.index].startIndex}]],
-                                    color: 'gray'
-                                },
-                                {
-                                    gt: [[${statistics.analyzes[iter.index].startIndex}]],
-                                    lt: [[${statistics.analyzes[iter.index].endIndex}]],
-                                    color: 'red'
-                                },
-                                {
-                                    gt: [[${statistics.analyzes[iter.index].endIndex}]],
-                                    lt: [[${statistics.analyzes[iter.index].futureIndex}]],
-                                    color: 'blue'
-                                },
-                                {
-                                    gt: [[${statistics.analyzes[iter.index].futureIndex}]],
-                                    color: 'gray'
+                                    data: [[${statistics.analyzes[iter.index].closeArr}]],
+                                    type: 'line',
+                                    symbol: 'none',
+                                    itemStyle: {
+                                        color: 'black'
+                                    },
+                                    lineStyle: {
+                                        width: 1
+                                    },
                                 }
                             ]
+                        });
+                    </script>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="float: left">
+        <div id="klineChart" style="width: 800px; height: 500px"></div>
+        <script th:inline="javascript">
+            function getTipColor(value) {
+                return chroma.scale([chroma("#ff0000"), chroma("gray"), chroma("#00ff00")]).domain([-0.1, 0.1])(value).hex();
+            }
+
+            const neighbors = [[${neighbors}]];
+            const data = [[${statistics.analyzes}]].map((item, index, arr) => [
+                ((item['closeArr'][item['endIndex']] - item['closeArr'][item['startIndex']]) / item['closeArr'][item['startIndex']]).toFixed(2),
+                ((item['closeArr'][item['futureIndex']] - item['closeArr'][item['endIndex']]) / item['closeArr'][item['endIndex']]).toFixed(2),
+                neighbors[index]['dist'],
+                item['futureSignal'],
+                item['code'],
+                index,
+                item['futurePercent'],
+            ]);
+
+            const distMax = Math.max(...neighbors.map(item => item['dist']))
+            const distMin = Math.min(...neighbors.map(item => item['dist']))
+
+            option = {
+                grid: {
+                    left: '8%',
+                },
+                tooltip: {
+                    formatter: function (params) {
+                        return `${params.marker} 信号强度：${params.data[6].toFixed(2)}%</br><table>`
+                            + `<tr><td>${params.data[5]}</td><td>${params.data[4]}</td></tr>`
+                            + `<tr><td>过去</td><td style="color: aliceblue; background-color: ${getTipColor(params.data[0])}; text-align: right">${params.data[0]}%</td></tr>`
+                            + `<tr><td>未来</td><td style="color: aliceblue; background-color: ${getTipColor(params.data[1])}; text-align: right">${params.data[1]}%</div></tr>`
+                            + `</table>`
+                    }
+                },
+                xAxis: {
+                    boundaryGap: false,
+                    axisLine: {
+                        onZero: true,
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    splitLine: {show: false},
+                    axisLabel: {
+                        formatter: function (value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                yAxis: {
+                    axisLine: {
+                        onZero: true,
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    scale: true,
+                    axisLabel: {
+                        formatter: function (value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                visualMap: {
+                    show: false,
+                    seriesIndex: 0,
+                    dimension: 6,
+                    min: -3,
+                    max: 3,
+                    inRange: {
+                        color: ['red', 'gray', 'green']
+                    }
+                },
+                series: [
+                    {
+                        data: data,
+                        type: 'scatter',
+                        symbolSize: function (data) {
+                            return Math.min(Math.max((distMax - data[2]) * 4, 4), 40);
                         },
-                        series: [
-                            {
-                                data: [[${statistics.analyzes[iter.index].closeArr}]],
-                                type: 'line',
-                                symbol: 'none',
-                                itemStyle: {
-                                    color: 'black'
-                                },
-                                lineStyle: {
-                                    width: 1
-                                },
-                            }
-                        ]
-                    });
-                </script>
-            </td>
-        </tr>
-    </table>
+                    }
+                ]
+            };
+
+            const myChart = echarts.init(document.getElementById('klineChart'));
+            myChart.setOption(option);
+        </script>
+    </div>
 </div>
 </body>
 </html>
