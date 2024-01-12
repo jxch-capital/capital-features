@@ -224,15 +224,17 @@
             }
 
             const neighbors = [[${neighbors}]];
-            const data = [[${statistics.analyzes}]].map((item, index, arr) => [
-                ((item['closeArr'][item['endIndex']] - item['closeArr'][item['startIndex']]) / item['closeArr'][item['startIndex']] * 100).toFixed(2),
-                ((item['closeArr'][item['futureIndex']] - item['closeArr'][item['endIndex']]) / item['closeArr'][item['endIndex']] * 100).toFixed(2),
-                neighbors[index]['dist'],
-                item['futureSignal'],
-                item['code'],
-                index,
-                item['futurePercent'],
-            ]);
+            const data = [[${statistics.analyzes}]]
+                .filter(item => item['hasFutureSignal'])
+                .map((item, index, arr) => [
+                    ((item['closeArr'][item['endIndex']] - item['closeArr'][item['startIndex']]) / item['closeArr'][item['startIndex']] * 100).toFixed(2),
+                    ((item['closeArr'][item['futureIndex']] - item['closeArr'][item['endIndex']]) / item['closeArr'][item['endIndex']] * 100).toFixed(2),
+                    neighbors[index]['dist'],
+                    item['futureSignal'],
+                    item['code'],
+                    index,
+                    item['futurePercent']
+                ]);
 
             const distMax = Math.max(...neighbors.map(item => item['dist']))
             const distMin = Math.min(...neighbors.map(item => item['dist']))

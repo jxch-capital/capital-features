@@ -24,4 +24,9 @@ public class KLineAnalyzeStatistics {
         return this;
     }
 
+    public KLineAnalyzeStatistics subtractNonFuture() {
+        analyzes = analyzes.stream().filter(KLineAnalyzes::isHasFutureSignal).toList();
+        return this;
+    }
+
 }
