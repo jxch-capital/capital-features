@@ -298,7 +298,7 @@
                         data: data,
                         type: 'scatter',
                         symbolSize: function (data) {
-                            return Math.min(Math.max((distMax - data[2]) * 4, 4), 40);
+                            return Math.min(Math.max((distMax - data[2]) / data[2]  * 400, 4), 40);
                         },
                     },
                     {
