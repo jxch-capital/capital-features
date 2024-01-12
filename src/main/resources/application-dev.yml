@@ -37,5 +37,6 @@ model:
     model_path: D:\\jxch-capital\\capital-features\\src\\main\\resources\\model\\classifier_smile\\
     model-suffix: .model
 
-
+chart:
+  png_path: D:\\jxch-capital\\capital-features\\src\\main\\resources\\chart\\
 

@@ -34,6 +34,7 @@
         <openblas.version>0.3.23-1.5.9</openblas.version>
         <bytedeco.version>1.5.9</bytedeco.version>
         <djl-pytorch-native.version>1.9.1</djl-pytorch-native.version>
+        <xchart.version>3.8.7</xchart.version>
     </properties>
 
     <dependencies>
@@ -180,61 +181,12 @@
             <artifactId>commons-math3</artifactId>
             <version>${math3.version}</version>
         </dependency>
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/openblas &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.bytedeco</groupId>-->
-<!--            <artifactId>openblas</artifactId>-->
-<!--            <version>${openblas.version}</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/javacpp &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.bytedeco</groupId>-->
-<!--            <artifactId>javacpp</artifactId>-->
-<!--            <version>${bytedeco.version}</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/javacpp-platform &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.bytedeco</groupId>-->
-<!--            <artifactId>javacpp-platform</artifactId>-->
-<!--            <version>${bytedeco.version}</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/javacv &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.bytedeco</groupId>-->
-<!--            <artifactId>javacv</artifactId>-->
-<!--            <version>${bytedeco.version}</version>-->
-<!--        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/com.aparapi/aparapi -->
-<!--        <dependency>-->
-<!--            <groupId>com.aparapi</groupId>-->
-<!--            <artifactId>aparapi</artifactId>-->
-<!--            <version>${aparapi.version}</version>-->
-<!--        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/io.milvus/milvus-sdk-java -->
-<!--        <dependency>-->
-<!--            <groupId>io.milvus</groupId>-->
-<!--            <artifactId>milvus-sdk-java</artifactId>-->
-<!--            <version>${milvus.version}</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; DJL API &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>ai.djl</groupId>-->
-<!--            <artifactId>api</artifactId>-->
-<!--            <version>${djl.version}</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; DJL PyTorch Enginge &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>ai.djl.pytorch</groupId>-->
-<!--            <artifactId>pytorch-engine</artifactId>-->
-<!--            <version>${djl.version}</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; DJL PyTorch native library &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>ai.djl.pytorch</groupId>-->
-<!--            <artifactId>pytorch-native-auto</artifactId>-->
-<!--            <version>${djl-pytorch-native.version}</version>-->
-<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.knowm.xchart/xchart -->
+        <dependency>
+            <groupId>org.knowm.xchart</groupId>
+            <artifactId>xchart</artifactId>
+            <version>${xchart.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
