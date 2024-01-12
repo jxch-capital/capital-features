@@ -1,4 +1,4 @@
-$.fn.exists = function(callback) {
+$.fn.exists = function (callback) {
     const args = [].slice.call(arguments, 1);
     if (this.length) {
         callback.call(this, args);
@@ -6,9 +6,12 @@ $.fn.exists = function(callback) {
     return this;
 };
 
-$(document).ready(function () {
 
-    $.get("/app/title", function(data) {
+$(document).ready(function () {
+    $("body").attr("style", "background-color: #000!important");
+
+
+    $.get("/app/title", function (data) {
         $("body").prepend(data)
     })
 

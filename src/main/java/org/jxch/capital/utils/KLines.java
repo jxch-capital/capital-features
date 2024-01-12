@@ -33,4 +33,13 @@ public class KLines {
                 .toArray();
     }
 
+    public static Double closePercent(@NonNull List<KLine> kLines, int num) {
+        if (kLines.size() > num) {
+            return (kLines.get(kLines.size() - 1).getClose() - kLines.get(kLines.size() - num).getClose())
+                    / kLines.get(kLines.size() - num).getClose() * 100;
+        } else {
+            return Double.NaN;
+        }
+    }
+
 }
