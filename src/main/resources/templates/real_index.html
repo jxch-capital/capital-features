@@ -155,10 +155,24 @@
     <div th:if="${nodes}" style="float: left">
         <div id="klineChart" style="width: 800px; height: 500px"></div>
         <script th:inline="javascript">
+            function getTipColor(value) {
+                console.log(value)
+                return chroma.scale([chroma("#ff0000"), chroma("gray"), chroma("#00ff00")]).domain([-16, 16])(value).hex();
+            }
+
             const data = [[${nodes}]].map(item => [item['d20Percent'], item['d40Percent'], item['d5Percent'], item['name'], item['code']]);
             option = {
                 grid: {
                     left: '8%',
+                },
+                tooltip: {
+                    formatter: function (params) {
+                        return `${params.marker} ${params.data[3]}</br><table>`
+                                    + `<tr><td>短期</td><td style="background-color: ${getTipColor(params.data[2])}; text-align: right">${params.data[2].toFixed(2)}%</td></tr>`
+                                    + `<tr><td>中期</td><td style="background-color: ${getTipColor(params.data[0])}; text-align: right">${params.data[0].toFixed(2)}%</div></tr>`
+                                    + `<tr><td>长期</td><td style="background-color: ${getTipColor(params.data[1])}; text-align: right">${params.data[1].toFixed(2)}%</td></tr>`
+                                    +`</table>`
+                    }
                 },
                 xAxis: {
                     boundaryGap: false,
