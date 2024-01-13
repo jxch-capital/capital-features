@@ -27,138 +27,8 @@
 
 <hr>
 <div style="display: flex">
-    <div style="float: left" th:if="${notes}">
-
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>type</th>
-                <th>k</th>
-                <th>key</th>
-                <th>value</th>
-                <th>remark</th>
-                <th>操作</th>
-            </tr>
-            <form th:action="@{/notebook_5m/save}" th:object="${add_param}" method="post">
-                <tr>
-                    <td style="color: gray; margin-left: 4px">Auto</td>
-                    <td>
-                        <label for="type">
-                            <input type="text" th:field="*{type}" id="type" placeholder="type">
-                        </label>
-                    </td>
-                    <td>
-                        <label for="k">
-                            <input type="text" th:field="*{k}" id="k" placeholder="K线">
-                        </label>
-                    </td>
-                    <td>
-                        <label for="key">
-                            <input type="text" th:field="*{key}" id="key" placeholder="key">
-                        </label>
-                    </td>
-                    <td>
-                        <label for="value">
-                            <input type="text" th:field="*{value}" id="value" placeholder="value">
-                        </label>
-                    </td>
-                    <td>
-                        <label for="remark">
-                            <input type="text" th:field="*{remark}" id="remark" placeholder="remark">
-                        </label>
-                    </td>
-                    <td>
-                        <div style="display: none">
-                            <label for="code_add">
-                                <input type="text" th:field="*{code}" id="code_add" placeholder="code"
-                                       th:value="${param.code}" required>
-                            </label>
-                            <label for="date_add">
-                                <input type="text" th:field="*{date}" id="date_add" placeholder="date"
-                                       th:value="${param.date}" required>
-                            </label>
-                        </div>
-                        <input type="submit" value="添加" class="btn-primary">
-                    </td>
-                </tr>
-            </form>
-            <tr th:each="item,iter: ${notes}" th:id="'note' + ${iter.index}">
-                <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
-                <td>
-                    <label th:for="'type' + ${iter.index}">
-                        <input type="text" th:value="${item.type}" th:id="'type' + ${iter.index}"
-                               placeholder="type">
-                    </label>
-                </td>
-                <td>
-                    <label th:for="'k' + ${iter.index}">
-                        <input type="text" th:value="${item.k}" th:id="'k' + ${iter.index}" placeholder="K线">
-                    </label>
-                </td>
-                <td>
-                    <label th:for="'key' + ${iter.index}">
-                        <input type="text" th:value="${item.key}" th:id="'key' + ${iter.index}" placeholder="key">
-                    </label>
-                </td>
-                <td>
-                    <label th:for="'value' + ${iter.index}">
-                        <input type="text" th:value="${item.value}" th:id="'value' + ${iter.index}"
-                               placeholder="value">
-                    </label>
-                </td>
-                <td>
-                    <label th:for="'remark' + ${iter.index}">
-                        <input type="text" th:value="${item.remark}" th:id="'remark' + ${iter.index}"
-                               placeholder="remark">
-                    </label>
-                </td>
-                <td>
-                    <button th:id="'edit' + ${iter.index}">修改</button>
-                    <button th:id="'del' + ${iter.index}">删除</button>
-                    <script th:inline="javascript">
-                        $(document).ready(function () {
-                            $('#edit' + [[${iter.index}]]).click(function () {
-                                $.get("/notebook_5m/save", {
-                                    id: [[${item.id}]],
-                                    code: [[${code}]],
-                                    date: [[${date}]],
-                                    type: $('#type' + [[${iter.index}]]).val(),
-                                    k: $('#k' + [[${iter.index}]]).val(),
-                                    key: $('#key' + [[${iter.index}]]).val(),
-                                    value: $('#value' + [[${iter.index}]]).val(),
-                                    remark: $('#remark' + [[${iter.index}]]).val(),
-                                }).done(function (data, status, jqxhr) {
-                                    $('#info').html("<span style='color: greenyellow'>修改成功</span>")
-                                }).fail(function (jqxhr, status, error) {
-                                    $('#info').html("<span style='color: red'>修改失败</span>")
-                                });
-                            })
-                            $('#del' + [[${iter.index}]]).click(function () {
-                                $.get("/notebook_5m/del", {
-                                    id: [[${item.id}]],
-                                    type: [[${item.type}]],
-                                    k: [[${item.k}]],
-                                    key: [[${item.key}]],
-                                    value: [[${item.value}]],
-                                    remark: [[${item.remark}]],
-                                    code: [[${code}]],
-                                    date: [[${date}]],
-                                }).done(function (data, status, jqxhr) {
-                                    $('#note' + [[${iter.index}]]).remove();
-                                    $('#info').html("<span style='color: greenyellow'>删除成功</span>")
-                                }).fail(function (jqxhr, status, error) {
-                                    $('#info').html("<span style='color: red'>删除失败</span>")
-                                });
-                            })
-                        })
-                    </script>
-                </td>
-            </tr>
-        </table>
-
-    </div>
-    <div style="float: left; margin-left: 10px" th:if="${kLines}">
-        <div id="klineChart" style="width: 1400px;height:1000px;"></div>
+    <div style="float: left" th:if="${kLines}">
+        <div id="klineChart" style="width: 1400px;height:1100px;"></div>
         <script th:inline="javascript">
             const myChart = echarts.init(document.getElementById('klineChart'));
             const upColor = '#00da3c';
@@ -436,6 +306,136 @@
 
             myChart.setOption(option);
         </script>
+    </div>
+    <div style="float: left; margin-left: 10px" th:if="${notes}">
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>type</th>
+                <th>k</th>
+                <th>key</th>
+                <th>value</th>
+                <th>remark</th>
+                <th>操作</th>
+            </tr>
+            <form th:action="@{/notebook_5m/save}" th:object="${add_param}" method="post">
+                <tr>
+                    <td style="color: gray; margin-left: 4px">Auto</td>
+                    <td>
+                        <label for="type">
+                            <input type="text" th:field="*{type}" id="type" placeholder="type">
+                        </label>
+                    </td>
+                    <td>
+                        <label for="k">
+                            <input type="text" th:field="*{k}" id="k" placeholder="K线">
+                        </label>
+                    </td>
+                    <td>
+                        <label for="key">
+                            <input type="text" th:field="*{key}" id="key" placeholder="key">
+                        </label>
+                    </td>
+                    <td>
+                        <label for="value">
+                            <input type="text" th:field="*{value}" id="value" placeholder="value">
+                        </label>
+                    </td>
+                    <td>
+                        <label for="remark">
+                            <input type="text" th:field="*{remark}" id="remark" placeholder="remark">
+                        </label>
+                    </td>
+                    <td>
+                        <div style="display: none">
+                            <label for="code_add">
+                                <input type="text" th:field="*{code}" id="code_add" placeholder="code"
+                                       th:value="${param.code}" required>
+                            </label>
+                            <label for="date_add">
+                                <input type="text" th:field="*{date}" id="date_add" placeholder="date"
+                                       th:value="${param.date}" required>
+                            </label>
+                        </div>
+                        <input type="submit" value="添加" class="btn-primary">
+                    </td>
+                </tr>
+            </form>
+            <tr th:each="item,iter: ${notes}" th:id="'note' + ${iter.index}">
+                <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+                <td>
+                    <label th:for="'type' + ${iter.index}">
+                        <input type="text" th:value="${item.type}" th:id="'type' + ${iter.index}"
+                               placeholder="type">
+                    </label>
+                </td>
+                <td>
+                    <label th:for="'k' + ${iter.index}">
+                        <input type="text" th:value="${item.k}" th:id="'k' + ${iter.index}" placeholder="K线">
+                    </label>
+                </td>
+                <td>
+                    <label th:for="'key' + ${iter.index}">
+                        <input type="text" th:value="${item.key}" th:id="'key' + ${iter.index}" placeholder="key">
+                    </label>
+                </td>
+                <td>
+                    <label th:for="'value' + ${iter.index}">
+                        <input type="text" th:value="${item.value}" th:id="'value' + ${iter.index}"
+                               placeholder="value">
+                    </label>
+                </td>
+                <td>
+                    <label th:for="'remark' + ${iter.index}">
+                        <input type="text" th:value="${item.remark}" th:id="'remark' + ${iter.index}"
+                               placeholder="remark">
+                    </label>
+                </td>
+                <td>
+                    <button th:id="'edit' + ${iter.index}">修改</button>
+                    <button th:id="'del' + ${iter.index}">删除</button>
+                    <script th:inline="javascript">
+                        $(document).ready(function () {
+                            $('#edit' + [[${iter.index}]]).click(function () {
+                                $.get("/notebook_5m/save", {
+                                    id: [[${item.id}]],
+                                    code: [[${code}]],
+                                    date: [[${date}]],
+                                    type: $('#type' + [[${iter.index}]]).val(),
+                                    k: $('#k' + [[${iter.index}]]).val(),
+                                    key: $('#key' + [[${iter.index}]]).val(),
+                                    value: $('#value' + [[${iter.index}]]).val(),
+                                    remark: $('#remark' + [[${iter.index}]]).val(),
+                                }).done(function (data, status, jqxhr) {
+                                    $('#info').html("<span style='color: greenyellow'>修改成功</span>")
+                                }).fail(function (jqxhr, status, error) {
+                                    $('#info').html("<span style='color: red'>修改失败</span>")
+                                });
+                            })
+                            $('#del' + [[${iter.index}]]).click(function () {
+                                $.get("/notebook_5m/del", {
+                                    id: [[${item.id}]],
+                                    type: [[${item.type}]],
+                                    k: [[${item.k}]],
+                                    key: [[${item.key}]],
+                                    value: [[${item.value}]],
+                                    remark: [[${item.remark}]],
+                                    code: [[${code}]],
+                                    date: [[${date}]],
+                                }).done(function (data, status, jqxhr) {
+                                    $('#note' + [[${iter.index}]]).remove();
+                                    $('#info').html("<span style='color: greenyellow'>删除成功</span>")
+                                }).fail(function (jqxhr, status, error) {
+                                    $('#info').html("<span style='color: red'>删除失败</span>")
+                                });
+                            })
+                        })
+                    </script>
+                </td>
+            </tr>
+        </table>
+
     </div>
 </div>
 <div>
