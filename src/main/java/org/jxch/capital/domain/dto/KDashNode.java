@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -29,12 +30,17 @@ public class KDashNode {
         this.kLines = kLines;
 
         if (!this.kLines.isEmpty()) {
-            this.d5Percent = closePercent(5);
-            this.d20Percent = closePercent(20);
-            this.d40Percent = closePercent(40);
-            this.maxPrice = this.kLines.stream().mapToDouble(KLine::getHigh).max().orElseThrow();
-            this.minPrice = this.kLines.stream().mapToDouble(KLine::getLow).min().orElseThrow();
-            this.closeArr = this.kLines.stream().map(KLine::getClose).toList();
+            try {
+                this.d5Percent = closePercent(5);
+                this.d20Percent = closePercent(20);
+                this.d40Percent = closePercent(40);
+                this.maxPrice = this.kLines.stream().filter(kLine -> Objects.nonNull(kLine.getHigh())).mapToDouble(KLine::getHigh).max().orElseThrow();
+                this.minPrice = this.kLines.stream().filter(kLine -> Objects.nonNull(kLine.getLow())).mapToDouble(KLine::getLow).min().orElseThrow();
+                this.closeArr = this.kLines.stream().map(KLine::getClose).filter(Objects::nonNull).toList();
+            }catch (NullPointerException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
 

@@ -153,7 +153,7 @@
         </table>
     </div>
     <div th:if="${nodes}" style="float: left">
-        <div id="klineChart" style="width: 2000px; height: 1200px"></div>
+        <div id="klineChart" style="width: 1800px; height: 1200px"></div>
         <script th:inline="javascript">
             function getTipColor(value) {
                 return chroma.scale([chroma("#ff0000"), chroma("gray"), chroma("#00ff00")]).domain([-16, 16])(value).hex();

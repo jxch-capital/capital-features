@@ -8,7 +8,7 @@ $.fn.exists = function (callback) {
 
 
 $(document).ready(function () {
-    $("body").attr("style", "background-color: #000!important");
+    $("body").attr("style", "background-color: #17191A!important");
 
 
     $.get("/app/title", function (data) {
