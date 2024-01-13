@@ -12,7 +12,7 @@ import org.jxch.capital.learning.classifier.ClassifierModelService;
 import org.jxch.capital.learning.classifier.config.ClassifierLearningConfig;
 import org.jxch.capital.learning.classifier.dto.ClassifierFitInfoDto;
 import org.jxch.capital.learning.classifier.dto.ClassifierFitParam;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.stock.IntervalEnum;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.utils.KLineSignals;
 import org.jxch.capital.utils.KNodes;

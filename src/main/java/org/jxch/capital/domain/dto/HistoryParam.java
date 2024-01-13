@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.jxch.capital.server.EngineEnum;
+import org.jxch.capital.stock.EngineEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
@@ -32,7 +32,7 @@ public class HistoryParam {
     @Builder.Default
     private String interval = "1d";
     @Builder.Default
-    private EngineEnum engine = EngineEnum.YAHOO;
+    private EngineEnum engine = EngineEnum.defaultEngine();
 
     @Override
     public boolean equals(Object o) {

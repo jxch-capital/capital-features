@@ -3,6 +3,7 @@ package org.jxch.capital.domain.convert;
 import lombok.NonNull;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.domain.po.StockHistory;
+import org.jxch.capital.http.yahoo.dto.ChartRes;
 import org.jxch.capital.http.yahoo.dto.DownloadStockCsvRes;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -16,6 +17,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.IntStream;
 
 @Mapper(componentModel = "spring")
 public interface KLineMapper {
@@ -102,6 +105,17 @@ public interface KLineMapper {
             kLineSignals.add(kLineSignal);
         }
         return kLineSignals;
+    }
+
+    default List<KLine> toKLineByYahooChartRes(@NonNull ChartRes chartRes) {
+        return IntStream.range(0, chartRes.getLengthThrow()).mapToObj(index -> new KLine()
+                .setDate(chartRes.getDate(index))
+                .setClose(chartRes.getClose(index))
+                .setOpen(chartRes.getOpen(index))
+                .setLow(chartRes.getLow(index))
+                .setHigh(chartRes.getHigh(index))
+                .setVolume(chartRes.getLongVolume(index))
+        ).filter(kLine -> Objects.nonNull(kLine.getClose())).toList();
     }
 
 }

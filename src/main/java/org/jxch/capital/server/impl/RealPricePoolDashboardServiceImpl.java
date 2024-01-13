@@ -6,7 +6,7 @@ import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.RealPricePoolDashboardService;
 import org.jxch.capital.server.StockBaseService;
 import org.jxch.capital.server.StockPoolService;
-import org.jxch.capital.server.StockService;
+import org.jxch.capital.stock.StockService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

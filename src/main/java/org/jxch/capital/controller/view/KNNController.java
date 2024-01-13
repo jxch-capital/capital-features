@@ -1,4 +1,4 @@
-package org.jxch.capital.controller;
+package org.jxch.capital.controller.view;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

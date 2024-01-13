@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.IndicesCombinationService;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.stock.IntervalEnum;
 import org.jxch.capital.server.KNodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

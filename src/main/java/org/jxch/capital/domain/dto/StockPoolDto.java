@@ -3,8 +3,8 @@ package org.jxch.capital.domain.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.jxch.capital.server.EngineEnum;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.stock.EngineEnum;
+import org.jxch.capital.stock.IntervalEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Arrays;

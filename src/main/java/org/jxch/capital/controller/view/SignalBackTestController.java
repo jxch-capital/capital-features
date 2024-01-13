@@ -1,4 +1,4 @@
-package org.jxch.capital.controller;
+package org.jxch.capital.controller.view;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;

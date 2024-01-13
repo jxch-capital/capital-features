@@ -9,7 +9,7 @@ import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.learning.knn.distance.LorentzianKNNServiceImpl;
 import org.jxch.capital.server.KNodeParams;
 import org.jxch.capital.server.KNodeService;
-import org.jxch.capital.server.StockService;
+import org.jxch.capital.stock.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

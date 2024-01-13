@@ -9,7 +9,7 @@ import org.jxch.capital.domain.dto.IndicatorWrapper;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
 import org.jxch.capital.server.IndicesConfigService;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.stock.IntervalEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.ta4j.core.indicators.CCIIndicator;

@@ -23,4 +23,6 @@ public interface StockHistoryRepository extends JpaRepository<StockHistory, Long
     @Query("delete from stock_history h where h.stockPoolId = ?1")
     void deleteByStockPoolId(Long id);
 
+    List<StockHistory> findAllByStockCodeAndDateBetween(String stockCode, Date start, Date end);
+
 }

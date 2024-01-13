@@ -1,4 +1,4 @@
-package org.jxch.capital.controller;
+package org.jxch.capital.controller.view;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.IndexService;
-import org.jxch.capital.server.StockService;
+import org.jxch.capital.stock.StockService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.ta4j.core.indicators.EMAIndicator;

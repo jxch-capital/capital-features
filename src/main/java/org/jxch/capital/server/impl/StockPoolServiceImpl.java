@@ -10,10 +10,10 @@ import org.jxch.capital.domain.dto.HistoryParam;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.StockHistoryDto;
 import org.jxch.capital.domain.dto.StockPoolDto;
-import org.jxch.capital.server.EngineEnum;
+import org.jxch.capital.stock.EngineEnum;
 import org.jxch.capital.server.StockHistoryService;
 import org.jxch.capital.server.StockPoolService;
-import org.jxch.capital.server.StockService;
+import org.jxch.capital.stock.StockService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

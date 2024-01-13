@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.server.*;
+import org.jxch.capital.stock.StockService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 

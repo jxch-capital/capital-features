@@ -1,10 +1,13 @@
 package org.jxch.capital.utils;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.NonNull;
 import org.jxch.capital.domain.dto.KLine;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class KLines {
@@ -40,6 +43,28 @@ public class KLines {
         } else {
             return Double.NaN;
         }
+    }
+
+    public static int  dayTradingKLinesIndexByTime(@NonNull List<KLine> kLines, @NonNull LocalTime time) {
+        return IntStream.range(0, kLines.size())
+                .filter(index -> DateUtil.toLocalDateTime(kLines.get(index).getDate()).toLocalTime().equals(time))
+                .findAny().orElseThrow(() -> new IllegalArgumentException("无法找到对应的时间: " + time));
+    }
+
+    public static List<String> dayTradingKLabels(@NonNull List<KLine> kLines, @NonNull LocalTime openDate, @NonNull LocalTime closeDate) {
+        int openIndex = dayTradingKLinesIndexByTime(kLines, openDate);
+        int closeIndex = dayTradingKLinesIndexByTime(kLines, closeDate);
+
+        return IntStream.range(0, kLines.size())
+                .mapToObj(index -> {
+                    if (index < openIndex) {
+                        return "l" + (openIndex - index);
+                    } else if (index <= closeIndex) {
+                        return "k" + (index - openIndex);
+                    } else {
+                        return "r" + (index - closeIndex);
+                    }
+                }).toList();
     }
 
 }

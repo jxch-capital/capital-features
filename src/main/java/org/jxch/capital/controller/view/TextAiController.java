@@ -1,4 +1,4 @@
-package org.jxch.capital.controller;
+package org.jxch.capital.controller.view;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;

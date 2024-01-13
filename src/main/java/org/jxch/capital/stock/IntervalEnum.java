@@ -1,4 +1,4 @@
-package org.jxch.capital.server;
+package org.jxch.capital.stock;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

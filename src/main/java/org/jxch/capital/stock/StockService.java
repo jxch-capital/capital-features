@@ -1,4 +1,4 @@
-package org.jxch.capital.server;
+package org.jxch.capital.stock;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;

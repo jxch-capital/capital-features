@@ -15,6 +15,7 @@ import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.learning.signal.KNNSignalBackTestService;
 import org.jxch.capital.learning.signal.filter.SignalFilters;
 import org.jxch.capital.server.*;
+import org.jxch.capital.stock.StockService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 

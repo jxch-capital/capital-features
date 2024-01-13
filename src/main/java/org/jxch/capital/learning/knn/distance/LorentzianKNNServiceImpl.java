@@ -8,7 +8,7 @@ import org.jxch.capital.domain.dto.KLineFeatures;
 import org.jxch.capital.domain.dto.KLineIndices;
 import org.jxch.capital.domain.dto.KNodeParam;
 import org.jxch.capital.learning.knn.KNNService;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.stock.IntervalEnum;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

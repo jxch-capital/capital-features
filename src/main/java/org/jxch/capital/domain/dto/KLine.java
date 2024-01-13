@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.Objects;
 
 @Data
-@Accessors(chain = true)
 @NoArgsConstructor
+@Accessors(chain = true)
 public class KLine {
     private Date date;
     private Double open;

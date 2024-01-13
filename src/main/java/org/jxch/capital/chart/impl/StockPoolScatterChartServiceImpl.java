@@ -12,7 +12,7 @@ import org.jxch.capital.chart.dto.StockPoolScatterChartRes;
 import org.jxch.capital.domain.dto.HistoryParam;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.server.StockPoolService;
-import org.jxch.capital.server.StockService;
+import org.jxch.capital.stock.StockService;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;

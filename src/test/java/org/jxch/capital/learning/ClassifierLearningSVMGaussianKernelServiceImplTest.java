@@ -13,7 +13,7 @@ import org.jxch.capital.learning.classifier.model.ClassifierLearningSVMGaussianK
 import org.jxch.capital.learning.classifier.ClassifierLearnings;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningParam;
 import org.jxch.capital.learning.classifier.dto.ClassifierLearningRes;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.stock.IntervalEnum;
 import org.jxch.capital.server.impl.KNodeServiceImpl;
 import org.jxch.capital.utils.KLineSignals;
 import org.springframework.beans.factory.annotation.Autowired;

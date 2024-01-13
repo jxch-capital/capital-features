@@ -50,4 +50,9 @@ public class StockHistoryServiceImpl implements StockHistoryService {
         return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolIdAndStockCode(stockPoolId, stockCode, startDate, endDate));
     }
 
+    @Override
+    public List<StockHistoryDto> findByStockCodeAndDate(String stockCode, Date start, Date end) {
+        return kLineMapper.toStockHistoryDto(stockHistoryRepository.findAllByStockCodeAndDateBetween(stockCode, start, end));
+    }
+
 }

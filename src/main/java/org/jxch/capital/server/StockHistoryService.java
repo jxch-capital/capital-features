@@ -16,4 +16,6 @@ public interface StockHistoryService {
     List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode);
 
     List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode, Date startDate, Date endDate);
+
+    List<StockHistoryDto> findByStockCodeAndDate(String stockCode, Date start, Date end);
 }

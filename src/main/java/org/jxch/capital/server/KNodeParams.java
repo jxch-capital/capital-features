@@ -2,6 +2,7 @@ package org.jxch.capital.server;
 
 import org.jxch.capital.domain.dto.IndicatorWrapper;
 import org.jxch.capital.domain.dto.KNodeParam;
+import org.jxch.capital.stock.IntervalEnum;
 import org.ta4j.core.indicators.CCIIndicator;
 import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.adx.ADXIndicator;

@@ -1,4 +1,4 @@
-package org.jxch.capital.controller;
+package org.jxch.capital.controller.view;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

@@ -5,7 +5,7 @@ import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KNeighbor;
 import org.jxch.capital.domain.dto.KNode;
 import org.jxch.capital.domain.dto.KNodeParam;
-import org.jxch.capital.server.IntervalEnum;
+import org.jxch.capital.stock.IntervalEnum;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.utils.AppContextHolder;
 
