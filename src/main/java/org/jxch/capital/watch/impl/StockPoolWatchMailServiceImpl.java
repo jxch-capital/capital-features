@@ -2,17 +2,18 @@ package org.jxch.capital.watch.impl;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.chart.dto.StockPoolChartParam;
+import org.jxch.capital.chart.dto.StockPoolBubbleChartParam;
+import org.jxch.capital.chart.dto.StockPoolScatterChartRes;
 import org.jxch.capital.chart.impl.StockPoolBubbleChartServiceImpl;
-import org.jxch.capital.server.RealPricePoolDashboardService;
-import org.jxch.capital.server.StockPoolService;
 import org.jxch.capital.watch.StockPoolWatchMailService;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -21,24 +22,38 @@ import java.util.Calendar;
 @RequiredArgsConstructor
 public class StockPoolWatchMailServiceImpl implements StockPoolWatchMailService {
     private final StockPoolBubbleChartServiceImpl stockPoolChartPngService;
-    private final RealPricePoolDashboardService realPricePoolDashboardService;
-    private final StockPoolService stockPoolService;
-    private final TemplateEngine templateEngine;
+    private ThreadLocal<StockPoolScatterChartRes> resThreadLocal = new ThreadLocal<>();
 
     @Override
-    public String watchTask() {
-        StockPoolChartParam param = StockPoolChartParam.builder()
-                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.MONTH, -1))
-                .stockPoolIds(Arrays.asList(95002L, 340053L, 340054L))
+    public String htmlBuild(String html) {
+        return html + "<div><img src=\"cid:stock_pool_img\" /></div>";
+    }
+
+    @Override
+    @SneakyThrows
+    public void addInline(@NonNull MimeMessageHelper helper) {
+        StockPoolBubbleChartParam param = StockPoolBubbleChartParam.builder()
+                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -3))
+                .stockPoolIds(Arrays.asList(554952L))
+                .pl(20)
+                .xl(60)
+                .yl(120)
                 .build();
 
-//        StockPoolChartRes res = stockPoolChartPngService.chart(param);
+        StockPoolScatterChartRes res = stockPoolChartPngService.chart(param);
+        helper.addInline("stock_pool_img", new File(res.getPath()));
+        resThreadLocal.set(res);
+    }
 
-        Context context = new Context();
-        context.setVariable("param1", "value1");
-        context.setVariable("param2", "value2");
+    @Override
+    public void clear() {
+        stockPoolChartPngService.clear(resThreadLocal.get());
+        resThreadLocal.remove();
+    }
 
-        return templateEngine.process("mail/stock_pool", context);
+    @Override
+    public int getOrder() {
+        return 1;
     }
 
 }
