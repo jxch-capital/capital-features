@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.chart.dto.StockPoolChartParam;
-import org.jxch.capital.chart.impl.StockPoolScatterChartServiceImpl;
+import org.jxch.capital.chart.impl.StockPoolBubbleChartServiceImpl;
 import org.jxch.capital.server.RealPricePoolDashboardService;
 import org.jxch.capital.server.StockPoolService;
 import org.jxch.capital.watch.StockPoolWatchMailService;
@@ -20,7 +20,7 @@ import java.util.Calendar;
 @Service
 @RequiredArgsConstructor
 public class StockPoolWatchMailServiceImpl implements StockPoolWatchMailService {
-    private final StockPoolScatterChartServiceImpl stockPoolChartPngService;
+    private final StockPoolBubbleChartServiceImpl stockPoolChartPngService;
     private final RealPricePoolDashboardService realPricePoolDashboardService;
     private final StockPoolService stockPoolService;
     private final TemplateEngine templateEngine;

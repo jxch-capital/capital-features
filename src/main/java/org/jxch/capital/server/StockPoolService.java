@@ -9,6 +9,8 @@ public interface StockPoolService {
 
     StockPoolDto findById(Long id);
 
+    List<StockPoolDto> findById(List<Long> ids);
+
     Integer save(List<StockPoolDto> stockPoolDto);
 
     void del(List<Long> id);

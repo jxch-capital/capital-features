@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class StockPoolScatterChartParam implements ChartParam {
+public class StockPoolBubbleChartParam implements ChartParam {
     private List<Long> stockPoolIds = new ArrayList<>();
     private Date start;
 
@@ -28,4 +28,14 @@ public class StockPoolScatterChartParam implements ChartParam {
     private Integer yl = 40;
     @Builder.Default
     private Integer pl = 5;
+    @Builder.Default
+    private Double colorRange = 20.0;
+    @Builder.Default
+    private Double minSize = 10.0;
+    @Builder.Default
+    private Double sizeZoom = 4.0;
+    @Builder.Default
+    private Integer width = 800;
+    @Builder.Default
+    private Integer height = 600;
 }

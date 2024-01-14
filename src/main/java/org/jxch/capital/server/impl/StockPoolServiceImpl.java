@@ -40,6 +40,11 @@ public class StockPoolServiceImpl implements StockPoolService {
     }
 
     @Override
+    public List<StockPoolDto> findById(List<Long> ids) {
+        return stockPoolMapper.toStockPoolDto(stockPoolRepository.findAllById(ids));
+    }
+
+    @Override
     public Integer save(List<StockPoolDto> stockPools) {
         return stockPoolRepository.saveAllAndFlush(stockPoolMapper.toStockPool(stockPools)).size();
     }

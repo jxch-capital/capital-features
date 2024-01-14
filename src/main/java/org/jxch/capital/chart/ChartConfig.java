@@ -14,6 +14,7 @@ import java.io.File;
 @ConfigurationProperties(prefix = "chart")
 public class ChartConfig {
     private String pngPath;
+    private String suffix = ".png";
 
     @PostConstruct
     public void init() {
@@ -26,7 +27,7 @@ public class ChartConfig {
             }
         }
 
-        Charts.setPngPath(pngPath);
+        Charts.init(this);
     }
 
 }
