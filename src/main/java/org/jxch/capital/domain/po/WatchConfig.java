@@ -1,9 +1,6 @@
 package org.jxch.capital.domain.po;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -12,6 +9,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Entity(name = "watch_config")
 @NoArgsConstructor
+@Table(indexes = {@Index(name = "index_user_id", columnList = "user_id"),
+        @Index(name = "index_watch_name", columnList = "watch_name")})
 public class WatchConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)

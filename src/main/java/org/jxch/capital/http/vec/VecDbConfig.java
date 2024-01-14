@@ -20,6 +20,7 @@ public class VecDbConfig {
     private String host;
     private Integer port;
     private String path;
+    private String dbUrl;
 
     @Bean
     public OkHttpClient vecDbClient() {

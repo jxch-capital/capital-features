@@ -1,9 +1,6 @@
 package org.jxch.capital.domain.po;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -12,6 +9,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Entity(name = "indices_config")
 @NoArgsConstructor
+@Table(indexes = {@Index(name = "index_name", columnList = "name"),
+        @Index(name = "index_index_name", columnList = "index_name")})
 public class IndicesConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)

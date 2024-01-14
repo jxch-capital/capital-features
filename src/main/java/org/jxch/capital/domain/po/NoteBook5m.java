@@ -1,9 +1,6 @@
 package org.jxch.capital.domain.po;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -14,6 +11,8 @@ import java.time.LocalDate;
 @Accessors(chain = true)
 @Entity(name = "notebook_5m")
 @NoArgsConstructor
+@Table(indexes = {@Index(name = "index_code", columnList = "code"),
+        @Index(name = "index_date", columnList = "date")})
 public class NoteBook5m {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)

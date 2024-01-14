@@ -12,6 +12,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @Entity(name = "knn_signal_config")
 @NoArgsConstructor
+@Table(indexes = {@Index(name = "index_name", columnList = "name")})
 public class KnnSignalConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)

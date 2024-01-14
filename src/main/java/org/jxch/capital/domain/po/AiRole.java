@@ -1,17 +1,15 @@
 package org.jxch.capital.domain.po;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
+@NoArgsConstructor
 @Accessors(chain = true)
 @Entity(name = "ai_role")
-@NoArgsConstructor
+@Table(indexes = {@Index(name = "index_name", columnList = "name")})
 public class AiRole {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)

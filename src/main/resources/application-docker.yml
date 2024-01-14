@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${DATASOURCE_URL}
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+model:
+  smile:
+    model_path: /capital/features/model/
+    model-suffix: .model
+
+chart:
+  png_path: /capital/features/chart/
+  suffix: .png
+
+vec:
+  db:
+    db-url: ${VEC_DB_URL}
+
