@@ -16,4 +16,8 @@ public interface WatchMailTask extends Ordered {
         return Integer.MAX_VALUE;
     }
 
+    default String name() {
+        return getClass().getSimpleName();
+    }
+
 }

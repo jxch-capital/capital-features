@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订阅器管理</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/watch_config/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>用户</th>
+            <th>订阅器</th>
+            <th>邮箱</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="userId">
+                    <select id="userId" th:field="*{userId}">
+                        <option th:each="item: ${user_configs}" th:value="${item.id}" th:text="${item.username}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="watchName">
+                    <select id="watchName" th:field="*{watchName}">
+                        <option th:each="item: ${all_watcher}" th:value="${item}" th:text="${item}"></option>
+                    </select>
+                </label>
+            </td>
+            <td style="color: gray">默认与用户绑定</td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
+            </td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${all_watch_configs}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td>
+                <label th:for="'userId' + ${iter.index}">
+                    <select th:id="'userId' + ${iter.index}" disabled>
+                        <option th:each="itemOp: ${user_configs}" th:value="${itemOp.id}" th:text="${itemOp.username}" th:selected="${itemOp.id == item.userId}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'watchName' + ${iter.index}">
+                    <select th:id="'watchName' + ${iter.index}" disabled>
+                        <option th:each="itemOp: ${all_watcher}" th:value="${itemOp}" th:text="${itemOp}" th:selected="${itemOp == item.watchName}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'email' + ${iter.index}">
+                    <select th:id="'email' + ${iter.index}" disabled>
+                        <option th:each="itemOp: ${user_configs}" th:value="${itemOp.id}" th:text="${itemOp.email}" th:selected="${itemOp.id == item.userId}"></option>
+                    </select>
+                </label>
+            </td>
+            <td th:text="${item.remark}"></td>
+            <td>
+                <a th:href="@{'/watch_config/edit/' + ${item.id}}">修改</a>
+                <a th:href="@{'/watch_config/del/' + ${item.id}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
