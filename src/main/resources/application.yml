@@ -6,10 +6,6 @@ yahoo:
   user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0
   crumb: mdeVssfeRhi
 
-ai:
-  gemini:
-    key: AIzaSyCzLBBh243bcKndgYuByv9PUygjMEaTSJk
-
 model:
   smile:
     model_path: /capital/features/
@@ -17,7 +13,7 @@ model:
 
 spring:
   profiles:
-    active: dev
+    active: dev-local
   datasource:
     driver-class-name: org.postgresql.Driver
     username: capital-features
@@ -38,8 +34,6 @@ spring:
     suffix: .html
     mode: HTML
   mail:
-    username: xicheng_jiang@outlook.com
-    password: xch_Jiang.outlook-A
     host: smtp.office365.com
     port: 587
     properties:
@@ -49,5 +43,5 @@ spring:
             enable: true
   security:
     user:
-      name: jxch
-      password: jxch
+      name: admin
+      password: admin
