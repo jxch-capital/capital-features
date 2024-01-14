@@ -10,8 +10,18 @@
 </head>
 <body>
 <form th:action="@{/notebook_5m/find}" th:object="${param}" method="post">
-    <label for="engine">引擎：</label>
-    <input type="text" th:field="*{engine}" id="engine" placeholder="引擎" required>
+    <label id="stockPoolId_all" for="stockPoolId" style="display: none">
+        <span>股票池：</span>
+        <select id="stockPoolId" th:field="*{stockPoolId}">
+            <option th:each="item: ${stock_pools}" th:value="${item.id}" th:text="${item.poolName}"></option>
+        </select>
+    </label>
+    <label for="engine">
+        <span>引擎：</span>
+        <select id="engine" th:field="*{engine}">
+            <option th:each="item: ${engines}" th:value="${item}" th:text="${item}"></option>
+        </select>
+    </label>
     <label for="timeZone">搜索时区：</label>
     <input type="text" th:field="*{timeZone}" id="timeZone" placeholder="时区" required>
     <label for="date">日期：</label>
@@ -23,6 +33,15 @@
     <label for="code">股票代码：</label>
     <input type="text" th:field="*{code}" id="code" placeholder="股票代码" required>
     <input type="submit" value="查询" class="btn-primary">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('#engine').change(function () {
+                if ($(this).find('option:selected').text() === "STOCK_POOL_DB") {
+                    $('#stockPoolId_all').css("display", "block")
+                }
+            })
+        });
+    </script>
 </form>
 
 <hr>

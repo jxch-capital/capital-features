@@ -21,7 +21,7 @@ public class NoteBook5mParam {
     @Builder.Default
     private String timeZone = "America/Los_Angeles";
     @Builder.Default
-    private String engine = EngineEnum.defaultEngine().getEngine();
+    private String engine = EngineEnum.defaultEngine().name();
     @Builder.Default
     private String code = "ES=F";
     @Builder.Default
@@ -34,5 +34,8 @@ public class NoteBook5mParam {
     @Builder.Default
     @DateTimeFormat(pattern = "HH:mm:ss")
     private LocalTime endTime = DateTimeU.americaToBeijingStockEndWinterTime();
+
+    @Builder.Default
+    private Long stockPoolId = null;
 
 }

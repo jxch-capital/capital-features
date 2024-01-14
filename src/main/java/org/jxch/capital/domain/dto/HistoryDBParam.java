@@ -1,13 +1,11 @@
 package org.jxch.capital.domain.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.*;
 
 @Data
+@Builder(builderMethodName = "historyDBParamBuilder")
+@AllArgsConstructor
 @NoArgsConstructor
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class HistoryDBParam extends HistoryParam {
     private Long stockPoolId;

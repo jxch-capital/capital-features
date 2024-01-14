@@ -4,15 +4,15 @@ import cn.hutool.core.date.DateUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.domain.dto.HistoryParam;
-import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.domain.dto.NoteBook5mDto;
-import org.jxch.capital.domain.dto.NoteBook5mParam;
+import org.jxch.capital.domain.convert.HistoryParamMapper;
+import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.exception.StockServiceNoResException;
 import org.jxch.capital.notebook.KeyEnum;
 import org.jxch.capital.notebook.NoteBook5mService;
 import org.jxch.capital.notebook.TypeEnum;
 import org.jxch.capital.server.IndexService;
+import org.jxch.capital.server.StockPoolService;
+import org.jxch.capital.stock.EngineEnum;
 import org.jxch.capital.stock.IntervalEnum;
 import org.jxch.capital.stock.StockService;
 import org.jxch.capital.utils.DateTimeU;
@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -36,6 +37,8 @@ public class NoteBook5mController {
     private final NoteBook5mService noteBook5mService;
     private final StockService stockService;
     private final IndexService indexService;
+    private final StockPoolService stockPoolService;
+    private final HistoryParamMapper historyParamMapper;
 
     @GetMapping("/index")
     public ModelAndView index() {
@@ -62,36 +65,50 @@ public class NoteBook5mController {
     @NonNull
     private ModelAndView modelAndView(@NonNull NoteBook5mParam param) {
         try {
-            List<KLine> kLines = stockService.history(HistoryParam.builder()
+            HistoryParam historyParam = HistoryParam.builder()
                     .code(param.getCode())
                     .interval(IntervalEnum.MINUTE_5.getInterval())
                     .start(DateTimeU.datetimeTo(DateUtil.date(param.getDate()), param.getTimeZone()))
                     .end(DateTimeU.datetimeTo(DateUtil.date(param.getDate().plusDays(1)), param.getTimeZone()))
-                    .build());
+                    .engine(EngineEnum.valueOf(param.getEngine()))
+                    .build();
 
-            ModelAndView modelAndView = new ModelAndView("notebook_5m_index");
-            modelAndView.addObject("param", param);
-            modelAndView.addObject("code", param.getCode());
-            modelAndView.addObject("date", param.getDate());
-            modelAndView.addObject("add_param", new NoteBook5mDto().setCode(param.getCode()).setDate(param.getDate()));
+            if (Objects.equals(param.getEngine(), EngineEnum.STOCK_POOL_DB.name())) {
+                HistoryDBParam historyDBParam = historyParamMapper.toHistoryDBParam(historyParam);
+                historyDBParam.setStockPoolId(param.getStockPoolId());
+                historyParam = historyDBParam;
+
+            }
+
+            List<KLine> kLines = stockService.history(historyParam);
+
+            ModelAndView modelAndView = baseModelAndView(param);
             modelAndView.addObject("notes", noteBook5mService.findAllByCodeAndDate(param.getCode(), param.getDate()));
             modelAndView.addObject("kLines", kLines);
             modelAndView.addObject("kLabels", KLines.dayTradingKLabels(kLines, param.getStartTime(), param.getEndTime()));
             modelAndView.addObject("ema20", IndicesU.emaXEChartsDto(indexService, kLines, 20));
             modelAndView.addObject("openIndex", KLines.dayTradingKLinesIndexByTime(kLines, param.getStartTime()));
             modelAndView.addObject("endIndex", KLines.dayTradingKLinesIndexByTime(kLines, param.getEndTime()));
-            modelAndView.addObject("types", Arrays.stream(TypeEnum.values()).map(Enum::name).toList());
-            modelAndView.addObject("keys", Arrays.stream(KeyEnum.values()).map(Enum::name).toList());
 
             return modelAndView;
         } catch (StockServiceNoResException e) {
             return modelAndView(param.setDate(param.getDate().plusDays(-1)));
         } catch (IllegalArgumentException e) {
-            ModelAndView modelAndView = new ModelAndView("notebook_5m_index");
-            modelAndView.addObject("add_param", new NoteBook5mDto().setCode(param.getCode()).setDate(param.getDate()));
-            modelAndView.addObject("param", param);
-            return modelAndView;
+            return baseModelAndView(param);
         }
+    }
+
+    private ModelAndView baseModelAndView(@NonNull NoteBook5mParam param) {
+        ModelAndView modelAndView = new ModelAndView("notebook_5m_index");
+        modelAndView.addObject("param", param);
+        modelAndView.addObject("code", param.getCode());
+        modelAndView.addObject("date", param.getDate());
+        modelAndView.addObject("add_param", new NoteBook5mDto().setCode(param.getCode()).setDate(param.getDate()));
+        modelAndView.addObject("types", Arrays.stream(TypeEnum.values()).map(Enum::name).toList());
+        modelAndView.addObject("keys", Arrays.stream(KeyEnum.values()).map(Enum::name).toList());
+        modelAndView.addObject("engines", Arrays.stream(EngineEnum.values()).map(Enum::name).toList());
+        modelAndView.addObject("stock_pools", stockPoolService.findAll());
+        return modelAndView;
     }
 
 }
