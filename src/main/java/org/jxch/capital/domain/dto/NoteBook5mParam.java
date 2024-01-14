@@ -29,10 +29,10 @@ public class NoteBook5mParam {
     private LocalDate date = LocalDate.now();
 
     @Builder.Default
-    @DateTimeFormat(pattern = "hh:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss")
     private LocalTime startTime = DateTimeU.americaToBeijingStockStartWinterTime();
     @Builder.Default
-    @DateTimeFormat(pattern = "hh:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss")
     private LocalTime endTime = DateTimeU.americaToBeijingStockEndWinterTime();
 
 }

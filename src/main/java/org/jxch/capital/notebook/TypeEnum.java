@@ -1,16 +1,19 @@
 package org.jxch.capital.notebook;
 
-public class TypeEnum {
-//    k: 单k线
-//    kn: k线组合
-//    kkh: 连接两根K线的高点
-//    kkl: 连接两根K线的低点
-//    kh: 高点水平线
-//    kl: 低点水平线
-//    kk2h: 双顶
-//    kk2l: 双底
-//    mark: 标记
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-
+@Getter
+@AllArgsConstructor
+public enum TypeEnum {
+    K_1("单K线"),
+    K_N("连续的K线组合"),
+    K_H_LINE("单K线高点水平线"),
+    K_L_LINE("单K线低点水平线"),
+    KK_H_LINE("两K线高点连线"),
+    KK_L_LINE("两K线低点连线"),
+    MARK("标记"),
+    GLOBAL("全局类型");
+    private final String remark;
 
 }

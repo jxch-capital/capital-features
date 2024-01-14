@@ -308,7 +308,7 @@
         </script>
     </div>
     <div style="float: left; margin-left: 10px" th:if="${notes}">
-
+        <div id="content"></div>
         <table>
             <tr>
                 <th>ID</th>
@@ -324,7 +324,9 @@
                     <td style="color: gray; margin-left: 4px">Auto</td>
                     <td>
                         <label for="type">
-                            <input type="text" th:field="*{type}" id="type" placeholder="type">
+                            <select id="type" th:field="*{type}">
+                                <option th:each="item: ${types}" th:value="${item}" th:text="${item}"></option>
+                            </select>
                         </label>
                     </td>
                     <td>
@@ -334,7 +336,9 @@
                     </td>
                     <td>
                         <label for="key">
-                            <input type="text" th:field="*{key}" id="key" placeholder="key">
+                            <select id="key" th:field="*{key}">
+                                <option th:each="item: ${keys}" th:value="${item}" th:text="${item}"></option>
+                            </select>
                         </label>
                     </td>
                     <td>
@@ -366,8 +370,10 @@
                 <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
                 <td>
                     <label th:for="'type' + ${iter.index}">
-                        <input type="text" th:value="${item.type}" th:id="'type' + ${iter.index}"
-                               placeholder="type">
+                        <select th:id="'type' + ${iter.index}">
+                            <option th:each="itemOp: ${types}" th:value="${itemOp}" th:text="${itemOp}"
+                                    th:selected="${itemOp == item.type}"></option>
+                        </select>
                     </label>
                 </td>
                 <td>
@@ -377,7 +383,10 @@
                 </td>
                 <td>
                     <label th:for="'key' + ${iter.index}">
-                        <input type="text" th:value="${item.key}" th:id="'key' + ${iter.index}" placeholder="key">
+                        <select th:id="'key' + ${iter.index}">
+                            <option th:each="itemOp: ${keys}" th:value="${itemOp}" th:text="${itemOp}"
+                                    th:selected="${itemOp == item.key}"></option>
+                        </select>
                     </label>
                 </td>
                 <td>
@@ -397,6 +406,10 @@
                     <button th:id="'del' + ${iter.index}">删除</button>
                     <script th:inline="javascript">
                         $(document).ready(function () {
+                            if ($('#type' + [[${iter.index}]]).val() === "GLOBAL" && $('#key' + [[${iter.index}]]).val() === "IMG_URL") {
+                                $('#content').append("<img alt='' src='" + $('#value' + [[${iter.index}]]).val() + "'/>")
+                            }
+
                             $('#edit' + [[${iter.index}]]).click(function () {
                                 $.get("/notebook_5m/save", {
                                     id: [[${item.id}]],

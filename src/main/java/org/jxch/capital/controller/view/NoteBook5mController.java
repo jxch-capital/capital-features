@@ -9,7 +9,9 @@ import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.NoteBook5mDto;
 import org.jxch.capital.domain.dto.NoteBook5mParam;
 import org.jxch.capital.exception.StockServiceNoResException;
+import org.jxch.capital.notebook.KeyEnum;
 import org.jxch.capital.notebook.NoteBook5mService;
+import org.jxch.capital.notebook.TypeEnum;
 import org.jxch.capital.server.IndexService;
 import org.jxch.capital.stock.IntervalEnum;
 import org.jxch.capital.stock.StockService;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,6 +80,8 @@ public class NoteBook5mController {
             modelAndView.addObject("ema20", IndicesU.emaXEChartsDto(indexService, kLines, 20));
             modelAndView.addObject("openIndex", KLines.dayTradingKLinesIndexByTime(kLines, param.getStartTime()));
             modelAndView.addObject("endIndex", KLines.dayTradingKLinesIndexByTime(kLines, param.getEndTime()));
+            modelAndView.addObject("types", Arrays.stream(TypeEnum.values()).map(Enum::name).toList());
+            modelAndView.addObject("keys", Arrays.stream(KeyEnum.values()).map(Enum::name).toList());
 
             return modelAndView;
         } catch (StockServiceNoResException e) {
