@@ -14,4 +14,6 @@ public interface StockPoolService {
     void del(List<Long> id);
 
     void update(List<Long> ids);
+
+    void updateToNow(List<Long> ids);
 }

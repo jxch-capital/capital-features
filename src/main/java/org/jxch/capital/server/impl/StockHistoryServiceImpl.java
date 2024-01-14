@@ -55,4 +55,9 @@ public class StockHistoryServiceImpl implements StockHistoryService {
         return kLineMapper.toStockHistoryDto(stockHistoryRepository.findAllByStockCodeAndDateBetween(stockCode, start, end));
     }
 
+    @Override
+    public void delByStockPoolIdAndCodes(Long stockPoolId, List<String> codes) {
+        stockHistoryRepository.deleteAllByStockPoolIdAndStockCodes(stockPoolId, codes);
+    }
+
 }

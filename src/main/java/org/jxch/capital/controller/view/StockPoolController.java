@@ -55,4 +55,10 @@ public class StockPoolController {
         return redirect();
     }
 
+    @RequestMapping(value = "/update_to_now/{id}")
+    public String updateToNow(@PathVariable(value = "id") Long id) {
+        stockPoolService.updateToNow(Collections.singletonList(id));
+        return redirect();
+    }
+
 }
