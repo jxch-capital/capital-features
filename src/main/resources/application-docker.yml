@@ -3,7 +3,9 @@ server:
 
 spring:
   datasource:
-    url: ${DATASOURCE_URL}
+    url: jdbc:postgresql://${PGSQL_DATASOURCE_URL}/${DB_TABLE}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration

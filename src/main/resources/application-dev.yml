@@ -41,3 +41,4 @@ chart:
   png_path: D:\\jxch-capital\\capital-features\\src\\main\\resources\\chart\\
   suffix: .png
 
+# 配置 ai.gemini.key 和 spring.mail.username
