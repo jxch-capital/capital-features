@@ -84,7 +84,7 @@ public class StockPoolBubbleChartServiceImpl implements ChartPngService<StockPoo
             chart.addAnnotation(new AnnotationText(stockName, xData.get(i), yData.get(i), false));
         }
 
-        return res.setPath(Charts.createChartPng(getClass().getSimpleName() + param.getTimestamp(), chart));
+        return res.setPath(Charts.createChartPng(param.getIdentifier() + getClass().getSimpleName() + param.getTimestamp(), chart));
     }
 
     @Override

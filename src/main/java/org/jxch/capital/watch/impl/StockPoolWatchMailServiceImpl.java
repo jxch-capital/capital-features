@@ -16,13 +16,15 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class StockPoolWatchMailServiceImpl implements StockPoolWatchMailService {
     private final StockPoolBubbleChartServiceImpl stockPoolChartPngService;
-    private ThreadLocal<StockPoolScatterChartRes> resThreadLocal = new ThreadLocal<>();
+    private final ThreadLocal<List<StockPoolScatterChartRes>> resThreadLocal = new ThreadLocal<>();
 
     @Override
     public String htmlBuild(String html) {
@@ -42,12 +44,12 @@ public class StockPoolWatchMailServiceImpl implements StockPoolWatchMailService 
 
         StockPoolScatterChartRes res = stockPoolChartPngService.chart(param);
         helper.addInline("stock_pool_img", new File(res.getPath()));
-        resThreadLocal.set(res);
+        resThreadLocal.set(Collections.singletonList(res));
     }
 
     @Override
     public void clear() {
-        stockPoolChartPngService.clear(resThreadLocal.get());
+        resThreadLocal.get().forEach(stockPoolChartPngService::clear);
         resThreadLocal.remove();
     }
 

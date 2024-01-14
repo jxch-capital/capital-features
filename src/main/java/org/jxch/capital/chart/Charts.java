@@ -31,8 +31,8 @@ public class Charts {
         return pngPath + name + suffix;
     }
 
-    public static void delete(String path) {
-        File file = new File(path);
+    public static void delete(String filePath) {
+        File file = new File(filePath);
         if (file.delete()) {
             log.debug("删除文件：{}", file.getAbsolutePath());
         } else {

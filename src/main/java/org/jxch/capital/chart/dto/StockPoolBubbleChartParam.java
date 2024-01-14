@@ -38,4 +38,6 @@ public class StockPoolBubbleChartParam implements ChartParam {
     private Integer width = 800;
     @Builder.Default
     private Integer height = 600;
+    @Builder.Default
+    private String identifier = "";
 }
