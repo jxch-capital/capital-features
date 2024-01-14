@@ -11,8 +11,8 @@ spring:
 logging:
   level:
     org.jxch.capital: debug
-    sql: info
-    web: info
+    sql: debug
+    web: debug
 
 yahoo:
   proxy-host: 127.0.0.1

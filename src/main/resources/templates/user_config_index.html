@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+</head>
+<body>
+<form th:action="@{/user_config/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>昵称</th>
+            <th>邮箱</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="username"></label>
+                <input type="text" th:field="*{username}" id="username" placeholder="用户名" required>
+            </td>
+            <td>
+                <label for="nickname"></label>
+                <input type="text" th:field="*{nickname}" id="nickname" placeholder="昵称">
+            </td>
+            <td>
+                <label for="email"></label>
+                <input type="text" th:field="*{email}" id="email" placeholder="邮箱" required>
+            </td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${all_user}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td th:text="${item.username}"></td>
+            <td th:text="${item.nickname}"></td>
+            <td th:text="${item.email}"></td>
+            <td>
+                <a th:href="@{'/user_config/edit/' + ${item.id}}">修改</a>
+                <a th:href="@{'/user_config/del/' + ${item.id}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
