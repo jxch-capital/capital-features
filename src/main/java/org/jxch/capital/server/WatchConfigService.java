@@ -16,6 +16,8 @@ public interface WatchConfigService {
 
     List<WatchConfigDto> findByWatchName(String watchName);
 
+    List<WatchConfigDto> findByUseridAndWatchName(Long userid, String watchName);
+
     boolean userHasWatch(Long userid, String watchName);
 
     void del(Long id);

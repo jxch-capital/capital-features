@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Objects;
+
 @Data
 @Builder
 @Accessors(chain = true)
@@ -15,5 +17,11 @@ public class WatchConfigDto {
     private Long id;
     private Long userId;
     private String watchName;
+    private String param;
     private String remark;
+
+    public boolean hasParam() {
+        return Objects.nonNull(param) && !param.isBlank();
+    }
+
 }

@@ -1,11 +1,15 @@
 package org.jxch.capital.server.impl;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.WatchConfigRepository;
 import org.jxch.capital.domain.convert.WatchConfigMapper;
 import org.jxch.capital.domain.dto.WatchConfigDto;
 import org.jxch.capital.server.WatchConfigService;
+import org.jxch.capital.watch.Watchers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,6 +48,11 @@ public class WatchConfigServiceImpl implements WatchConfigService {
     }
 
     @Override
+    public List<WatchConfigDto> findByUseridAndWatchName(Long userid, String watchName) {
+        return watchConfigMapper.toWatchConfigDto(watchConfigRepository.findAllByUserIdAndWatchName(userid, watchName));
+    }
+
+    @Override
     public boolean userHasWatch(Long userid, String watchName) {
         return !watchConfigRepository.findAllByUserIdAndWatchName(userid, watchName).isEmpty();
     }
@@ -59,7 +68,15 @@ public class WatchConfigServiceImpl implements WatchConfigService {
     }
 
     @Override
-    public Integer save(List<WatchConfigDto> dtoList) {
+    public Integer save(@NonNull List<WatchConfigDto> dtoList) {
+        dtoList.forEach(dto -> {
+            if (!dto.hasParam()) {
+                dto.setParam(JSONObject.toJSONString(Watchers.getWatchMailTaskByName(dto.getWatchName()).getDefaultParam(),
+                        JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNullListAsEmpty
+                ));
+            }
+        });
+
         return watchConfigRepository.saveAllAndFlush(watchConfigMapper.toWatchConfig(dtoList)).size();
     }
 

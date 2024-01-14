@@ -5,9 +5,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 public interface WatchMailTask extends Ordered {
 
-    String htmlBuild(String html);
+    boolean support(Long userId);
 
-    void addInline(MimeMessageHelper helper);
+    String htmlBuild(Long userId, String html);
+
+    void addInline(Long userId, MimeMessageHelper helper);
+
+    void clear(Long userId);
 
     void clear();
 
@@ -19,5 +23,7 @@ public interface WatchMailTask extends Ordered {
     default String name() {
         return getClass().getSimpleName();
     }
+
+    Object getDefaultParam();
 
 }

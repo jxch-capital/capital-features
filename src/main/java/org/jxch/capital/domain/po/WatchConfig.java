@@ -18,5 +18,6 @@ public class WatchConfig {
     private Long id;
     private Long userId;
     private String watchName;
+    private String param;
     private String remark;
 }

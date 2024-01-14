@@ -5,7 +5,9 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jxch.capital.domain.dto.UserConfigDto;
 import org.jxch.capital.mail.config.MailConfig;
+import org.jxch.capital.server.UserConfigService;
 import org.jxch.capital.utils.AppContextHolder;
 import org.jxch.capital.watch.ScheduledWatchTask;
 import org.jxch.capital.watch.WatchMailTask;
@@ -24,6 +26,7 @@ public class AutoWatchMailTaskImpl implements ScheduledWatchTask {
     @Resource
     private JavaMailSenderImpl javaMailSender;
     private final MailConfig mailConfig;
+    private final UserConfigService userConfigService;
 
     @Override
     @SneakyThrows
@@ -32,15 +35,20 @@ public class AutoWatchMailTaskImpl implements ScheduledWatchTask {
         List<WatchMailTask> watchMailTasks = AppContextHolder.getContext().getBeansOfType(WatchMailTask.class).values()
                 .stream().sorted(Comparator.comparing(WatchMailTask::getOrder)).toList();
 
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(mailConfig.getUsername());
-        helper.setTo(mailConfig.getUsername());
-        helper.setSubject("市场简报");
+        for (UserConfigDto userConfigDto : userConfigService.findAll()) {
+            Long userId = userConfigDto.getId();
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(mailConfig.getUsername());
+            helper.setTo(userConfigDto.getEmail());
+            helper.setSubject("市场简报");
 
-        helper.setText(String.join("</hr>", watchMailTasks.stream().map(task -> task.htmlBuild("")).toList()), true);
-        watchMailTasks.forEach(task -> task.addInline(helper));
-        javaMailSender.send(message);
+            helper.setText(String.join("</hr>", watchMailTasks.stream().map(task -> task.htmlBuild(userId, "")).toList()), true);
+            watchMailTasks.forEach(task -> task.addInline(userId, helper));
+            javaMailSender.send(message);
+            watchMailTasks.forEach(watchMailTask -> watchMailTask.clear(userId));
+        }
+
         watchMailTasks.forEach(WatchMailTask::clear);
     }
 
