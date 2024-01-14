@@ -98,6 +98,7 @@ public class NoteBook5mController {
         }
     }
 
+    @NonNull
     private ModelAndView baseModelAndView(@NonNull NoteBook5mParam param) {
         ModelAndView modelAndView = new ModelAndView("notebook_5m_index");
         modelAndView.addObject("param", param);
