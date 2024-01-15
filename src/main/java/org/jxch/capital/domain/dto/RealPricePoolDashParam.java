@@ -17,5 +17,12 @@ public class RealPricePoolDashParam {
     private Integer offset;
 
     @Builder.Default
+    private Integer pl = 5;
+    @Builder.Default
+    private Integer xl = 20;
+    @Builder.Default
+    private Integer yl = 40;
+
+    @Builder.Default
     private DateField field = DateField.DAY_OF_YEAR;
 }

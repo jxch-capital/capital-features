@@ -22,6 +22,12 @@ public class KDashNode {
     private Double maxPrice;
     private Double minPrice;
     private List<Double> closeArr;
+    private Integer pl = 5;
+    private Integer xl = 20;
+    private Integer yl = 40;
+    private Double dpPercent;
+    private Double dxPercent;
+    private Double dyPercent;
 
     @Builder
     public KDashNode(String code, String name, List<KLine> kLines) {
@@ -34,6 +40,9 @@ public class KDashNode {
                 this.d5Percent = closePercent(5);
                 this.d20Percent = closePercent(20);
                 this.d40Percent = closePercent(40);
+                this.dpPercent = closePercent(pl);
+                this.dxPercent = closePercent(xl);
+                this.dyPercent = closePercent(yl);
                 this.maxPrice = this.kLines.stream().filter(kLine -> Objects.nonNull(kLine.getHigh())).mapToDouble(KLine::getHigh).max().orElseThrow();
                 this.minPrice = this.kLines.stream().filter(kLine -> Objects.nonNull(kLine.getLow())).mapToDouble(KLine::getLow).min().orElseThrow();
                 this.closeArr = this.kLines.stream().map(KLine::getClose).filter(Objects::nonNull).toList();
@@ -42,6 +51,16 @@ public class KDashNode {
             }
 
         }
+    }
+
+    public KDashNode setL(Integer pl, Integer xl, Integer yl) {
+        setPl(pl);
+        setXl(xl);
+        setYl(yl);
+        this.dpPercent = closePercent(pl);
+        this.dxPercent = closePercent(xl);
+        this.dyPercent = closePercent(yl);
+        return this;
     }
 
     public double closePercent(int num) {

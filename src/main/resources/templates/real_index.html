@@ -35,7 +35,13 @@
         </select>
     </label>
     <label for="offset">偏移天数：</label>
-    <input type="text" th:field="*{offset}" id="offset" placeholder="偏移天数">
+    <input type="text" th:field="*{offset}" id="offset" placeholder="偏移天数" style="width: 80px">
+    <label for="pl">短期：</label>
+    <input type="text" th:field="*{pl}" id="pl" placeholder="短期" style="width: 80px">
+    <label for="xl">中期：</label>
+    <input type="text" th:field="*{xl}" id="xl" placeholder="中期" style="width: 80px">
+    <label for="yl">长期：</label>
+    <input type="text" th:field="*{yl}" id="yl" placeholder="长期" style="width: 80px">
     <input type="submit" value="查询">
 </form>
 <div style="display: flex">
@@ -45,9 +51,9 @@
                 <th>No.</th>
                 <th>股票代码</th>
                 <th>股票名称</th>
-                <th>5D_P</th>
-                <th>20D_P</th>
-                <th>40D_P</th>
+                <th>短期</th>
+                <th>中期</th>
+                <th>长期</th>
                 <th>简图</th>
             </tr>
             <tr th:each="item,iter: ${nodes}">
@@ -56,16 +62,16 @@
                     <a th:text="${item.code}" th:href="@{'/app/history/' + ${item.code}}" target="_blank"></a>
                 </td>
                 <td th:text="${item.name}"></td>
-                <td th:id="'d5p'+${iter.index}" style="text-align: right; font-weight: normal; color: azure">
-                    <span th:text="${#numbers.formatDecimal(item.d5Percent, 1, 'COMMA', 2, 'POINT')}"></span>
+                <td th:id="'pp'+${iter.index}" style="text-align: right; font-weight: normal; color: azure">
+                    <span th:text="${#numbers.formatDecimal(item.dpPercent, 1, 'COMMA', 2, 'POINT')}"></span>
                     <span>%</span>
                 </td>
-                <td th:id="'d20p'+${iter.index}" style="text-align: right; font-weight: normal; color: azure">
-                    <span th:text="${#numbers.formatDecimal(item.d20Percent, 1, 'COMMA', 2, 'POINT')}"></span>
+                <td th:id="'xp'+${iter.index}" style="text-align: right; font-weight: normal; color: azure">
+                    <span th:text="${#numbers.formatDecimal(item.dxPercent, 1, 'COMMA', 2, 'POINT')}"></span>
                     <span>%</span>
                 </td>
-                <td th:id="'d40p'+${iter.index}" style="text-align: right; font-weight: normal; color: azure">
-                    <span th:text="${#numbers.formatDecimal(item.d40Percent, 1, 'COMMA', 2, 'POINT')}"></span>
+                <td th:id="'yp'+${iter.index}" style="text-align: right; font-weight: normal; color: azure">
+                    <span th:text="${#numbers.formatDecimal(item.dyPercent, 1, 'COMMA', 2, 'POINT')}"></span>
                     <span>%</span>
                 </td>
                 <td>
@@ -75,9 +81,9 @@
                             return chroma.scale([chroma("#ff0000"), chroma("#00ff00")]).domain([-40, 40])(value).hex();
                         }
 
-                        document.getElementById('d5p' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.d5Percent}]]);
-                        document.getElementById('d20p' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.d20Percent}]]);
-                        document.getElementById('d40p' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.d40Percent}]]);
+                        document.getElementById('pp' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.dpPercent}]]);
+                        document.getElementById('xp' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.dxPercent}]]);
+                        document.getElementById('yp' + [[${iter.index}]]).style.backgroundColor = getColor([[${item.dyPercent}]]);
                         echarts.init(document.getElementById('KLineChart' + [[${iter.index}]])).setOption({
                             xAxis: {
                                 show: false,
@@ -103,11 +109,11 @@
                                 pieces: [
                                     {
                                         gt: 0,
-                                        lt: [[${item.closeArr}]].length - 40,
+                                        lt: [[${item.closeArr}]].length - [[${item.yl}]],
                                         color: 'gray'
                                     },
                                     {
-                                        gt: [[${item.closeArr}]].length - 40,
+                                        gt: [[${item.closeArr}]].length - [[${item.yl}]],
                                         color: 'rgba(9,116,203,0.82)'
                                     }
                                 ]
@@ -163,7 +169,8 @@
                 return chroma.scale([chroma("#ff0000"), chroma("gray"), chroma("#00ff00")]).domain([-16, 16])(value).hex();
             }
 
-            const data = [[${nodes}]].map(item => [item['d20Percent'], item['d40Percent'], item['d5Percent'], item['name'], item['code']]);
+            const data = [[${nodes}]].map(item => [item['dxPercent'], item['dyPercent'], item['dpPercent'], item['name'], item['code']]);
+            console.log([[${nodes}]])
             option = {
                 grid: {
                     left: '8%',
