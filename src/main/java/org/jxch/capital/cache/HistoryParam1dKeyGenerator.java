@@ -12,8 +12,9 @@ import java.lang.reflect.Method;
 @Component("HistoryParam1dKeyGenerator")
 public class HistoryParam1dKeyGenerator implements KeyGenerator {
 
+    @NotNull
     @Override
-    public Object generate(Object target, Method method, @NotNull Object... params) {
+    public Object generate(@NotNull Object target, @NotNull Method method, @NotNull Object... params) {
         return ((HistoryParam)params[0]).toString1d();
     }
 
