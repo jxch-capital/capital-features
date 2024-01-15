@@ -1,9 +1,6 @@
 package org.jxch.capital.domain.po;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -19,6 +16,7 @@ public class StockPool {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.STOCK_POOL_SEQ)
     private Long id;
     private String poolName;
+    @Column(columnDefinition = "TEXT")
     private String poolStocks;
     private String engine;
     private String interval;

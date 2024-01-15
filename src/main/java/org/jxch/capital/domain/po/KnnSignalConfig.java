@@ -28,9 +28,11 @@ public class KnnSignalConfig {
     private Integer size;
     private Integer futureSize;
     private Integer neighborSize;
+    @Column(columnDefinition = "TEXT")
     private String codes;
     private String stockEngine;
     private Long lastUpdateTimeConsumingSecond;
+    @Column(columnDefinition = "TEXT")
     private String remark;
     @Version
     private Long version = 0L;

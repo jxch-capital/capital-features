@@ -16,6 +16,8 @@ public class AiRole {
     @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String text;
+    @Column(columnDefinition = "TEXT")
     private String remark;
 }

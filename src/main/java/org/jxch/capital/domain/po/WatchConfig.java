@@ -20,7 +20,9 @@ public class WatchConfig {
     private Long id;
     private Long userId;
     private String watchName;
+    @Column(columnDefinition = "TEXT")
     private String param;
+    @Column(columnDefinition = "TEXT")
     private String remark;
     private Date lastWatchTime;
 }

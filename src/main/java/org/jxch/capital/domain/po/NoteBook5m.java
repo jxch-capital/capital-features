@@ -23,6 +23,7 @@ public class NoteBook5m {
     private String type;
     private String key;
     private String value;
+    @Column(columnDefinition = "TEXT")
     private String remark;
     private String k;
 }
