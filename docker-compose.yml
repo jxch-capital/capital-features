@@ -12,6 +12,21 @@ services:
       POSTGRES_DB: capital-features
       POSTGRES_USER: capital-features
       POSTGRES_PASSWORD: capital-features
+  capital-features:
+    image: jxch/capital-features:latest
+    restart: unless-stopped
+    ports:
+      - "28080:8080"
+    environment:
+      PGSQL_DATASOURCE_URL: db
+      DB_PASSWORD: capital-features
+      DB_TABLE: capital-features
+      DB_USERNAME: capital-features
+      MAIL_USERNAME: xicheng_jiang@outlook.com
+      MAIL_PASSWORD: xch_Jiang.outlook-A
+      USERNAME: jxch
+      PASSWORD: jxch
+      GEMINI_KEY: AIzaSyCzLBBh243bcKndgYuByv9PUygjMEaTSJk
 
 
 volumes:

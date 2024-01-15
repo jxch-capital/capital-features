@@ -9,11 +9,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Entity(name = "user_config")
 @NoArgsConstructor
-@Table(indexes = {@Index(name = "index_username", columnList = "username"),
-        @Index(name = "index_email", columnList = "email")})
+@Table(indexes = {@Index(name = "index_user_config_username", columnList = "username"),
+        @Index(name = "index_user_config_email", columnList = "email")})
 public class UserConfig {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String username;
     private String email;

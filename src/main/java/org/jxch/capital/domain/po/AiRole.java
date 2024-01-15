@@ -9,10 +9,11 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Entity(name = "ai_role")
-@Table(indexes = {@Index(name = "index_name", columnList = "name")})
+@Table(indexes = {@Index(name = "index_ai_role_name", columnList = "name")})
 public class AiRole {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String name;
     private String text;

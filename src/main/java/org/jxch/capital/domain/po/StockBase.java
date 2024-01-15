@@ -9,10 +9,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Entity(name = "stock_base")
 @NoArgsConstructor
-@Table(indexes = {@Index(name = "index_code", columnList = "code")})
+@Table(indexes = {@Index(name = "index_stock_base_code", columnList = "code")})
 public class StockBase {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String code;
     private String name;

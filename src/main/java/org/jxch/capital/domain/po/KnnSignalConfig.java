@@ -12,10 +12,11 @@ import java.util.Date;
 @Accessors(chain = true)
 @Entity(name = "knn_signal_config")
 @NoArgsConstructor
-@Table(indexes = {@Index(name = "index_name", columnList = "name")})
+@Table(indexes = {@Index(name = "index_knn_signal_config_name", columnList = "name")})
 public class KnnSignalConfig {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String name;
     private String distance;

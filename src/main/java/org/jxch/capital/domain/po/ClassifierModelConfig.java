@@ -9,10 +9,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Entity(name = "classifier_model_config")
 @NoArgsConstructor
-@Table(indexes = {@Index(name = "index_name", columnList = "name")})
+@Table(indexes = {@Index(name = "index_classifier_model_config_name", columnList = "name")})
 public class ClassifierModelConfig {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String name;
     private Long classifierId;

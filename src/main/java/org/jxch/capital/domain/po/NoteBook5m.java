@@ -11,11 +11,12 @@ import java.time.LocalDate;
 @Accessors(chain = true)
 @Entity(name = "notebook_5m")
 @NoArgsConstructor
-@Table(indexes = {@Index(name = "index_code", columnList = "code"),
-        @Index(name = "index_date", columnList = "date")})
+@Table(indexes = {@Index(name = "index_notebook_5m_code", columnList = "code"),
+        @Index(name = "index_notebook_5m_date", columnList = "date")})
 public class NoteBook5m {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String code;
     private LocalDate date;

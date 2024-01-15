@@ -9,11 +9,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Entity(name = "watch_config")
 @NoArgsConstructor
-@Table(indexes = {@Index(name = "index_user_id", columnList = "user_id"),
-        @Index(name = "index_watch_name", columnList = "watch_name")})
+@Table(indexes = {@Index(name = "index_watch_config_user_id", columnList = "user_id"),
+        @Index(name = "index_watch_config_watch_name", columnList = "watch_name")})
 public class WatchConfig {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.COMM_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private Long userId;
     private String watchName;
