@@ -5,7 +5,7 @@ services:
     image: postgres
     restart: unless-stopped
     ports:
-      - "25432:5432"
+      - "15432:5432"
     volumes:
       - pgsql_data:/var/lib/postgresql/data
     environment:
@@ -16,17 +16,17 @@ services:
     image: jxch/capital-features:latest
     restart: unless-stopped
     ports:
-      - "28080:8080"
+      - "18080:8080"
     environment:
       PGSQL_DATASOURCE_URL: db
       DB_PASSWORD: capital-features
       DB_TABLE: capital-features
       DB_USERNAME: capital-features
-      MAIL_USERNAME: xicheng_jiang@outlook.com
-      MAIL_PASSWORD: xch_Jiang.outlook-A
-      USERNAME: jxch
-      PASSWORD: jxch
-      GEMINI_KEY: AIzaSyCzLBBh243bcKndgYuByv9PUygjMEaTSJk
+      MAIL_USERNAME: email@gmail.com
+      MAIL_PASSWORD: email_password
+      USERNAME: web_admin_username
+      PASSWORD: web_admin_password
+      GEMINI_KEY: gemini_api_key
 
 
 volumes:
