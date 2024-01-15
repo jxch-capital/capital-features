@@ -13,7 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class StockPool {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = IdGenerators.STOCK_POOL_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
+    @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String poolName;
     @Column(columnDefinition = "TEXT")
