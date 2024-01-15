@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -43,13 +44,21 @@ public class AutoWatchMailTaskImpl implements ScheduledWatchTask {
             helper.setTo(userConfigDto.getEmail());
             helper.setSubject("市场简报");
 
-            helper.setText(String.join("</hr>", watchMailTasks.stream().map(task -> task.htmlBuild(userId, "")).toList()), true);
-            watchMailTasks.forEach(task -> task.addInline(userId, helper));
-            javaMailSender.send(message);
-            watchMailTasks.forEach(watchMailTask -> watchMailTask.clear(userId));
+            List<String> htmlList = watchMailTasks.stream().map(task -> task.htmlBuild(userId, "")).toList();
+            if (hasContent(htmlList)) {
+                helper.setText(String.join("</hr>", htmlList), true);
+                watchMailTasks.forEach(task -> task.addInline(userId, helper));
+                javaMailSender.send(message);
+                watchMailTasks.forEach(watchMailTask -> watchMailTask.clear(userId));
+            }
         }
 
         watchMailTasks.forEach(WatchMailTask::clear);
+    }
+
+    private boolean hasContent(List<String> htmlList) {
+        return Objects.nonNull(htmlList) && !htmlList.isEmpty() &&
+                htmlList.stream().anyMatch(html -> Objects.nonNull(html) && !html.isBlank());
     }
 
 }
