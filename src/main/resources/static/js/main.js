@@ -8,9 +8,6 @@ $.fn.exists = function (callback) {
 
 
 $(document).ready(function () {
-    $("body").attr("style", "background-color: #17191A!important");
-
-
     $.get("/app/title", function (data) {
         $("body").prepend(data)
     })
@@ -33,6 +30,5 @@ $(document).ready(function () {
         const name = selected.find('option:selected').attr('name')
         setClassifier(types, name)
     })
-
 });
 
