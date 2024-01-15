@@ -10,6 +10,7 @@ import okhttp3.Response;
 import org.jsoup.Jsoup;
 import org.jxch.capital.http.logic.dto.BreathDto;
 import org.jxch.capital.http.logic.dto.BreathResDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -22,6 +23,7 @@ public class BreathApi {
     private final Request.Builder breathRequestBuilder = new Request.Builder().url("https://www.trading-logic.com/index.html").get();
 
     @SneakyThrows
+    @Cacheable(value = "getBreath")
     public BreathDto getBreath() {
         try (Response response = okHttpClient.newCall(breathRequestBuilder.build()).execute()) {
             String html = Objects.requireNonNull(response.body()).string();

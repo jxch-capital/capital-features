@@ -26,6 +26,20 @@ public class BreathDto {
         return this;
     }
 
+    public BreathDto retained(int length) {
+        BreathDto breathDto = new BreathDto();
+        List<LocalDate> localDates = getDateReverse().stream().limit(length).toList();
+        List<String> types = getTypes();
+
+        for (LocalDate localDate : localDates) {
+            for (String type : types) {
+                breathDto.add(localDate, type, getItem(type, localDate).getScore());
+            }
+        }
+
+        return breathDto;
+    }
+
     @JSONField(serialize = false)
     public BreathDto.Item getItem(String type, LocalDate date) {
         return scores.stream().filter(item -> Objects.equals(type, item.getType()) && Objects.equals(date, item.getDate()))
@@ -33,9 +47,16 @@ public class BreathDto {
     }
 
     @JSONField(serialize = false)
-    public List<BreathDto.Item> getItems(String type) {
+    public List<BreathDto.Item> getItemsReversedDate(String type) {
         return scores.stream().filter(item -> Objects.equals(type, item.getType()))
                 .sorted(Comparator.comparing(Item::getDate).reversed())
+                .toList();
+    }
+
+    @JSONField(serialize = false)
+    public List<BreathDto.Item> getItems(String type) {
+        return scores.stream().filter(item -> Objects.equals(type, item.getType()))
+                .sorted(Comparator.comparing(Item::getDate))
                 .toList();
     }
 
@@ -52,8 +73,13 @@ public class BreathDto {
     }
 
     @JSONField(serialize = false)
-    public List<LocalDate> getDates() {
+    public List<LocalDate> getDateReverse() {
         return scores.stream().map(Item::getDate).distinct().sorted(Comparator.reverseOrder()).toList();
+    }
+
+    @JSONField(serialize = false)
+    public List<LocalDate> getDates() {
+        return scores.stream().map(Item::getDate).distinct().sorted().toList();
     }
 
     @Data

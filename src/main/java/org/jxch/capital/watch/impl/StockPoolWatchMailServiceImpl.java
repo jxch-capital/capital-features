@@ -82,8 +82,10 @@ public class StockPoolWatchMailServiceImpl implements StockPoolWatchMailService 
 
     @Override
     public void clear(Long userId) {
-        resThreadLocal.get().get(userId).values().forEach(stockPoolChartPngService::clear);
-        resThreadLocal.get().remove(userId);
+        if (resThreadLocal.get().containsKey(userId)) {
+            resThreadLocal.get().get(userId).values().forEach(stockPoolChartPngService::clear);
+            resThreadLocal.get().remove(userId);
+        }
     }
 
     @Override

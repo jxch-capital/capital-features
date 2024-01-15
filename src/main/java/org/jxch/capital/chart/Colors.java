@@ -30,4 +30,18 @@ public class Colors {
         return (value - min) / (max - min);
     }
 
+    @NotNull
+    public static String colorTo16(@NotNull Color color) {
+        String R = Integer.toHexString(color.getRed());
+        R = R.length() < 2 ? ('0' + R) : R;
+
+        String G = Integer.toHexString(color.getGreen());
+        G = G.length() < 2 ? ('0' + G) : G;
+
+        String B = Integer.toHexString(color.getBlue());
+        B = B.length() < 2 ? ('0' + B) : B;
+
+        return '#' + R + G + B;
+    }
+
 }
