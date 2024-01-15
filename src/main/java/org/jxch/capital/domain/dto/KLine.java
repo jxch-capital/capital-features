@@ -4,13 +4,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class KLine {
+public class KLine implements Serializable {
     private Date date;
     private Double open;
     private Double high;

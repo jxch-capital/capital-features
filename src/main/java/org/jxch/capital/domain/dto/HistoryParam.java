@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import org.jxch.capital.stock.EngineEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,7 +19,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoryParam {
+public class HistoryParam implements Serializable {
     private String code;
 
     @Builder.Default
@@ -33,6 +34,10 @@ public class HistoryParam {
     private String interval = "1d";
     @Builder.Default
     private EngineEnum engine = EngineEnum.defaultEngine();
+
+    public String toString1d() {
+        return code + interval + engine + DateUtil.format(start, "yyyyMMdd") + DateUtil.format(end, "yyyyMMdd");
+    }
 
     @Override
     public boolean equals(Object o) {

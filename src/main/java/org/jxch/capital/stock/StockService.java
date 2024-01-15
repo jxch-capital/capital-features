@@ -12,6 +12,10 @@ import java.util.List;
 public interface StockService {
     List<KLine> history(HistoryParam param);
 
+    default List<KLine> history1d(HistoryParam param) {
+        return history(param);
+    }
+
     default Date getStartOffsetDay(int offset, Date start, String code) {
         List<KLine> history = history(HistoryParam.builder()
                 .end(Calendar.getInstance().getTime())

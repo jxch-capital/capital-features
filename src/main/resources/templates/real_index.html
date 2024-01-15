@@ -5,6 +5,7 @@
     <title>实时看板</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
             integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
             crossorigin="anonymous"></script>
@@ -155,7 +156,7 @@
         </table>
     </div>
     <div th:if="${nodes}" style="float: left">
-        <div id="klineChart" style="width: 1800px; height: 1200px"></div>
+        <div id="klineChart" style="width: 1600px; height: 1100px"></div>
         <script th:inline="javascript">
             function getTipColor(value) {
                 return chroma.scale([chroma("#ff0000"), chroma("gray"), chroma("#00ff00")]).domain([-16, 16])(value).hex();
