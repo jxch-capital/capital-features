@@ -7,6 +7,7 @@ import org.jxch.capital.server.UserConfigService;
 import org.jxch.capital.server.WatchConfigService;
 import org.jxch.capital.utils.Controllers;
 import org.jxch.capital.watch.Watchers;
+import org.jxch.capital.watch.impl.AutoWatchMailTaskImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +21,7 @@ import java.util.Collections;
 public class WatchConfigController {
     private final WatchConfigService watchConfigService;
     private final UserConfigService userConfigService;
+    private final AutoWatchMailTaskImpl autoWatchMailTask;
 
     @GetMapping("/index")
     public ModelAndView index() {
@@ -50,6 +52,12 @@ public class WatchConfigController {
         modelAndView.addObject("user_configs", userConfigService.findAll());
         modelAndView.addObject("all_watcher", Watchers.allWatchMailTaskNames());
         return modelAndView;
+    }
+
+    @GetMapping(value = "/email")
+    public String email() {
+        autoWatchMailTask.watchTask();
+        return Controllers.redirect("/watch_config/index");
     }
 
 }

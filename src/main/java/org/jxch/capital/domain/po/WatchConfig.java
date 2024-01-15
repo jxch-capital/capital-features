@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 @Data
 @Accessors(chain = true)
 @Entity(name = "watch_config")
@@ -20,4 +22,5 @@ public class WatchConfig {
     private String watchName;
     private String param;
     private String remark;
+    private Date lastWatchTime;
 }

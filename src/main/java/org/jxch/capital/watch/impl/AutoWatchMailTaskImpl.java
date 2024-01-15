@@ -30,7 +30,7 @@ public class AutoWatchMailTaskImpl implements ScheduledWatchTask {
 
     @Override
     @SneakyThrows
-    @Scheduled(cron = "0 0 16 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     public void watchTask() {
         List<WatchMailTask> watchMailTasks = AppContextHolder.getContext().getBeansOfType(WatchMailTask.class).values()
                 .stream().sorted(Comparator.comparing(WatchMailTask::getOrder)).toList();

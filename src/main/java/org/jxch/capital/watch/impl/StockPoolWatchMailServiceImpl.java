@@ -40,6 +40,7 @@ public class StockPoolWatchMailServiceImpl implements StockPoolWatchMailService 
         StockPoolBubbleChartParam param = (StockPoolBubbleChartParam) JSONObject.parseObject(watchConfigDto.getParam(), getDefaultParam().getClass());
         String jsonString = JSONObject.toJSONString(param.setTimestamp(time), JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNullListAsEmpty);
         watchConfigDto.setParam(jsonString);
+        watchConfigDto.setLastWatchTime(DateUtil.date(time));
         watchConfigService.save(Collections.singletonList(watchConfigDto));
     }
 

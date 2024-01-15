@@ -15,6 +15,7 @@
             <th>订阅器</th>
             <th>邮箱</th>
             <th>备注</th>
+            <th>发送时间</th>
             <th>操作</th>
         </tr>
         <tr>
@@ -38,8 +39,10 @@
                 <label for="remark"></label>
                 <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
             </td>
+            <td></td>
             <td>
                 <input type="submit" value="添加">
+                <a th:href="@{'/watch_config/email'}">发送邮件</a>
             </td>
         </tr>
         <tr th:each="item,iter: ${all_watch_configs}">
@@ -66,6 +69,7 @@
                 </label>
             </td>
             <td th:text="${item.remark}"></td>
+            <td th:text="${#dates.format(item.lastWatchTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
                 <a th:href="@{'/watch_config/edit/' + ${item.id}}">修改</a>
                 <a th:href="@{'/watch_config/del/' + ${item.id}}">删除</a>

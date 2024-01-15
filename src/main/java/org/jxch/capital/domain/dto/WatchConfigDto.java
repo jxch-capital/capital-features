@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Data
@@ -19,6 +20,7 @@ public class WatchConfigDto {
     private String watchName;
     private String param;
     private String remark;
+    private Date lastWatchTime;
 
     public boolean hasParam() {
         return Objects.nonNull(param) && !param.isBlank();
