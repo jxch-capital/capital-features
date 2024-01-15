@@ -35,6 +35,7 @@
         <bytedeco.version>1.5.9</bytedeco.version>
         <djl-pytorch-native.version>1.9.1</djl-pytorch-native.version>
         <xchart.version>3.8.7</xchart.version>
+        <jsoup.version>1.17.2</jsoup.version>
     </properties>
 
     <dependencies>
@@ -187,6 +188,13 @@
             <artifactId>xchart</artifactId>
             <version>${xchart.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
