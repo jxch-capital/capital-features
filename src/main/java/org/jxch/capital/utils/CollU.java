@@ -1,6 +1,8 @@
 package org.jxch.capital.utils;
 
 import lombok.NonNull;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -19,5 +21,14 @@ public class CollU {
         }
 
     }
+
+    @NotNull
+    @Contract("_, _ -> param1")
+    public static <T> List<T> append(@NotNull List<T> list, T item) {
+        list.add(item);
+        return list;
+    }
+
+
 
 }

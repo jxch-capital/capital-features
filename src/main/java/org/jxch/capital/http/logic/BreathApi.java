@@ -23,7 +23,7 @@ public class BreathApi {
     private final Request.Builder breathRequestBuilder = new Request.Builder().url("https://www.trading-logic.com/index.html").get();
 
     @SneakyThrows
-    @Cacheable(value = "getBreath")
+    @Cacheable(value = "getBreath", unless = "#result == null")
     public BreathDto getBreath() {
         try (Response response = okHttpClient.newCall(breathRequestBuilder.build()).execute()) {
             String html = Objects.requireNonNull(response.body()).string();

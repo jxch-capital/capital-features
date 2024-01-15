@@ -1,17 +1,20 @@
 package org.jxch.capital.http.logic.dto;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jxch.capital.utils.CollU;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -38,6 +41,12 @@ public class BreathDto {
         }
 
         return breathDto;
+    }
+
+    public List<List<String>> getScoresStrTable() {
+        return CollU.append(
+                getTypes().stream().map(type -> CollU.append(getItems(type).stream().map(Item::getScore).map(String::valueOf).collect(Collectors.toList()), type)).collect(Collectors.toList()),
+                getDates().stream().map(date -> DateUtil.format(DateUtil.date(date), "yy\nMM\ndd")).toList());
     }
 
     @JSONField(serialize = false)

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.chart.Colors;
 import org.jxch.capital.domain.dto.WatchConfigDto;
-import org.jxch.capital.http.logic.BreathService;
+import org.jxch.capital.server.BreathService;
 import org.jxch.capital.http.logic.dto.BreathDto;
 import org.jxch.capital.http.logic.dto.BreathParam;
 import org.jxch.capital.server.WatchConfigService;

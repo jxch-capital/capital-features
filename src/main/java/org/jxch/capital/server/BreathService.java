@@ -1,4 +1,4 @@
-package org.jxch.capital.http.logic;
+package org.jxch.capital.server;
 
 import org.jxch.capital.http.logic.dto.BreathDto;
 import org.jxch.capital.http.logic.dto.BreathParam;
