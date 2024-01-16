@@ -1,6 +1,5 @@
 package org.jxch.capital.learning.classifier.impl;
 
-import com.google.common.reflect.ClassPath;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -10,6 +9,7 @@ import org.jxch.capital.domain.convert.ClassifierConfigMapper;
 import org.jxch.capital.domain.dto.ClassifierConfigDto;
 import org.jxch.capital.learning.classifier.ClassifierConfigService;
 import org.jxch.capital.learning.classifier.dto.ClassifierFitInfoDto;
+import org.jxch.capital.utils.ReflectionsU;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Modifier;
@@ -72,6 +72,7 @@ public class ClassifierConfigServiceImpl implements ClassifierConfigService {
         return classifierConfigMapper.toClassifierConfigDtoByClassifierFitInfoDto(getAllClassificationSupportInfo());
     }
 
+
     @SneakyThrows
     @PostConstruct
     public void init() {
@@ -81,9 +82,8 @@ public class ClassifierConfigServiceImpl implements ClassifierConfigService {
                 double.class, double[].class, double[][].class, Double.class, Double[].class, Double[][].class,
                 long.class, long[].class, long[][].class, Long.class, Long[].class, Long[][].class
         ));
-        classifierFitInfos = ClassPath.from(Thread.currentThread().getContextClassLoader())
-                .getTopLevelClassesRecursive("smile.classification").stream()
-                .map(classInfo -> ClassifierFitInfoDto.builder().classifierName(classInfo.getSimpleName()).classifierClazz(classInfo.load()).build())
+        classifierFitInfos = ReflectionsU.scanAllPublicClass("classpath*:smile/classification/**/*.class").stream()
+                .map(clazz -> ClassifierFitInfoDto.builder().classifierName(clazz.getSimpleName()).classifierClazz(clazz).build())
                 .filter(classInfoDto -> !Modifier.isAbstract(classInfoDto.getClassifierClazz().getModifiers()))
                 .filter(classInfoDto -> !classInfoDto.getClassifierClazz().isAnonymousClass())
                 .flatMap(classInfoDto -> Arrays.stream(classInfoDto.getClassifierClazz().getMethods())

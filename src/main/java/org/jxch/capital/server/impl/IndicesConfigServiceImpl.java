@@ -1,6 +1,5 @@
 package org.jxch.capital.server.impl;
 
-import com.google.common.reflect.ClassPath;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,6 +10,7 @@ import org.jxch.capital.dao.IndicesConfigRepository;
 import org.jxch.capital.domain.convert.IndicesConfigMapper;
 import org.jxch.capital.domain.dto.IndicesConfigDto;
 import org.jxch.capital.server.IndicesConfigService;
+import org.jxch.capital.utils.ReflectionsU;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.BarSeries;
@@ -18,6 +18,7 @@ import org.ta4j.core.Indicator;
 import org.ta4j.core.num.Num;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
@@ -38,12 +39,11 @@ public class IndicesConfigServiceImpl implements IndicesConfigService {
 
     @PostConstruct
     public void init() throws IOException {
-        ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
-        indicatorsClazzMap = classPath.getTopLevelClassesRecursive("org.ta4j.core.indicators").stream()
-                .collect(Collectors.toMap(ClassPath.ClassInfo::getSimpleName, ClassPath.ClassInfo::load));
         supportTypeClazzMap = Stream.of(Integer.class, Double.class, Indicator.class, BarSeries.class, Number.class, Num.class)
                 .collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
         supportTypeClazzMap.put("int", int.class);
+        indicatorsClazzMap = ReflectionsU.scanAllPublicClass("classpath*:org/ta4j/core/indicators/**/*.class").stream()
+                .collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
     }
 
     @Override
@@ -128,8 +128,9 @@ public class IndicesConfigServiceImpl implements IndicesConfigService {
     @Override
     @Cacheable(cacheNames = "allSupportIndicators")
     public List<String> allSupportIndicators() {
+        // todo 用对象封装重构
         return this.indicatorsClazzMap.values().stream()
-                .map(clazz -> clazz.getDeclaredConstructors()[0].toString())
+                .flatMap(clazz -> Arrays.stream(clazz.getDeclaredConstructors()).map(Constructor::toString))
                 .filter(s -> s.contains("public"))
                 .map(s -> s.replaceAll("\\(.*", "")
                         .replaceAll(".*\\.", "")
