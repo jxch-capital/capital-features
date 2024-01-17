@@ -41,4 +41,9 @@ chart:
   png_path: D:\\jxch-capital\\capital-features\\src\\main\\resources\\chart\\
   suffix: .png
 
+http:
+  use-proxy: true
+  proxy-host: 127.0.0.1
+  proxy-port: 10809
+
 # 配置 ai.gemini.key 和 spring.mail.username

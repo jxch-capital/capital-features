@@ -17,7 +17,7 @@ public interface WatchMailTask extends Ordered {
 
     @Override
     default int getOrder() {
-        return Integer.MAX_VALUE;
+        return 0;
     }
 
     default String name() {
