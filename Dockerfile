@@ -1,6 +1,9 @@
 FROM openjdk:17
 
 ENV TZ=Asia/Shanghai
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
 ENV PGSQL_DATASOURCE_URL=localhost:15432
 ENV DB_TABLE=capital-features
 ENV DB_USERNAME=capital-features
