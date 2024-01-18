@@ -10,7 +10,7 @@ import org.jxch.capital.http.ai.GeminiApi;
 import org.jxch.capital.http.ai.dto.TextAiParam;
 import org.jxch.capital.http.brooks.BrooksBlogApi;
 import org.jxch.capital.server.BrooksService;
-import org.mapstruct.ap.internal.util.Collections;
+import org.jxch.capital.utils.CollU;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -51,7 +51,7 @@ public class BrooksServiceImpl implements BrooksService {
     }
 
     private String transAi(String text) {
-        return Collections.last(geminiApi.questionTextChain(transAiParam().addText(text)).chainText());
+        return CollU.last(geminiApi.questionTextChain(transAiParam().addText(text)).chainText());
     }
 
     private TextAiParam transAiParam() {

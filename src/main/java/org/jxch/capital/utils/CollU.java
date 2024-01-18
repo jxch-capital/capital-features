@@ -29,6 +29,9 @@ public class CollU {
         return list;
     }
 
+    public static <T> T last(@NotNull List<T> list) {
+        return list.get(list.size() - 1);
+    }
 
 
 }
