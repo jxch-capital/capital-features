@@ -29,6 +29,7 @@ public class BrooksServiceImpl implements BrooksService {
         Document doc = Jsoup.parse(html);
 
         doc.select("div.addtoany_share_save_container").forEach(Node::remove);
+        doc.select("footer.entry-footer").forEach(Node::remove);
         doc.select("p.caption").forEach(Node::remove);
         doc.select("span.entry-comments-link").forEach(Node::remove);
         doc.select(".wp-block-heading").stream()

@@ -10,6 +10,9 @@ import org.jxch.capital.watch.WatchMailTask;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Collections;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,8 +29,9 @@ public class BrooksBlogWatchMailTaskImpl  implements WatchMailTask {
     public String htmlBuild(Long userId, String html) {
         StringBuilder builder = new StringBuilder(html);
         if (support(userId)) {
-            for (WatchConfigDto ignored : watchConfigService.findByUseridAndWatchName(userId, name())) {
+            for (WatchConfigDto watchConfigDto : watchConfigService.findByUseridAndWatchName(userId, name())) {
                 builder.append(brooksService.newBlogArticleHtmlAndTransToChinese());
+                watchConfigService.save(Collections.singletonList(watchConfigDto.setLastWatchTime(Calendar.getInstance().getTime())));
             }
         }
         return builder.toString();
