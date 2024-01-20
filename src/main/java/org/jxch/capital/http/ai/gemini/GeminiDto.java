@@ -1,8 +1,9 @@
-package org.jxch.capital.http.ai.dto;
+package org.jxch.capital.http.ai.gemini;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.jxch.capital.http.ai.TextAiParam;
 
 import java.util.ArrayList;
 import java.util.Arrays;

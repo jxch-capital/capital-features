@@ -2,7 +2,7 @@ package org.jxch.capital.server;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.jxch.capital.http.ai.GeminiApi;
+import org.jxch.capital.http.ai.gemini.GeminiApi;
 import org.jxch.capital.http.ai.TextAiApi;
 
 import java.util.Arrays;

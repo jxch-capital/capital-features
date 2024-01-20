@@ -1,4 +1,4 @@
-package org.jxch.capital.http.ai.dto;
+package org.jxch.capital.http.ai.gemini;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jxch.capital.http.ai.TextAiRes;
 
 import java.util.List;
 import java.util.Objects;

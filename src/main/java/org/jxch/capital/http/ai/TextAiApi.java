@@ -1,8 +1,6 @@
 package org.jxch.capital.http.ai;
 
 import lombok.NonNull;
-import org.jxch.capital.http.ai.dto.TextAiParam;
-import org.jxch.capital.http.ai.dto.TextAiRes;
 
 import java.util.ArrayList;
 import java.util.List;

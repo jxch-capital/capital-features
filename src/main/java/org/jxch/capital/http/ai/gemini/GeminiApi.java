@@ -1,14 +1,13 @@
-package org.jxch.capital.http.ai;
+package org.jxch.capital.http.ai.gemini;
 
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import org.jxch.capital.http.ai.dto.GeminiDto;
-import org.jxch.capital.http.ai.dto.GeminiRes;
-import org.jxch.capital.http.ai.dto.TextAiParam;
-import org.jxch.capital.http.ai.dto.TextAiRes;
+import org.jxch.capital.http.ai.TextAiApi;
+import org.jxch.capital.http.ai.TextAiParam;
+import org.jxch.capital.http.ai.TextAiRes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 

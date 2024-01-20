@@ -1,4 +1,4 @@
-package org.jxch.capital.http.ai;
+package org.jxch.capital.http.ai.gemini;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

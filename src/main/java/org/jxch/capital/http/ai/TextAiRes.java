@@ -1,4 +1,4 @@
-package org.jxch.capital.http.ai.dto;
+package org.jxch.capital.http.ai;
 
 public interface TextAiRes {
 
