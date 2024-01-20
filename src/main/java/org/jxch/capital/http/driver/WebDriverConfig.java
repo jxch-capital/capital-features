@@ -34,17 +34,13 @@ public class WebDriverConfig {
     @Bean(destroyMethod = "quit", name = "chromeRemoteDriver")
     @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public WebDriver chromeRemoteDriver(@NonNull ChromeOptions chromeOptions) {
-        ClientConfig clientConfig = ClientConfig.defaultConfig();
-
-//        Field connectionTimeout = clientConfig.getClass().getDeclaredField("connectionTimeout");
-//        connectionTimeout.setAccessible(true);
-//        connectionTimeout.set(clientConfig, Duration.ofHours(10));
-//        Field readTimeout = clientConfig.getClass().getDeclaredField("readTimeout");
-//        readTimeout.setAccessible(true);
-//        readTimeout.set(clientConfig, Duration.ofHours(10));
-
-        HttpCommandExecutor executor = new HttpCommandExecutor(new HashMap<>(), new URL(webDriverHttp), clientConfig);
-        return new RemoteWebDriver(executor, chromeOptions);
+        try {
+            ClientConfig clientConfig = ClientConfig.defaultConfig();
+            HttpCommandExecutor executor = new HttpCommandExecutor(new HashMap<>(), new URL(webDriverHttp), clientConfig);
+            return new RemoteWebDriver(executor, chromeOptions);
+        } catch (Throwable e) {
+            return null;
+        }
     }
 
 }
