@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.time.Duration;
 
 @Data
 @Slf4j
@@ -19,6 +20,7 @@ public class HttpConfig {
     private boolean useProxy = false;
     private String proxyHost;
     private Integer proxyPort;
+
     @Bean
     @Primary
     public OkHttpClient okHttpClient() {
@@ -28,9 +30,12 @@ public class HttpConfig {
             builder.proxy(proxy);
         }
 
-        return builder.build();
+        return builder
+                .connectTimeout(Duration.ofMinutes(3))
+                .writeTimeout(Duration.ofMinutes(3))
+                .readTimeout(Duration.ofMinutes(3))
+                .build();
     }
-
 
 
 }

@@ -45,3 +45,6 @@ spring:
     user:
       name: admin
       password: admin
+
+trans:
+  url: http://jiangxicheng.site:15500/trans

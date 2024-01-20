@@ -37,3 +37,6 @@ ai:
     key: ${GEMINI_KEY}
 driver:
   web-driver-http: ${WEB_DRIVER}
+
+trans:
+  url: ${TRANS_URL}
