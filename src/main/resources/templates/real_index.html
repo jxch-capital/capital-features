@@ -43,7 +43,9 @@
     <label for="yl">长期：</label>
     <input type="text" th:field="*{yl}" id="yl" placeholder="长期" style="width: 80px">
     <input type="submit" value="查询">
+    <div id="labelButton" class="btn">标签</div>
 </form>
+
 <div style="display: flex">
     <div th:if="${nodes}" style="float: left">
         <table>
@@ -249,8 +251,17 @@
                 ]
             };
 
+            if (data.length > 20) {
+                option.series[0].label.show = false
+            }
+
             const myChart = echarts.init(document.getElementById('klineChart'));
             myChart.setOption(option);
+
+            $('#labelButton').on('click', function() {
+                option.series[0].label.show = !option.series[0].label.show; // 确保访问的是 option.series
+                myChart.setOption(option); // 强制使用新的配置项重绘图表
+            });
         </script>
     </div>
 </div>
