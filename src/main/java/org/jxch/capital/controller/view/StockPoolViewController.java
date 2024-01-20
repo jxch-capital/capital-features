@@ -15,7 +15,7 @@ import java.util.Collections;
 @Controller
 @RequestMapping(path = "/stock_pool")
 @RequiredArgsConstructor
-public class StockPoolController {
+public class StockPoolViewController {
     private final StockPoolService stockPoolService;
 
     @GetMapping("/index")

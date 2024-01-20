@@ -36,6 +36,7 @@
         <djl-pytorch-native.version>1.9.1</djl-pytorch-native.version>
         <xchart.version>3.8.7</xchart.version>
         <jsoup.version>1.17.2</jsoup.version>
+        <selenium.version>4.16.1</selenium.version>
     </properties>
 
     <dependencies>
@@ -193,6 +194,12 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
         </dependency>
 
     </dependencies>

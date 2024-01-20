@@ -1,5 +1,6 @@
 package org.jxch.capital.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -25,14 +26,17 @@ public class StockPoolDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
+
     public List<String> getPoolStockList() {
         return Arrays.stream(this.poolStocks.split(",")).map(String::trim).toList();
     }
 
+    @JsonIgnore
     public IntervalEnum getIntervalEnum() {
         return IntervalEnum.valueOf(this.interval);
     }
 
+    @JsonIgnore
     public EngineEnum getEngineEnum() {
         return EngineEnum.pares(this.engine);
     }
