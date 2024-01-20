@@ -35,4 +35,5 @@ vec:
 ai:
   gemini:
     key: ${GEMINI_KEY}
-
+driver:
+  web-driver-http: ${WEB_DRIVER}

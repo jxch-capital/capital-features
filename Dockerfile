@@ -14,6 +14,7 @@ ENV MAIL_PASSWORD=password
 ENV USERNAME=username
 ENV PASSWORD=password
 ENV GEMINI_KEY=gemini_key
+ENV WEB_DRIVER=selenium-hub:4444
 
 VOLUME /capital/features
 ADD target/capital-features.jar app.jar
