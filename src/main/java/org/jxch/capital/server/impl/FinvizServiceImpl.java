@@ -22,16 +22,35 @@ public class FinvizServiceImpl implements FinvizService {
     private final FinvizApi finvizApi;
     private final TransApi transApi;
 
-    @Override
     @SneakyThrows
+    private List<FinvizNewsDto> trans(List<FinvizNewsDto> news) {
+        AtomicInteger integer = new AtomicInteger(0);
+        return AsyncU.newForkJoinPool(Runtime.getRuntime().availableProcessors() * 4).submit(() -> news.parallelStream().map(dto -> {
+            log.debug("翻译进度：{}/{}", integer.incrementAndGet(), news.size());
+            String trans = transApi.trans(TransParam.builder().text(dto.getTitle()).build());
+
+            return dto.setTitle(trans);
+        }).toList()).get();
+    }
+
+    @Override
     @Cacheable(value = "allNewsTitleTransToChinese")
     public List<FinvizNewsDto> allNewsTitleTransToChinese() {
-        List<FinvizNewsDto> allNews = finvizApi.allNews();
-        AtomicInteger integer = new AtomicInteger(0);
-        return AsyncU.newForkJoinPool(Runtime.getRuntime().availableProcessors() * 4).submit(() -> allNews.parallelStream().map(dto -> {
-            log.debug("翻译进度：{}/{}", integer.incrementAndGet(), allNews.size());
-            return dto.setTitle(transApi.trans(TransParam.builder().text(dto.getTitle()).build()));
-        }).toList()).get();
+        return trans(finvizApi.allNews());
+    }
+
+    @Override
+    @SneakyThrows
+    @Cacheable(value = "newsTitleTransToChinese")
+    public List<FinvizNewsDto> newsTitleTransToChinese() {
+        return trans(finvizApi.news());
+    }
+
+    @Override
+    @SneakyThrows
+    @Cacheable(value = "blogsTitleTransToChinese")
+    public List<FinvizNewsDto> blogsTitleTransToChinese() {
+        return trans(finvizApi.blogs());
     }
 
 }

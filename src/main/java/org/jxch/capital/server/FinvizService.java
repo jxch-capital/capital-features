@@ -7,5 +7,7 @@ import java.util.List;
 public interface FinvizService {
 
     List<FinvizNewsDto> allNewsTitleTransToChinese();
+    List<FinvizNewsDto> newsTitleTransToChinese();
+    List<FinvizNewsDto> blogsTitleTransToChinese();
 
 }

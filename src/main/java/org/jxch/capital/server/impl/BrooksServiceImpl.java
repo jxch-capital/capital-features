@@ -42,7 +42,7 @@ public class BrooksServiceImpl implements BrooksService {
                 });
         doc.getAllElements().forEach(element -> element.removeAttr("class"));
 
-        Elements lis = doc.select("li");
+        Elements lis = doc.select("li,p");
         for (int i = 0; i < lis.size(); i++) {
             lis.get(i).text(transAi(lis.get(i).text()));
             log.debug("翻译进度：{}/{}", i + 1, lis.size());

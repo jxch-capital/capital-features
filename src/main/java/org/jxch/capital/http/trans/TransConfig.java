@@ -11,4 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "trans")
 public class TransConfig {
     private String url;
+    private int retry = 3;
+    private boolean ignoredErrorTrans = true;
 }
