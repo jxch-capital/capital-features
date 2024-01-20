@@ -19,7 +19,9 @@ ENV WEB_DRIVER=selenium-hub:4444
 VOLUME /capital/features
 ADD target/capital-features.jar app.jar
 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update && apt-get install -y fonts-wqy-zenhei && rm -rf /var/lib/apt/lists/*
 RUN bash -c 'touch /app.jar'
 EXPOSE 8080
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=docker","-jar","/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=docker", "-Djava.awt.headless=true","-Dfile.encoding=UTF-8", "-jar","/app.jar"]
