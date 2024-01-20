@@ -18,9 +18,10 @@ ENV WEB_DRIVER=selenium-hub:4444
 
 VOLUME /capital/features
 ADD target/capital-features.jar app.jar
+ADD fonts /usr/share/fonts/jdk_fonts
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && apt-get install -y fonts-wqy-zenhei && rm -rf /var/lib/apt/lists/*
+RUN fc-cache -fvll
 RUN bash -c 'touch /app.jar'
 EXPOSE 8080
 
