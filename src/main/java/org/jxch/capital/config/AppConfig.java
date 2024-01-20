@@ -19,10 +19,11 @@ public class AppConfig {
 
     @Bean
     public CacheManager cacheManager() {
+        // todo 对接配置信息
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterAccess(10, TimeUnit.MINUTES)
-                .maximumSize(100));
+                .expireAfterAccess(30, TimeUnit.MINUTES)
+                .maximumSize(2000));
         return cacheManager;
     }
 
