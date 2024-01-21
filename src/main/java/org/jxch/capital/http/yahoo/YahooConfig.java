@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jxch.capital.http.config.RetrySuccessInterceptor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.time.Duration;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -35,7 +37,9 @@ public class YahooConfig {
             builder.proxy(proxy);
         }
 
-        return builder.build();
+        return builder
+                .addInterceptor(RetrySuccessInterceptor.builder().maxRetry(3).retryWait(Duration.ofMillis(500)).build())
+                .build();
     }
 
     @Bean(name = "newYahooUrlBuilder")
@@ -60,14 +64,14 @@ public class YahooConfig {
     }
 
     @Bean(name = "newYahooDownloadStockCsvUrlBuilder")
-    public Supplier<HttpUrl.Builder> newYahooDownloadStockCsvUrlBuilder(@NonNull @Qualifier("newYahooUrlBuilder")  Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
+    public Supplier<HttpUrl.Builder> newYahooDownloadStockCsvUrlBuilder(@NonNull @Qualifier("newYahooUrlBuilder") Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
         return () -> newYahooUrlBuilder.get()
                 .host("query1.finance.yahoo.com")
                 .addPathSegments("/v7/finance/download/");
     }
 
     @Bean(name = "newYahooChartUrlBuilder")
-    public Supplier<HttpUrl.Builder> newYahooChartUrlBuilder(@NonNull @Qualifier("newYahooUrlBuilder")  Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
+    public Supplier<HttpUrl.Builder> newYahooChartUrlBuilder(@NonNull @Qualifier("newYahooUrlBuilder") Supplier<HttpUrl.Builder> newYahooUrlBuilder) {
         return () -> newYahooUrlBuilder.get()
                 .host("query2.finance.yahoo.com")
                 .addPathSegments("/v8/finance/chart/");

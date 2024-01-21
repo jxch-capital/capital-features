@@ -57,7 +57,7 @@ public class BrooksServiceImpl implements BrooksService {
 
     private TextAiParam transAiParam() {
         return geminiApi.getDefaultParam()
-                .addText("英译中,注意炒股及金融领域的专用术语的翻译准确性，以及常见缩写的翻译（金融术语及标的名称除外）");
+                .addText("英译中,注意炒股及金融领域的专用术语的翻译准确性（比如把Bar翻译为K线），以及常见缩写的翻译（金融术语及标的名称除外），另外人名不要翻译。");
     }
 
 }

@@ -17,4 +17,8 @@ public class TransParam {
     @Builder.Default
     private String target = "zh-CN";
 
+    @Builder.Default
+    private Boolean ignoredErrorTrans = true;
+
+
 }

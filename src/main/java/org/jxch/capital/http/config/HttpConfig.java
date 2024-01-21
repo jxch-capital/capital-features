@@ -37,5 +37,23 @@ public class HttpConfig {
                 .build();
     }
 
+    @Bean("okHttpRetrySuccessClient")
+    public OkHttpClient okHttpRetrySuccessClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        if (useProxy) {
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+            builder.proxy(proxy);
+        }
+
+        return builder
+                .connectTimeout(Duration.ofMinutes(3))
+                .writeTimeout(Duration.ofMinutes(3))
+                .readTimeout(Duration.ofMinutes(3))
+                .addInterceptor(RetrySuccessInterceptor.builder()
+                        .maxRetry(5)
+                        .retryWait(Duration.ofSeconds(1))
+                        .build())
+                .build();
+    }
 
 }

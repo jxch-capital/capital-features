@@ -25,10 +25,9 @@ public class FinvizServiceImpl implements FinvizService {
     @SneakyThrows
     private List<FinvizNewsDto> trans(List<FinvizNewsDto> news) {
         AtomicInteger integer = new AtomicInteger(0);
-        return AsyncU.newForkJoinPool(Runtime.getRuntime().availableProcessors() * 4).submit(() -> news.parallelStream().map(dto -> {
+        return AsyncU.newForkJoinPool(Runtime.getRuntime().availableProcessors() * 2).submit(() -> news.parallelStream().map(dto -> {
             log.debug("翻译进度：{}/{}", integer.incrementAndGet(), news.size());
             String trans = transApi.trans(TransParam.builder().text(dto.getTitle()).build());
-
             return dto.setTitle(trans);
         }).toList()).get();
     }
