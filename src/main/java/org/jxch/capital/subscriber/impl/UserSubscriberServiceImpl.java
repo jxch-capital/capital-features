@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.UserSubscriberRepository;
 import org.jxch.capital.domain.convert.UserSubscriberMapper;
 import org.jxch.capital.domain.dto.UserSubscriberDto;
+import org.jxch.capital.subscriber.SubscriberConfigGroupService;
+import org.jxch.capital.subscriber.SubscriberGroupService;
 import org.jxch.capital.subscriber.UserSubscriberService;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class UserSubscriberServiceImpl implements UserSubscriberService {
     private final UserSubscriberMapper userSubscriberMapper;
     private final UserSubscriberRepository userSubscriberRepository;
+    private final SubscriberConfigGroupService subscriberConfigGroupService;
 
     @Override
     public List<UserSubscriberDto> findAll() {
@@ -43,4 +46,12 @@ public class UserSubscriberServiceImpl implements UserSubscriberService {
     public List<UserSubscriberDto> findByUserId(Long userId) {
         return userSubscriberMapper.toUserSubscriberDto(userSubscriberRepository.findAllByUserId(userId));
     }
+
+    @Override
+    public void subscriber(Long id) {
+        UserSubscriberDto dto = findById(id);
+        SubscriberGroupService groupService = subscriberConfigGroupService.getGroupServiceById(dto.getSubscriberConfigGroupId());
+        groupService.subscribe(dto);
+    }
+
 }

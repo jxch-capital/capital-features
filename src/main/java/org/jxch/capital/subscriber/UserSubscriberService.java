@@ -15,4 +15,6 @@ public interface UserSubscriberService {
 
     List<UserSubscriberDto> findByUserId(Long userId);
 
+    void subscriber(Long id);
+
 }

@@ -18,4 +18,6 @@ public interface SubscriberConfigGroupService {
     List<SubscriberConfigDto> getDBSubscribersByGroupServiceName(String groupServiceName);
 
     Map<String, List<SubscriberConfigDto>> groupServiceDBSubscriberMap();
+
+    SubscriberGroupService getGroupServiceById(Long id);
 }

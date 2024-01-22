@@ -6,10 +6,7 @@ import org.jxch.capital.dao.SubscriberConfigGroupRepository;
 import org.jxch.capital.domain.convert.SubscriberConfigGroupMapper;
 import org.jxch.capital.domain.dto.SubscriberConfigDto;
 import org.jxch.capital.domain.dto.SubscriberConfigGroupDto;
-import org.jxch.capital.subscriber.Subscriber;
-import org.jxch.capital.subscriber.SubscriberConfigGroupService;
-import org.jxch.capital.subscriber.SubscriberConfigService;
-import org.jxch.capital.subscriber.Subscribers;
+import org.jxch.capital.subscriber.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,6 +53,11 @@ public class SubscriberConfigGroupServiceImpl implements SubscriberConfigGroupSe
     public Map<String, List<SubscriberConfigDto>> groupServiceDBSubscriberMap() {
         return Subscribers.allSubscriberGroupServiceNames().stream()
                 .collect(Collectors.toMap(Function.identity(), this::getDBSubscribersByGroupServiceName));
+    }
+
+    @Override
+    public SubscriberGroupService getGroupServiceById(Long id) {
+        return Subscribers.getSubscriberGroupService(findById(id).getGroupService());
     }
 
 }

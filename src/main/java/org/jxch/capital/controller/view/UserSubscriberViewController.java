@@ -56,9 +56,9 @@ public class UserSubscriberViewController {
         return Controllers.redirect("/user_subscriber_view/index");
     }
 
-    @RequestMapping(value = "/submit/{id}")
-    public String submit(@PathVariable(value = "id") Long id) {
-        // todo 执行计划
+    @RequestMapping(value = "/subscribe/{id}")
+    public String subscribe(@PathVariable(value = "id") Long id) {
+        userSubscriberService.subscriber(id);
         return Controllers.redirect("/user_subscriber_view/index");
     }
 
