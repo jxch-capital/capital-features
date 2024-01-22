@@ -16,6 +16,7 @@ public class UserConfig {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IdGenerators.COMM_SEQ)
     @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
+    @Column(unique = true)
     private String username;
     private String email;
     private String nickname;

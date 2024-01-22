@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户订阅管理</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+</head>
+<body>
+<form th:action="@{/user_subscriber_view/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>用户</th>
+            <th>邮箱</th>
+            <th>订阅组</th>
+            <th>执行计划</th>
+            <th>备注</th>
+            <th>最后执行时间</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="userId">
+                    <select id="userId" th:field="*{userId}" required>
+                        <option th:each="item: ${allUsers}" th:value="${item.id}" th:text="${item.username}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>自动绑定</td>
+            <td>
+                <label for="subscriberConfigGroupId">
+                    <select id="subscriberConfigGroupId" th:field="*{subscriberConfigGroupId}" required>
+                        <option th:each="item: ${allGroups}" th:value="${item.id}" th:text="${item.name}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="cron"></label>
+                <input type="text" th:field="*{cron}" id="cron" placeholder="cron" required>
+            </td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
+            </td>
+            <td></td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${allUserSubscribers}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td>
+                <label th:for="'userId' + ${iter.index}">
+                    <select th:id="'userId' + ${iter.index}">
+                        <option th:each="itemOp: ${allUsers}" th:value="${itemOp.id}" th:text="${itemOp.username}"
+                                th:selected="${itemOp.id == item.userId}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'useremail' + ${iter.index}">
+                    <select th:id="'useremail' + ${iter.index}">
+                        <option th:each="itemOp: ${allUsers}" th:value="${itemOp.id}" th:text="${itemOp.email}"
+                                th:selected="${itemOp.id == item.userId}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'subscriberConfigGroupId' + ${iter.index}">
+                    <select th:id="'subscriberConfigGroupId' + ${iter.index}">
+                        <option th:each="itemOp: ${allGroups}" th:value="${itemOp.id}" th:text="${itemOp.name}"
+                                th:selected="${itemOp.id == item.subscriberConfigGroupId}"></option>
+                    </select>
+                </label>
+            </td>
+            <td th:text="${item.cron}"></td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
+            <td th:text="${#dates.format(item.lastSubscribeTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <a th:href="@{'/user_subscriber_view/edit/' + ${item.id}}">修改</a>
+                <a th:href="@{'/user_subscriber_view/del/' + ${item.id}}">删除</a>
+                <a th:href="@{'/user_subscriber_view/submit/' + ${item.id}}">执行</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

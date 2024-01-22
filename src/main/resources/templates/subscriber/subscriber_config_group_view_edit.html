@@ -39,8 +39,7 @@
             <td><label for="groupService">组服务</label></td>
             <td>
                 <select id="groupService" th:field="*{groupService}" class="selectpicker" required>
-                    <option th:each="item: ${allGroupService}" th:value="${item}" th:text="${item}"
-                            th:selected="${item == param.groupService}"></option>
+                    <option th:each="item: ${allGroupService}" th:value="${item}" th:text="${item}"></option>
                 </select>
             </td>
         </tr>
