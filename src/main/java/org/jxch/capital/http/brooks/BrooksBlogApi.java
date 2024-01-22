@@ -50,10 +50,14 @@ public class BrooksBlogApi {
         }
     }
 
+    public String topArticleUrl(int index) {
+        return Optional.ofNullable(articleUrlsInPage(BrooksBlogParam.builder().page(1).containsPinned(false).build()).get(index))
+                .orElseThrow(() -> new RuntimeException("找不到文章"));
+    }
+
     @NonNull
     public String newArticleUrl() {
-        return Optional.ofNullable(articleUrlsInPage(BrooksBlogParam.builder().page(1).containsPinned(false).build()).get(0))
-                .orElseThrow(() -> new RuntimeException("找不到文章"));
+        return topArticleUrl(0);
     }
 
     @NonNull
@@ -68,7 +72,15 @@ public class BrooksBlogApi {
     }
 
     public String newArticleHtml() {
-        return articleHtml(newArticleUrl());
+        for (int i = 0; i < 20; i++) {
+            String articleHtml = articleHtml(topArticleUrl(i));
+            if (articleHtml.contains("Please log in to view content.")) {
+                continue;
+            }
+            return articleHtml;
+        }
+
+        throw new IllegalArgumentException("前20篇文章都需要登录才能访问，请核实文章源是否有效");
     }
 
 }
