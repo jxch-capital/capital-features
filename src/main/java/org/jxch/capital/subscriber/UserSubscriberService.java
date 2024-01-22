@@ -17,4 +17,6 @@ public interface UserSubscriberService {
 
     void subscriber(Long id);
 
+    void refreshSubscriberTasks();
+
 }
