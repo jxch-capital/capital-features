@@ -48,14 +48,11 @@ public class SubscriberGroupMailServiceImpl implements SubscriberGroupService {
             helper.setTo(user.getEmail());
             helper.setSubject(groupDto.getName());
 
-            String html = subscriberConfigs.stream().map(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService()).mailHtml(config))
-                    .collect(Collectors.joining("</hr>"));
-            helper.setText(html, true);
-
-            List<MailSubscriber> mailSubscribers = subscriberConfigs.stream().map(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService())).toList();
-            mailSubscribers.forEach(subscriber -> subscriber.addInline(helper));
+            helper.setText(subscriberConfigs.stream().map(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService()).mailHtml(config))
+                    .collect(Collectors.joining("</hr>")), true);
+            subscriberConfigs.forEach(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService()).addInline(config, helper));
             javaMailSender.send(message);
-            mailSubscribers.forEach(subscriber -> subscriber.addInline(helper));
+            subscriberConfigs.forEach(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService()).clear(config));
 
             userSubscriberDto.setLastSubscribeTime(Calendar.getInstance().getTime());
             userSubscriberService.save(Collections.singletonList(userSubscriberDto));

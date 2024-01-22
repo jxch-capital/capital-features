@@ -7,8 +7,8 @@ public interface MailSubscriber extends Subscriber {
 
     String mailHtml(SubscriberConfigDto configDto);
 
-    void addInline(MimeMessageHelper helper);
+    void addInline(SubscriberConfigDto configDto, MimeMessageHelper helper);
 
-    void clear();
+    void clear(SubscriberConfigDto configDto);
 
 }

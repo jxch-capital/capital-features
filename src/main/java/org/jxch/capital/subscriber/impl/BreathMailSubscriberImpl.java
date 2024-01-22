@@ -58,12 +58,12 @@ public class BreathMailSubscriberImpl implements MailSubscriber {
     }
 
     @Override
-    public void addInline(MimeMessageHelper helper) {
+    public void addInline(SubscriberConfigDto configDto, MimeMessageHelper helper) {
 
     }
 
     @Override
-    public void clear() {
+    public void clear(SubscriberConfigDto configDto) {
 
     }
 

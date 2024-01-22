@@ -1,6 +1,8 @@
 package org.jxch.capital.subscriber;
 
-public interface Subscriber {
+import org.springframework.core.Ordered;
+
+public interface Subscriber extends Ordered {
 
     default String name() {
         return getClass().getSimpleName();
@@ -8,4 +10,8 @@ public interface Subscriber {
 
     SubscriberParam getDefaultParam();
 
+    @Override
+    default int getOrder() {
+        return 0;
+    }
 }
