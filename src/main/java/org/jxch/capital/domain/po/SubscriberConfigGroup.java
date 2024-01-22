@@ -16,9 +16,9 @@ public class SubscriberConfigGroup {
     @SequenceGenerator(name = IdGenerators.COMM_SEQ, sequenceName = IdGenerators.COMM_SEQ, allocationSize = 1)
     private Long id;
     private String name;
+    private String groupService;
     @Column(columnDefinition = "TEXT")
     private String subscriberConfigIds;
-    private String subscriberType;
     @Column(columnDefinition = "TEXT")
     private String remark;
 }

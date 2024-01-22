@@ -1,8 +1,10 @@
 package org.jxch.capital.subscriber;
 
+import org.jxch.capital.domain.dto.SubscriberConfigDto;
 import org.jxch.capital.domain.dto.SubscriberConfigGroupDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SubscriberConfigGroupService {
     List<SubscriberConfigGroupDto> findAll();
@@ -12,4 +14,8 @@ public interface SubscriberConfigGroupService {
     void delById(List<Long> ids);
 
     Integer save(List<SubscriberConfigGroupDto> dtoList);
+
+    List<SubscriberConfigDto> getDBSubscribersByGroupServiceName(String groupServiceName);
+
+    Map<String, List<SubscriberConfigDto>> groupServiceDBSubscriberMap();
 }

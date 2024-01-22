@@ -52,8 +52,8 @@
                     </select>
                 </label>
             </td>
-            <td th:text="${#strings.abbreviate(item.params, 20)}" th:title="${#strings.abbreviate(item.params, 20)}"></td>
-            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${#strings.abbreviate(item.remark, 20)}"></td>
+            <td th:text="${#strings.abbreviate(item.params, 20)}" th:title="${item.params}"></td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
             <td>
                 <a th:href="@{'/subscriber_config_view/edit/' + ${item.id}}">修改</a>
                 <a th:href="@{'/subscriber_config_view/del/' + ${item.id}}">删除</a>

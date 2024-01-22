@@ -38,4 +38,9 @@ public class SubscriberConfigServiceImpl implements SubscriberConfigService {
         return subscriberConfigRepository.saveAllAndFlush(subscriberConfigMapper.toSubscriberConfig(dtoList)).size();
     }
 
+    @Override
+    public List<SubscriberConfigDto> findById(List<Long> ids) {
+        return subscriberConfigMapper.toSubscriberConfigDto(subscriberConfigRepository.findAllById(ids));
+    }
+
 }

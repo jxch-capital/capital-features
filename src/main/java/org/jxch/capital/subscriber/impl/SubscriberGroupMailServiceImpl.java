@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.subscriber.MailSubscriber;
 import org.jxch.capital.subscriber.Subscriber;
 import org.jxch.capital.subscriber.SubscriberGroupService;
-import org.jxch.capital.utils.AppContextHolder;
+import org.jxch.capital.subscriber.Subscribers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +16,9 @@ import java.util.List;
 public class SubscriberGroupMailServiceImpl implements SubscriberGroupService {
 
 
-
     @Override
     public List<Subscriber> supportSubscribers() {
-        return AppContextHolder.getContext().getBeansOfType(MailSubscriber.class).values().stream()
+        return Subscribers.allSubscribers(MailSubscriber.class).stream()
                 .map(mailSubscriber -> (Subscriber) mailSubscriber).toList();
     }
 

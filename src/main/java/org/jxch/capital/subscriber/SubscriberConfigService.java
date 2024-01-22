@@ -14,4 +14,6 @@ public interface SubscriberConfigService {
 
     Integer save(List<SubscriberConfigDto> dtoList);
 
+    List<SubscriberConfigDto> findById(List<Long> ids);
+
 }

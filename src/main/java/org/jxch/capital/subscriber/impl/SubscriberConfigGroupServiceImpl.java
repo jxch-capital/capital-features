@@ -4,11 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.SubscriberConfigGroupRepository;
 import org.jxch.capital.domain.convert.SubscriberConfigGroupMapper;
+import org.jxch.capital.domain.dto.SubscriberConfigDto;
 import org.jxch.capital.domain.dto.SubscriberConfigGroupDto;
+import org.jxch.capital.subscriber.Subscriber;
 import org.jxch.capital.subscriber.SubscriberConfigGroupService;
+import org.jxch.capital.subscriber.SubscriberConfigService;
+import org.jxch.capital.subscriber.Subscribers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -16,6 +23,7 @@ import java.util.List;
 public class SubscriberConfigGroupServiceImpl implements SubscriberConfigGroupService {
     private final SubscriberConfigGroupMapper subscriberConfigGroupMapper;
     private final SubscriberConfigGroupRepository subscriberConfigGroupRepository;
+    private final SubscriberConfigService subscriberConfigService;
 
     @Override
     public List<SubscriberConfigGroupDto> findAll() {
@@ -37,4 +45,17 @@ public class SubscriberConfigGroupServiceImpl implements SubscriberConfigGroupSe
     public Integer save(List<SubscriberConfigGroupDto> dtoList) {
         return subscriberConfigGroupRepository.saveAllAndFlush(subscriberConfigGroupMapper.toSubscriberConfigGroup(dtoList)).size();
     }
+
+    @Override
+    public List<SubscriberConfigDto> getDBSubscribersByGroupServiceName(String groupServiceName) {
+        List<String> allSupports = Subscribers.getSubscriberGroupService(groupServiceName).supportSubscribers().stream().map(Subscriber::name).toList();
+        return subscriberConfigService.findAll().stream().filter(dto -> allSupports.contains(dto.getService())).toList();
+    }
+
+    @Override
+    public Map<String, List<SubscriberConfigDto>> groupServiceDBSubscriberMap() {
+        return Subscribers.allSubscriberGroupServiceNames().stream()
+                .collect(Collectors.toMap(Function.identity(), this::getDBSubscribersByGroupServiceName));
+    }
+
 }

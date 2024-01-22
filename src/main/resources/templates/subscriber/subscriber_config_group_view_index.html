@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订阅组配置</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-zh_CN.min.js"></script>
+</head>
+<body>
+<form th:action="@{/subscriber_config_group_view/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <td>ID</td>
+            <td>名称</td>
+            <td>组服务</td>
+            <td>订阅器</td>
+            <td>备注</td>
+            <td>操作</td>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="name"></label>
+                <input type="text" th:field="*{name}" id="name" placeholder="名称" required>
+            </td>
+            <td>
+                <label for="groupService">
+                    <select id="groupService" th:field="*{groupService}" class="selectpicker" required>
+                        <option th:each="item: ${allGroupService}" th:value="${item}" th:text="${item}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="subscriberConfigIds">
+                    <select id="subscriberConfigIds" th:field="*{subscriberConfigIds}" class="selectpicker" multiple
+                            required>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
+            </td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${allConfigGroups}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td th:text="${item.name}"></td>
+            <td>
+                <label th:for="'groupService' + ${iter.index}">
+                    <select th:id="'groupService' + ${iter.index}" class="selectpicker" disabled>
+                        <option th:each="itemOp: ${allGroupService}" th:value="${itemOp}" th:text="${itemOp}"
+                                th:selected="${itemOp == item.groupService}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label th:for="'subscriberConfigIds' + ${iter.index}">
+                    <select th:id="'subscriberConfigIds' + ${iter.index}" class="selectpicker" multiple disabled>
+                        <option th:each="itemOp: ${groupServiceSubscribersMap[item.groupService]}"
+                                th:value="${itemOp.id}" th:text="${itemOp.name}"
+                                th:selected="${#lists.contains(item.subscriberConfigIds, itemOp.id)}"></option>
+                    </select>
+                </label>
+            </td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
+            <td>
+                <a th:href="@{'/subscriber_config_group_view/edit/' + ${item.id}}">修改</a>
+                <a th:href="@{'/subscriber_config_group_view/del/' + ${item.id}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
+<script th:inline="javascript">
+    const groupServiceSubscribersMap = [[${groupServiceSubscribersMap}]]
+
+    function initSubscriberOptions() {
+        const selectedGroupService = $('#groupService').val();
+        $('#subscriberConfigIds').empty();
+        if (groupServiceSubscribersMap[selectedGroupService]) {
+            $.each(groupServiceSubscribersMap[selectedGroupService], function (index, itemOp) {
+                $('#subscriberConfigIds').append($('<option>', {
+                    value: itemOp.id,
+                    text: itemOp.name
+                }));
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $('#groupService').change(function () {
+            initSubscriberOptions()
+        });
+    });
+    initSubscriberOptions()
+</script>
+</body>
+</html>
