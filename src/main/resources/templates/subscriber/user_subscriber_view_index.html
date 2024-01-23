@@ -55,7 +55,7 @@
             <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
             <td>
                 <label th:for="'userId' + ${iter.index}">
-                    <select th:id="'userId' + ${iter.index}">
+                    <select th:id="'userId' + ${iter.index}" disabled>
                         <option th:each="itemOp: ${allUsers}" th:value="${itemOp.id}" th:text="${itemOp.username}"
                                 th:selected="${itemOp.id == item.userId}"></option>
                     </select>
@@ -63,7 +63,7 @@
             </td>
             <td>
                 <label th:for="'useremail' + ${iter.index}">
-                    <select th:id="'useremail' + ${iter.index}">
+                    <select th:id="'useremail' + ${iter.index}" disabled>
                         <option th:each="itemOp: ${allUsers}" th:value="${itemOp.id}" th:text="${itemOp.email}"
                                 th:selected="${itemOp.id == item.userId}"></option>
                     </select>
@@ -71,7 +71,7 @@
             </td>
             <td>
                 <label th:for="'subscriberConfigGroupId' + ${iter.index}">
-                    <select th:id="'subscriberConfigGroupId' + ${iter.index}">
+                    <select th:id="'subscriberConfigGroupId' + ${iter.index}" disabled>
                         <option th:each="itemOp: ${allGroups}" th:value="${itemOp.id}" th:text="${itemOp.name}"
                                 th:selected="${itemOp.id == item.subscriberConfigGroupId}"></option>
                     </select>
