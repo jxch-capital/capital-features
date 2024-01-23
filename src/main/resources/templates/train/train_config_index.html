@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>训练数据配置</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+</head>
+<body>
+<form th:action="@{/train_config_view/save}" th:object="${param}" method="post">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>数据服务</th>
+            <th>参数</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td style="color: gray">Auto</td>
+            <td>
+                <label for="name"></label>
+                <input type="text" th:field="*{name}" id="name" placeholder="名称" required>
+            </td>
+            <td>
+                <label for="service">
+                    <select id="service" th:field="*{service}" required>
+                        <option th:each="item: ${all_train_service}" th:value="${item}" th:text="${item}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>默认参数</td>
+            <td>
+                <label for="remark"></label>
+                <input type="text" th:field="*{remark}" id="remark" placeholder="备注">
+            </td>
+            <td>
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${all_configs}">
+            <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td th:text="${item.name}"></td>
+            <td>
+                <label th:for="'service' + ${iter.index}">
+                    <select th:id="'service' + ${iter.index}" disabled>
+                        <option th:each="itemOp: ${all_train_service}" th:value="${itemOp}" th:text="${itemOp}"
+                                th:selected="${itemOp == item.service}"></option>
+                    </select>
+                </label>
+            </td>
+            <td th:text="${#strings.abbreviate(item.params, 20)}" th:title="${item.params}"></td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
+            <td>
+                <a th:href="@{'/train_config_view/edit/' + ${item.id}}">修改</a>
+                <a th:href="@{'/train_config_view/del/' + ${item.id}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
