@@ -12,5 +12,7 @@ public interface TrainDataService {
 
     TrainDataParam getDefaultParam();
 
+    TrainDataParam getParam(String json);
+
 
 }

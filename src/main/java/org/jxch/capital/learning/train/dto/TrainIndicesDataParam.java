@@ -23,4 +23,21 @@ public class TrainIndicesDataParam implements TrainDataParam {
     private Boolean onlyPredictionData = false;
     private Date predictionStartDate = DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -10);
     private Date predictionEndDate = Calendar.getInstance().getTime();
+
+    @Override
+    public TrainDataParam setCode(String code) {
+        kNodeParam.setCode(code);
+        return this;
+    }
+
+    @Override
+    public TrainDataParam setStart(Date start) {
+        return setPredictionStartDate(start);
+    }
+
+    @Override
+    public TrainDataParam setEnd(Date end) {
+        return setPredictionEndDate(end);
+    }
+
 }

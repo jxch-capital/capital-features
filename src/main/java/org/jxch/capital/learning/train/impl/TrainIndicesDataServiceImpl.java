@@ -1,5 +1,6 @@
 package org.jxch.capital.learning.train.impl;
 
+import com.alibaba.fastjson2.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +67,11 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     @Override
     public TrainDataParam getDefaultParam() {
         return new TrainIndicesDataParam();
+    }
+
+    @Override
+    public TrainDataParam getParam(String json) {
+        return JSONObject.parseObject(json, TrainIndicesDataParam.class);
     }
 
 }
