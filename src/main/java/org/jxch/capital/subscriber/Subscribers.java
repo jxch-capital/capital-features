@@ -1,6 +1,7 @@
 package org.jxch.capital.subscriber;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +56,8 @@ public class Subscribers {
     @Contract("_ -> param1")
     public static SubscriberConfigDto setDefaultParamsIfIsBlank(@NonNull SubscriberConfigDto dto) {
         if (Objects.isNull(dto.getParams()) || dto.getParams().isBlank()) {
-            dto.setParams(JSONObject.toJSONString(getSubscriber(dto.getService()).getDefaultParam()));
+            dto.setParams(JSONObject.toJSONString(getSubscriber(dto.getService()).getDefaultParam(),
+                    JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNullListAsEmpty));
         }
         return dto;
     }

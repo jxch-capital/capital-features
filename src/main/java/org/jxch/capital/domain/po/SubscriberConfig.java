@@ -18,6 +18,7 @@ public class SubscriberConfig {
     @Column(unique = true)
     private String name;
     private String service;
+    @Column(columnDefinition = "TEXT")
     private String params;
     @Column(columnDefinition = "TEXT")
     private String remark;

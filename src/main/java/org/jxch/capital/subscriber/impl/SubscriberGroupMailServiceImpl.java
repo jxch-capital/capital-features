@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -41,6 +43,7 @@ public class SubscriberGroupMailServiceImpl implements SubscriberGroupService {
             UserConfigDto user = userConfigService.findById(userSubscriberDto.getUserId());
             SubscriberConfigGroupDto groupDto = subscriberConfigGroupService.findById(userSubscriberDto.getSubscriberConfigGroupId());
             List<SubscriberConfigDto> subscriberConfigs = subscriberConfigService.findById(groupDto.getSubscriberConfigIds());
+            Map<Long, SubscriberConfigDto> configMap = subscriberConfigs.stream().collect(Collectors.toMap(SubscriberConfigDto::getId, Function.identity()));
 
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -48,7 +51,8 @@ public class SubscriberGroupMailServiceImpl implements SubscriberGroupService {
             helper.setTo(user.getEmail());
             helper.setSubject(groupDto.getName());
 
-            helper.setText(subscriberConfigs.stream().map(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService()).mailHtml(config))
+            helper.setText(groupDto.getSubscriberConfigIds().stream().map(configMap::get)
+                    .map(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService()).mailHtml(config))
                     .collect(Collectors.joining("</hr>")), true);
             subscriberConfigs.forEach(config -> Subscribers.getSubscriber(MailSubscriber.class, config.getService()).addInline(config, helper));
             javaMailSender.send(message);

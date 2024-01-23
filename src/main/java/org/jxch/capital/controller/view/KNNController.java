@@ -41,7 +41,7 @@ public class KNNController {
         ModelAndView modelAndView = new ModelAndView("knn_index");
         modelAndView.addObject("knn", KNNs.getAllKNNServicesName());
         List<KNeighbor> neighbors = knnAutoService.search(
-                knnParam.getDistanceName(), knnParam.getKNodeParam(), knnParam.getNeighborSize());
+                knnParam.getDistanceName(), knnParam.getKNodeParam().setNormalized(true), knnParam.getNeighborSize());
 
         KLineAnalyzeStatistics statistics = kNodeAnalyzeService.statisticsKNN(neighbors, knnParam);
 
