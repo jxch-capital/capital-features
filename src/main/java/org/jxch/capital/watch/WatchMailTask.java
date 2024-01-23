@@ -2,7 +2,7 @@ package org.jxch.capital.watch;
 
 import org.springframework.core.Ordered;
 import org.springframework.mail.javamail.MimeMessageHelper;
-
+@Deprecated
 public interface WatchMailTask extends Ordered {
 
     boolean support(Long userId);

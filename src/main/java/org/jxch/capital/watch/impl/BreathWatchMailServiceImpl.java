@@ -18,7 +18,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Collections;
-
+@Deprecated
 @Slf4j
 @Service
 @RequiredArgsConstructor

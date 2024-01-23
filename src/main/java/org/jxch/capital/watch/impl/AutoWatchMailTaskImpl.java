@@ -22,6 +22,7 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class AutoWatchMailTaskImpl implements ScheduledWatchTask {
     @Resource

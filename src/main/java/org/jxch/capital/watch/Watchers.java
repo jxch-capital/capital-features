@@ -4,7 +4,7 @@ import org.jxch.capital.utils.AppContextHolder;
 
 import java.util.List;
 import java.util.Objects;
-
+@Deprecated
 public class Watchers {
 
     public static List<WatchMailTask> allWatchMailTask() {

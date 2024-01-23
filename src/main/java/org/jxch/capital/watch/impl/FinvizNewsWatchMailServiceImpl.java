@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Collections;
-
+@Deprecated
 @Slf4j
 @Service
 @RequiredArgsConstructor
