@@ -35,7 +35,7 @@ public class TrainIndicesDataParam implements TrainDataParam {
     @Builder.Default
     private List<ServiceWrapper> filterWrappers = new ArrayList<>();
     @Builder.Default
-    private ServiceWrapper balancerWrapper = null;
+    private List<ServiceWrapper> balancerWrappers = null;
 
     @Override
     public TrainDataParam setCode(String code) {

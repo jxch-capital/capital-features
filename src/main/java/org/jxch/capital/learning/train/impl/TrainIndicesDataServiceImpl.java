@@ -22,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     private final AutoTrainDataSignalFilterPreprocessor autoTrainDataSignalFilterPreprocessor;
+    private final AutoTrainDataSignalBalancePreProcessor autoTrainDataSignalBalancePreProcessor;
     private final IndicesCombinationService indicesCombinationService;
     private final KNodeService kNodeService;
 
@@ -52,6 +53,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         List<KNodeTrain> kNodeTrains = kNodes.stream().map(k ->
                 KNodeTrain.builder().code(k.getCode()).kNode(k).futureNum(finalKNodeParam.getFutureNum()).build()).toList();
         kNodeTrains = autoTrainDataSignalFilterPreprocessor.kNodeTrainsPostProcess(kNodeTrains, filterWrappers);
+        kNodeTrains = autoTrainDataSignalBalancePreProcessor.kNodeTrainsPostProcess(kNodeTrains, trainIndicesDataParam.getBalancerWrappers());
 
         KNodeTrains theKNodeTrains = KNodeTrains.builder().kNodes(kNodeTrains).build().feature(kNodeParam.getIndicatorNames());
         return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(theKNodeTrains, trainIndicesDataParam.getSimplify())).build();
@@ -85,7 +87,8 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     @Override
     public TrainDataParam getDefaultParam() {
         return new TrainIndicesDataParam()
-                .setFilterWrappers(autoTrainDataSignalFilterPreprocessor.allPreprocessorWrappers());
+                .setFilterWrappers(autoTrainDataSignalFilterPreprocessor.allPreprocessorWrappers())
+                .setBalancerWrappers(autoTrainDataSignalBalancePreProcessor.allServiceWrapper());
     }
 
     @Override
