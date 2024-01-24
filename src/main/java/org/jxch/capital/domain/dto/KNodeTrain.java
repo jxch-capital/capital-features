@@ -30,6 +30,7 @@ public class KNodeTrain {
     private boolean down = false;
     private boolean flat = false;
     private double futurePercent;
+    private boolean isReset = false;
 
     @Builder
     public KNodeTrain(String code, @NonNull KNode kNode, int futureNum) {
@@ -52,6 +53,20 @@ public class KNodeTrain {
 
         this.futurePercent = (this.kLines.get(futureIndex).getClose() - this.kLines.get(this.endIndex).getClose())
                 / this.kLines.get(this.endIndex).getClose() * 100;
+    }
+
+    public KNodeTrain resetUpToFlat() {
+        up = false;
+        flat = true;
+        isReset = true;
+        return this;
+    }
+
+    public KNodeTrain resetDownToFlat() {
+        down = false;
+        flat = true;
+        isReset = true;
+        return this;
     }
 
     public double[][] getIndices() {

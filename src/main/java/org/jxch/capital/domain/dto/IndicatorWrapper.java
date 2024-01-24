@@ -19,6 +19,8 @@ import java.util.function.Function;
 public class IndicatorWrapper {
     private String name;
     private Function<BarSeries, Indicator<Num>> indicatorFunc;
+    @Builder.Default
+    private Boolean immutable = false;
 
     public Indicator<Num> getIndicator(BarSeries barSeries) {
         return indicatorFunc.apply(barSeries);

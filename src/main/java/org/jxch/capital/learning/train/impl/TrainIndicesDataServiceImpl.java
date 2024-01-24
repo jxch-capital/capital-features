@@ -1,7 +1,6 @@
 package org.jxch.capital.learning.train.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.*;
@@ -12,6 +11,7 @@ import org.jxch.capital.learning.train.dto.TrainIndicesDataParam;
 import org.jxch.capital.learning.train.dto.TrainIndicesDataRes;
 import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.KNodeService;
+import org.jxch.capital.support.ServiceWrapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
+    private final AutoTrainDataSignalFilterPreprocessor autoTrainDataSignalFilterPreprocessor;
     private final IndicesCombinationService indicesCombinationService;
     private final KNodeService kNodeService;
 
@@ -33,22 +34,27 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         return kNodeTrains;
     }
 
-    public KNodeTrains trainData(@NonNull KNodeParam kNodeParam) {
+    @Override
+    public TrainDataRes trainData(TrainDataParam param) {
+        TrainIndicesDataParam trainIndicesDataParam = (TrainIndicesDataParam) param;
+        KNodeParam kNodeParam = trainIndicesDataParam.getKNodeParam();
         if (kNodeParam.hasIndicesComId()) {
             List<IndicatorWrapper> indicatorWrapper = indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId());
             kNodeParam.addIndicators(indicatorWrapper);
         }
-        List<KNode> kNodes = kNodeService.comparison(kNodeParam);
-        List<KNodeTrain> kNodeTrains = kNodes.stream().map(k ->
-                KNodeTrain.builder().code(k.getCode()).kNode(k).futureNum(kNodeParam.getFutureNum()).build()).toList();
-        return KNodeTrains.builder().kNodes(kNodeTrains).build();
-    }
 
-    @Override
-    public TrainDataRes trainData(TrainDataParam param) {
-        TrainIndicesDataParam trainIndicesDataParam = (TrainIndicesDataParam) param;
-        KNodeTrains kNodeTrains = trainData(trainIndicesDataParam.getKNodeParam());
-        return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(kNodeTrains, trainIndicesDataParam.getSimplify())).build();
+        List<ServiceWrapper> filterWrappers = trainIndicesDataParam.getFilterWrappers();
+        kNodeParam = autoTrainDataSignalFilterPreprocessor.kNodeParamPreprocess(kNodeParam, filterWrappers);
+        List<KNode> kNodes = kNodeService.comparison(kNodeParam);
+        kNodes = autoTrainDataSignalFilterPreprocessor.kNodesPostProcess(kNodes, filterWrappers);
+
+        KNodeParam finalKNodeParam = kNodeParam;
+        List<KNodeTrain> kNodeTrains = kNodes.stream().map(k ->
+                KNodeTrain.builder().code(k.getCode()).kNode(k).futureNum(finalKNodeParam.getFutureNum()).build()).toList();
+        kNodeTrains = autoTrainDataSignalFilterPreprocessor.kNodeTrainsPostProcess(kNodeTrains, filterWrappers);
+
+        KNodeTrains theKNodeTrains = KNodeTrains.builder().kNodes(kNodeTrains).build().feature(kNodeParam.getIndicatorNames());
+        return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(theKNodeTrains, trainIndicesDataParam.getSimplify())).build();
     }
 
     @Override
@@ -78,7 +84,8 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
 
     @Override
     public TrainDataParam getDefaultParam() {
-        return new TrainIndicesDataParam();
+        return new TrainIndicesDataParam()
+                .setFilterWrappers(autoTrainDataSignalFilterPreprocessor.allPreprocessorWrappers());
     }
 
     @Override

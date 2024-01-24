@@ -1,5 +1,6 @@
 package org.jxch.capital.domain.dto;
 
+import com.alibaba.fastjson2.JSONObject;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,9 +30,21 @@ public class KNodeTrains {
         this.signals3 = this.kNodes.stream().mapToInt(KNodeTrain::signal3).toArray();
     }
 
-    public void feature(Function<KLine, KLineFeatures> featureFunc) {
+    public KNodeTrains feature(Function<KLine, KLineFeatures> featureFunc) {
         this.features = this.kNodes.stream().map(train -> train.getFeatures(featureFunc)).toArray(double[][][]::new);
         this.featuresT = this.kNodes.stream().map(train -> train.getFeaturesT(featureFunc)).toArray(double[][][]::new);
+        return this;
+    }
+
+    public KNodeTrains feature(List<String> indicesNames) {
+        return feature(kLine -> {
+            KLineIndices kLineIndices = (KLineIndices) kLine;
+            KLineFeatures kLineFeatures = KLineFeatures.buildKLineFeatures(kLineIndices).setFeatures(kLineIndices.get(indicesNames));
+            if (kLineFeatures.isHasNull()) {
+                throw new IllegalArgumentException("特征数据中存在Null: " + JSONObject.toJSONString(kLineFeatures));
+            }
+            return kLineFeatures;
+        });
     }
 
 }

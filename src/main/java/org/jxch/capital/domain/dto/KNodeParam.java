@@ -1,5 +1,7 @@
 package org.jxch.capital.domain.dto;
 
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,6 +49,16 @@ public class KNodeParam implements Cloneable {
     public KNodeParam addIndicators(List<IndicatorWrapper> wrappers) {
         this.indicatorWrappers.addAll(wrappers);
         return this;
+    }
+
+    public Boolean hasIndicator(String name) {
+        return indicatorWrappers.stream().anyMatch(indicatorWrapper -> Objects.equals(indicatorWrapper.getName(), name));
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public List<String> getIndicatorNames() {
+        return indicatorWrappers.stream().map(IndicatorWrapper::getName).toList();
     }
 
     public boolean hasIndicatorWrappers() {

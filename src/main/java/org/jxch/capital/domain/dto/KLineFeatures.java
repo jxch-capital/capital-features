@@ -2,6 +2,7 @@ package org.jxch.capital.domain.dto;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +21,14 @@ public class KLineFeatures extends KLine {
 
     @Getter
     private boolean hasNull = false;
+
+    public KLineFeatures setFeatures(@NotNull List<Double> features) {
+        this.features = features;
+        if (features.contains(null)) {
+            hasNull = true;
+        }
+        return this;
+    }
 
     public int getFeaturesNum(){
         return features.size();
@@ -47,7 +56,7 @@ public class KLineFeatures extends KLine {
         return features.get(index);
     }
 
-    private static KLineFeatures buildKLineFeatures(@NonNull KLineIndices indices) {
+    public static KLineFeatures buildKLineFeatures(@NonNull KLineIndices indices) {
         return (KLineFeatures) KLineFeatures.builder().build()
                 .setDate(indices.getDate())
                 .setClose(indices.getClose())

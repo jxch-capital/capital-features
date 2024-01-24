@@ -45,13 +45,18 @@ public class IndexServiceImpl implements IndexService {
 
         indicators.forEach(wrapper -> {
             Indicator<Num> indicator = wrapper.getIndicator(barSeries);
-            List<Double> values = indicator.stream().map(Num::doubleValue).toList();
-            Stats stats = Stats.of(values);
-            values = values.stream().map(value -> (value - stats.min()) / (stats.max() - stats.min())).toList();
+            if (wrapper.getImmutable()) {
+                IntStream.range(0, kLineIndices.size())
+                        .forEach(i -> kLineIndices.get(i).setIndex(wrapper.getName(), indicator.getValue(i).doubleValue()));
+            } else {
+                List<Double> values = indicator.stream().map(Num::doubleValue).toList();
+                Stats stats = Stats.of(values);
+                values = values.stream().map(value -> (value - stats.min()) / (stats.max() - stats.min())).toList();
 
-            List<Double> finalValues = values;
-            IntStream.range(0, kLineIndices.size())
-                    .forEach(i -> kLineIndices.get(i).setIndex(wrapper.getName(), finalValues.get(i)));
+                List<Double> finalValues = values;
+                IntStream.range(0, kLineIndices.size())
+                        .forEach(i -> kLineIndices.get(i).setIndex(wrapper.getName(), finalValues.get(i)));
+            }
         });
 
         return kLineIndices;
