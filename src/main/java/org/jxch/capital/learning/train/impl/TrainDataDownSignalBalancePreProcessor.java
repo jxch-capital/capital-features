@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KNodeTrain;
 import org.jxch.capital.learning.train.TrainDataSignalBalancePreProcessor;
 import org.jxch.capital.learning.train.dto.TrainDataDownSignalBalanceParam;
-import org.jxch.capital.learning.train.dto.TrainDataUpSignalBalanceParam;
 import org.jxch.capital.support.ServiceWrapper;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ public class TrainDataDownSignalBalancePreProcessor  implements TrainDataSignalB
     @Override
     public List<KNodeTrain> kNodeTrainsPostProcess(@NotNull List<KNodeTrain> kNodeTrains, @NotNull ServiceWrapper serviceWrapper) {
         kNodeTrains = kNodeTrains.stream().filter(kNodeTrain -> !kNodeTrain.isReset()).collect(Collectors.toList());
-        var param = serviceWrapper.getParamObj(TrainDataUpSignalBalanceParam.class);
+        var param = serviceWrapper.getParamObj(TrainDataDownSignalBalanceParam.class);
         int down = kNodeTrains.stream().mapToInt(KNodeTrain::downSignal).sum();
 
         if ((double) down / kNodeTrains.size() < 1 - param.getThreshold()) {
