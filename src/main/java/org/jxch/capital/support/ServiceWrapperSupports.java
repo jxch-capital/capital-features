@@ -23,7 +23,8 @@ public class ServiceWrapperSupports {
     @PostConstruct
     public void init() {
         List<String> allServiceNameHold = appContextHolder.allServiceNameHold(ServiceWrapperSupport.class);
-        if (!Objects.equals(allServiceNameHold.stream().distinct().count(), allServiceNameHold.size())) {
+        long count = allServiceNameHold.stream().distinct().count();
+        if (!Objects.equals((int) count, allServiceNameHold.size())) {
             String duplicateServiceNames = allServiceNameHold.stream()
                     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                     .entrySet().stream()

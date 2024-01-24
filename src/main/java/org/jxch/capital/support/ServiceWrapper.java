@@ -18,7 +18,7 @@ import org.jxch.capital.utils.AppContextHolder;
 @Accessors(chain = true)
 public class ServiceWrapper {
     private String name;
-    private String param;
+    private Object param;
 
     @JsonIgnore
     @JSONField(serialize = false)
@@ -34,14 +34,14 @@ public class ServiceWrapper {
 
     @JsonIgnore
     @JSONField(serialize = false)
-    public Object getParam() {
-        return JSONObject.parseObject(param, getService().getDefaultParam().getClass());
+    public Object getParamObj() {
+        return JSONObject.parseObject(JSONObject.toJSONString(param), getService().getDefaultParam().getClass());
     }
 
     @JsonIgnore
     @JSONField(serialize = false)
-    public <T> T getParam(@NotNull Class<T> clazz) {
-        return clazz.cast(getParam());
+    public <T> T getParamObj(@NotNull Class<T> clazz) {
+        return clazz.cast(getParamObj());
     }
 
 }

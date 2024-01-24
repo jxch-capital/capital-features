@@ -21,7 +21,7 @@ public class TrainDataUpSignalBalancePreProcessor implements TrainDataSignalBala
     @Override
     public List<KNodeTrain> kNodeTrainsPostProcess(@NotNull List<KNodeTrain> kNodeTrains, @NotNull ServiceWrapper serviceWrapper) {
         kNodeTrains = kNodeTrains.stream().filter(kNodeTrain -> !kNodeTrain.isReset()).collect(Collectors.toList());
-        var param = serviceWrapper.getParam(TrainDataUpSignalBalanceParam.class);
+        var param = serviceWrapper.getParamObj(TrainDataUpSignalBalanceParam.class);
         int up = kNodeTrains.stream().mapToInt(KNodeTrain::upSignal).sum();
 
         if ((double) up / kNodeTrains.size() < 1 - param.getThreshold()) {

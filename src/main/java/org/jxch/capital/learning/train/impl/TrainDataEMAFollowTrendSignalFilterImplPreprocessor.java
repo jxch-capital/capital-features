@@ -25,7 +25,7 @@ public class TrainDataEMAFollowTrendSignalFilterImplPreprocessor implements Trai
 
     @Override
     public KNodeParam kNodeParamPreprocess(@NotNull KNodeParam kNodeParam, @NotNull ServiceWrapper serviceWrapper) {
-        var param = serviceWrapper.getParam(TrainDataEMAFollowTrendSignalFilterParam.class);
+        var param = serviceWrapper.getParamObj(TrainDataEMAFollowTrendSignalFilterParam.class);
         String indicatorName = PREFIX + param.getLength();
         if (!kNodeParam.hasIndicator(indicatorName)) {
             return kNodeParam.addIndicator(IndicatorWrapper.builder().name(indicatorName).immutable(true)
@@ -36,7 +36,7 @@ public class TrainDataEMAFollowTrendSignalFilterImplPreprocessor implements Trai
 
     @Override
     public List<KNodeTrain> kNodeTrainsPostProcess(@NotNull List<KNodeTrain> kNodeTrains, @NotNull ServiceWrapper serviceWrapper) {
-        var param = serviceWrapper.getParam(TrainDataEMAFollowTrendSignalFilterParam.class);
+        var param = serviceWrapper.getParamObj(TrainDataEMAFollowTrendSignalFilterParam.class);
         return kNodeTrains.stream().peek(kNodeTrain -> {
             if (!kNodeTrain.isFlat()) {
                 KLineIndices kLineIndices = (KLineIndices) CollU.last(kNodeTrain.getKLines());

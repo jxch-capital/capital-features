@@ -11,7 +11,7 @@ public interface ServiceWrapperSupport extends ServiceNameSupport, ServiceParamS
     }
 
     default ServiceWrapper getDefaultServiceWrapper() {
-        return ServiceWrapper.builder().name(name()).param(getDefaultParamJson()).build();
+        return ServiceWrapper.builder().name(name()).param(getDefaultParam()).build();
     }
 
 }

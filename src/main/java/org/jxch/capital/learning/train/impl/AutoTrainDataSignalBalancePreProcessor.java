@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Primary
@@ -20,7 +21,8 @@ public class AutoTrainDataSignalBalancePreProcessor implements TrainDataSignalBa
 
     @Override
     public List<ServiceWrapper> allServiceWrapper() {
-        return allServiceWrapper(TrainDataSignalBalancePreProcessor.class);
+        return allServiceWrapper(TrainDataSignalBalancePreProcessor.class).stream()
+                .filter(serviceWrapper -> !Objects.equals(serviceWrapper.getName(), name())).toList();
     }
 
     public List<KNodeTrain> kNodeTrainsPostProcess(List<KNodeTrain> kNodeTrains, @NotNull List<ServiceWrapper> serviceWrappers) {

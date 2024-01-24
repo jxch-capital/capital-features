@@ -23,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TrainIndicesDataParam implements TrainDataParam {
     @Builder.Default
-    private KNodeParam kNodeParam = new KNodeParam();
+    private KNodeParam kNodeParam = new KNodeParam().setNormalized(true).setMaxLength(100);
     @Builder.Default
     private Boolean onlyPredictionData = false;
     @Builder.Default

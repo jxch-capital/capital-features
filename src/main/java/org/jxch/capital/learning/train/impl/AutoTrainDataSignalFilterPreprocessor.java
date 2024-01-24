@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Primary
@@ -25,7 +26,8 @@ public class AutoTrainDataSignalFilterPreprocessor implements TrainDataSignalFil
     }
 
     public List<ServiceWrapper> allPreprocessorWrappers() {
-        return allPreprocessor().stream().map(TrainDataSignalFilterPreprocessor::getDefaultServiceWrapper).toList();
+        return allPreprocessor().stream().map(TrainDataSignalFilterPreprocessor::getDefaultServiceWrapper)
+                .filter(serviceWrapper -> !Objects.equals(serviceWrapper.getName(), name())).toList();
     }
 
     public KNodeParam kNodeParamPreprocess(KNodeParam kNodeParam, @NotNull List<ServiceWrapper> serviceWrappers) {

@@ -39,6 +39,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     public TrainDataRes trainData(TrainDataParam param) {
         TrainIndicesDataParam trainIndicesDataParam = (TrainIndicesDataParam) param;
         KNodeParam kNodeParam = trainIndicesDataParam.getKNodeParam();
+        kNodeParam.setSize(kNodeParam.getSize() + kNodeParam.getFutureNum());
         if (kNodeParam.hasIndicesComId()) {
             List<IndicatorWrapper> indicatorWrapper = indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId());
             kNodeParam.addIndicators(indicatorWrapper);
@@ -63,6 +64,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     public TrainDataRes predictionData(TrainDataParam param) {
         TrainIndicesDataParam indicesDataParam = (TrainIndicesDataParam) param;
         KNodeParam kNodeParam = indicesDataParam.getKNodeParam();
+        kNodeParam.setSize(kNodeParam.getSize() + kNodeParam.getFutureNum());
         if (kNodeParam.hasIndicesComId()) {
             kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
         }
