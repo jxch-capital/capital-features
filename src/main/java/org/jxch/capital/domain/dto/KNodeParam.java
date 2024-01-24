@@ -7,10 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.stock.IntervalEnum;
 
 import java.util.*;
 
+@Slf4j
 @Data
 @Builder
 @NoArgsConstructor
@@ -41,13 +44,17 @@ public class KNodeParam implements Cloneable {
     @Builder.Default
     private int futureNum = 8;
 
-    public KNodeParam addIndicator(IndicatorWrapper indicatorWrapper) {
-        this.indicatorWrappers.add(indicatorWrapper);
+    public KNodeParam addIndicator(@NotNull IndicatorWrapper indicatorWrapper) {
+        if (!hasIndicator(indicatorWrapper.getName())) {
+            this.indicatorWrappers.add(indicatorWrapper);
+        } else {
+            log.warn("{}指标名称已经存在，将忽略，请检查一下，如果只是名称相同请改变名称后再添加", indicatorWrapper.getName());
+        }
         return this;
     }
 
-    public KNodeParam addIndicators(List<IndicatorWrapper> wrappers) {
-        this.indicatorWrappers.addAll(wrappers);
+    public KNodeParam addIndicators(@NotNull List<IndicatorWrapper> wrappers) {
+        wrappers.forEach(this::addIndicator);
         return this;
     }
 

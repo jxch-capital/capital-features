@@ -40,7 +40,7 @@ public class AutoTrainDataSignalFilterPreprocessor implements TrainDataSignalFil
     @Override
     public KNodeParam kNodeParamPreprocess(KNodeParam kNodeParam, ServiceWrapper serviceWrapper) {
         for (TrainDataSignalFilterPreprocessor preprocessor : allPreprocessor()) {
-            if (support(serviceWrapper)) {
+            if (preprocessor.support(serviceWrapper)) {
                 kNodeParam = preprocessor.kNodeParamPreprocess(kNodeParam, serviceWrapper);
             }
         }
@@ -57,7 +57,7 @@ public class AutoTrainDataSignalFilterPreprocessor implements TrainDataSignalFil
     @Override
     public List<KNode> kNodesPostProcess(List<KNode> kNodes, ServiceWrapper serviceWrapper) {
         for (TrainDataSignalFilterPreprocessor preprocessor : allPreprocessor()) {
-            if (support(serviceWrapper)) {
+            if (preprocessor.support(serviceWrapper)) {
                 kNodes = preprocessor.kNodesPostProcess(kNodes, serviceWrapper);
             }
         }
@@ -74,7 +74,7 @@ public class AutoTrainDataSignalFilterPreprocessor implements TrainDataSignalFil
     @Override
     public List<KNodeTrain> kNodeTrainsPostProcess(List<KNodeTrain> kNodeTrains, ServiceWrapper serviceWrapper) {
         for (TrainDataSignalFilterPreprocessor preprocessor : allPreprocessor()) {
-            if (support(serviceWrapper)) {
+            if (preprocessor.support(serviceWrapper)) {
                 kNodeTrains = preprocessor.kNodeTrainsPostProcess(kNodeTrains, serviceWrapper);
             }
         }

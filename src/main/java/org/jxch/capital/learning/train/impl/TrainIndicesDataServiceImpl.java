@@ -40,9 +40,11 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         TrainIndicesDataParam trainIndicesDataParam = (TrainIndicesDataParam) param;
         KNodeParam kNodeParam = trainIndicesDataParam.getKNodeParam();
         kNodeParam.setSize(kNodeParam.getSize() + kNodeParam.getFutureNum());
+        List<String> indicatorNames = new ArrayList<>();
         if (kNodeParam.hasIndicesComId()) {
             List<IndicatorWrapper> indicatorWrapper = indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId());
             kNodeParam.addIndicators(indicatorWrapper);
+            indicatorNames.addAll(kNodeParam.getIndicatorNames());
         }
 
         List<ServiceWrapper> filterWrappers = trainIndicesDataParam.getFilterWrappers();
@@ -56,7 +58,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         kNodeTrains = autoTrainDataSignalFilterPreprocessor.kNodeTrainsPostProcess(kNodeTrains, filterWrappers);
         kNodeTrains = autoTrainDataSignalBalancePreProcessor.kNodeTrainsPostProcess(kNodeTrains, trainIndicesDataParam.getBalancerWrappers());
 
-        KNodeTrains theKNodeTrains = KNodeTrains.builder().kNodes(kNodeTrains).build().feature(kNodeParam.getIndicatorNames());
+        KNodeTrains theKNodeTrains = KNodeTrains.builder().kNodes(kNodeTrains).build().feature(indicatorNames);
         return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(theKNodeTrains, trainIndicesDataParam.getSimplify())).build();
     }
 
@@ -64,9 +66,10 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     public TrainDataRes predictionData(TrainDataParam param) {
         TrainIndicesDataParam indicesDataParam = (TrainIndicesDataParam) param;
         KNodeParam kNodeParam = indicesDataParam.getKNodeParam();
-        kNodeParam.setSize(kNodeParam.getSize() + kNodeParam.getFutureNum());
+        List<String> indicatorNames = new ArrayList<>();
         if (kNodeParam.hasIndicesComId()) {
             kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
+            indicatorNames.addAll(kNodeParam.getIndicatorNames());
         }
 
         List<KNode> kNodes = new ArrayList<>();
@@ -77,8 +80,8 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         }
 
         List<KNodeTrain> kNodeTrains = kNodes.stream().map(kNode -> KNodeTrain.builder().code(kNode.getCode()).kNode(kNode).futureNum(0).build()).toList();
-
-        return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(KNodeTrains.builder().kNodes(kNodeTrains).build(), indicesDataParam.getSimplify())).build();
+        KNodeTrains theKNodeTrains = KNodeTrains.builder().kNodes(kNodeTrains).build().feature(indicatorNames);
+        return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(theKNodeTrains, indicesDataParam.getSimplify())).build();
     }
 
     @Override

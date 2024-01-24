@@ -40,7 +40,7 @@ public class KNodeTrain {
         this.futureIndex = this.kLines.size() - 1;
         this.futureDate = this.kLines.get(this.futureIndex).getDate();
         this.startDate = this.kLines.get(0).getDate();
-        this.endIndex = this.kLines.size() - 1 - this.futureNum;
+        this.endIndex = this.futureIndex - this.futureNum;
         this.endDate = this.kLines.get(this.endIndex).getDate();
 
         if (this.kLines.get(this.futureIndex).getLow() > this.kLines.get(this.endIndex).getHigh()) {
@@ -70,7 +70,7 @@ public class KNodeTrain {
     }
 
     public double[][] getIndices() {
-        return this.kLines.subList(startIndex, endIndex).stream().map(kLine -> {
+        return this.kLines.subList(startIndex, endIndex + 1).stream().map(kLine -> {
             KLineIndices indices = (KLineIndices) kLine;
             return indices.getIndices().values().stream().mapToDouble(v -> v).toArray();
         }).toArray(double[][]::new);
@@ -82,7 +82,7 @@ public class KNodeTrain {
 
     // todo 相关特征的转变应该属于KLineFeaturesDto的职责
     public double[][] getFeatures(Function<KLine, KLineFeatures> featureFunc) {
-        return this.kLines.subList(startIndex, endIndex).stream().map(featureFunc).map(KLineFeatures::getFeatures)
+        return this.kLines.subList(startIndex, endIndex + 1).stream().map(featureFunc).map(KLineFeatures::getFeatures)
                 .map(features -> features.stream().mapToDouble(v -> v).toArray())
                 .toArray(double[][]::new);
     }
