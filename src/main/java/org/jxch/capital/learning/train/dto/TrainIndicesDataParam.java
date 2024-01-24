@@ -19,10 +19,16 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainIndicesDataParam implements TrainDataParam {
+    @Builder.Default
     private KNodeParam kNodeParam = new KNodeParam();
+    @Builder.Default
     private Boolean onlyPredictionData = false;
+    @Builder.Default
     private Date predictionStartDate = DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -10);
+    @Builder.Default
     private Date predictionEndDate = Calendar.getInstance().getTime();
+    @Builder.Default
+    private Boolean simplify = true;
 
     @Override
     public TrainDataParam setCode(String code) {

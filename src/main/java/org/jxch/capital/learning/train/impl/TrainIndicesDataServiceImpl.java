@@ -24,6 +24,15 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     private final IndicesCombinationService indicesCombinationService;
     private final KNodeService kNodeService;
 
+    private KNodeTrains setNullIfSimplify(KNodeTrains kNodeTrains, boolean simplify) {
+        if (simplify) {
+            kNodeTrains.setKNodes(null);
+            kNodeTrains.setFeatures(null);
+            kNodeTrains.setSignals3(null);
+        }
+        return kNodeTrains;
+    }
+
     public KNodeTrains trainData(@NonNull KNodeParam kNodeParam) {
         if (kNodeParam.hasIndicesComId()) {
             List<IndicatorWrapper> indicatorWrapper = indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId());
@@ -37,7 +46,9 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
 
     @Override
     public TrainDataRes trainData(TrainDataParam param) {
-        return TrainIndicesDataRes.builder().kNodeTrains(trainData(((TrainIndicesDataParam) param).getKNodeParam())).build();
+        TrainIndicesDataParam trainIndicesDataParam = (TrainIndicesDataParam) param;
+        KNodeTrains kNodeTrains = trainData(trainIndicesDataParam.getKNodeParam());
+        return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(kNodeTrains, trainIndicesDataParam.getSimplify())).build();
     }
 
     @Override
@@ -56,7 +67,8 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         }
 
         List<KNodeTrain> kNodeTrains = kNodes.stream().map(kNode -> KNodeTrain.builder().code(kNode.getCode()).kNode(kNode).futureNum(0).build()).toList();
-        return TrainIndicesDataRes.builder().kNodeTrains(KNodeTrains.builder().kNodes(kNodeTrains).build()).build();
+
+        return TrainIndicesDataRes.builder().kNodeTrains(setNullIfSimplify(KNodeTrains.builder().kNodes(kNodeTrains).build(), indicesDataParam.getSimplify())).build();
     }
 
     @Override
