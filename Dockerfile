@@ -16,6 +16,9 @@ ENV PASSWORD=password
 ENV GEMINI_KEY=gemini_key
 ENV WEB_DRIVER=selenium-hub:4444
 ENV TRANS_URL=http://jiangxicheng.site:15500/trans
+ENV MINIO_URL=http://jiangxicheng.site:9000
+ENV MINIO_ACCESS_KEY=minio
+ENV MINIO_SECRET_KEY=minio
 
 VOLUME /capital/features
 ADD target/capital-features.jar app.jar

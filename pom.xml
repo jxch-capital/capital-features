@@ -38,6 +38,7 @@
         <jsoup.version>1.17.2</jsoup.version>
         <selenium.version>4.16.1</selenium.version>
         <httpclient5.version>5.3</httpclient5.version>
+        <minio.version>8.5.7</minio.version>
     </properties>
 
     <dependencies>
@@ -87,6 +88,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.ejml/ejml-all -->
         <dependency>

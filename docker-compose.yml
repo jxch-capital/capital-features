@@ -27,6 +27,9 @@ services:
       USERNAME: web_admin_username
       PASSWORD: web_admin_password
       GEMINI_KEY: gemini_api_key
+      MINIO_URL: minio
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio
 
 
 volumes:
