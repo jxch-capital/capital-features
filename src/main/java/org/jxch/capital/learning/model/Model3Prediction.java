@@ -6,7 +6,7 @@ import java.io.File;
 
 public interface Model3Prediction {
 
-    double[] prediction(double[][] x, File modelFile, Model3MetaData metaData);
+    double[] prediction(double[][][] x, File modelFile, Model3MetaData metaData);
 
 
 }

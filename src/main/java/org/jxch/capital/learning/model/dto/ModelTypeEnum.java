@@ -9,7 +9,8 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 public enum ModelTypeEnum {
-    TENSORFLOW_MODEL("tensorflow_model"),
+    TENSORFLOW_MODEL_H5("tensorflow_model_h5"),
+    TENSORFLOW_MODEL_TF("tensorflow_model_tf"),
     TENSORFLOW_SCALER("tensorflow_scaler");
     private final String name;
 

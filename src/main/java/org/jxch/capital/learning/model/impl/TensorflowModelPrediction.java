@@ -24,7 +24,7 @@ public class TensorflowModelPrediction implements Model3Prediction {
     private final TensorflowModel3Management tensorflowModel3Management;
 
     @Override
-    public double[] prediction(double[][] x, @NotNull File modelFile, Model3MetaData metaData) {
+    public double[] prediction(double[][][] x, @NotNull File modelFile, Model3MetaData metaData) {
         try (SavedModelBundle modelBundle = SavedModelBundle.load(modelFile.getAbsolutePath(), "serve");
              Session session = modelBundle.session();
              Tensor inputTensor = TFloat32.tensorOf(StdArrays.ndCopyOf(x).shape());
