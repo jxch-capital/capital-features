@@ -7,12 +7,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.jxch.capital.io.FileUploadService;
+import org.jxch.capital.config.MinioConfig;
+import org.jxch.capital.io.FileManagementService;
 import org.jxch.capital.io.dto.FileMetaData;
+import org.jxch.capital.utils.FileU;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,9 +31,11 @@ import java.util.stream.StreamSupport;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class MinioFilUploadService implements FileUploadService {
+public class MinioFilManagementService implements FileManagementService {
     private final static String META_SUFFIX = "X-Amz-Meta-";
     private final MinioClient minioClient;
+    private final MinioConfig minioConfig;
+
 
     public Map<String, String> toMinioMetaData(@NotNull Map<String, String> metaData) {
         return metaData.entrySet().stream().collect(Collectors.toMap(entry -> META_SUFFIX + entry.getKey(), Map.Entry::getValue));
@@ -121,6 +130,21 @@ public class MinioFilUploadService implements FileUploadService {
     @SneakyThrows
     public void delFile(String path, String name) {
         minioClient.removeObject(RemoveObjectArgs.builder().bucket(path).object(name).build());
+    }
+
+    @Override
+    @SneakyThrows
+    public File getFile(String path, String name) {
+        try (InputStream stream = minioClient.getObject(GetObjectArgs.builder().bucket(path).object(name).build())) {
+            Path dir = Path.of(minioConfig.getLocalPath()).resolve(path);
+            FileU.mkdir(dir.toAbsolutePath().toString());
+            File file = dir.resolve(name).toFile();
+
+            Files.copy(stream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            log.info("文件从Minio下载成功，保存到: {}", file.toPath());
+
+            return file;
+        }
     }
 
 }

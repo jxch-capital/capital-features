@@ -31,6 +31,11 @@ public class Model3MetaData {
     private String remark;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date uploadtime = Calendar.getInstance().getTime();
+    private String type = ModelTypeEnum.TENSORFLOW_MODEL.getName();
+    private Integer shapex1 = 5;
+    private Integer shapex2 = 40;
+    private String inputname = "input_1";
+    private String outputname = "dense_7";
 
 
     @JsonIgnore

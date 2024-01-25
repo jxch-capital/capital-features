@@ -3,12 +3,13 @@ package org.jxch.capital.learning.model.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.jxch.capital.io.impl.MinioFilUploadService;
+import org.jxch.capital.io.impl.MinioFilManagementService;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.dto.Model3MetaData;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @Slf4j
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TensorflowModel3Management implements Model3Management {
     private final static String BUCKEt_NAME = "capital-features-model-tensorflow-train";
-    private final MinioFilUploadService minioFilUploadService;
+    private final MinioFilManagementService minioFilUploadService;
 
     @Override
     public void uploadModel(MultipartFile file, @NotNull Model3MetaData metaData) {
@@ -42,6 +43,11 @@ public class TensorflowModel3Management implements Model3Management {
     @Override
     public void delModel(String name) {
         minioFilUploadService.delFile(BUCKEt_NAME, name);
+    }
+
+    @Override
+    public File getModelFile(String name) {
+        return minioFilUploadService.getFile(BUCKEt_NAME, name);
     }
 
 }

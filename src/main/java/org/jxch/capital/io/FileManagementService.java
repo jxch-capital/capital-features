@@ -3,9 +3,10 @@ package org.jxch.capital.io;
 import org.jxch.capital.io.dto.FileMetaData;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
-public interface FileUploadService {
+public interface FileManagementService {
 
     String getFullPath(String path, String name);
 
@@ -20,5 +21,7 @@ public interface FileUploadService {
     FileMetaData getFileMetaData(String path, String name);
 
     void delFile(String path, String name);
+
+    File getFile(String path, String name);
 
 }
