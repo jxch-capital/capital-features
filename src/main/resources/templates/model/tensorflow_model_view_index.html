@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tensorflow模型管理</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+</head>
+<body>
+<form th:action="@{/model_view/upload}" method="post" enctype="multipart/form-data">
+    <label for="metaData">元数据：</label>
+    <input type="text" id="metaData" name="metaDataJson" th:value="${metaDataJson}" style="width: 1000px"/>
+
+    <table>
+        <tr>
+            <td>名称</td>
+            <td>训练配置</td>
+            <td>备注</td>
+            <td>上传时间</td>
+            <td>更新时间</td>
+            <td>操作</td>
+        </tr>
+        <tr>
+            <td>Auto</td>
+            <td>上传后再修改</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <input type="submit" value="Upload"/>
+                <input type="file" name="file" accept=".h5"/>
+            </td>
+        </tr>
+        <tr th:each="item,iter: ${all_model}">
+            <td th:text="${item.filename}"></td>
+            <td>
+                <label th:for="'trainconfigid' + ${iter.index}">
+                    <select th:id="'groupService' + ${iter.index}" disabled>
+                        <option th:each="itemOp: ${all_train_configs}" th:value="${itemOp.id}" th:text="${itemOp.name}"
+                                th:selected="${itemOp.id == item.trainconfigid}"></option>
+                    </select>
+                </label>
+            </td>
+            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
+            <td th:text="${#dates.format(item.uploadtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <a th:href="@{'/model_view/del/' + ${item.filename}}">删除</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -34,6 +34,7 @@ public class HttpConfig {
                 .connectTimeout(Duration.ofMinutes(3))
                 .writeTimeout(Duration.ofMinutes(3))
                 .readTimeout(Duration.ofMinutes(3))
+                .callTimeout(Duration.ofMinutes(3))
                 .build();
     }
 

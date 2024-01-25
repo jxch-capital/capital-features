@@ -4,19 +4,19 @@ ENV TZ=Asia/Shanghai
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-ENV PGSQL_DATASOURCE_URL=localhost:15432
+ENV PGSQL_DATASOURCE_URL=pgsql:5432
 ENV DB_TABLE=capital-features
 ENV DB_USERNAME=capital-features
 ENV DB_PASSWORD=capital-features
-ENV VEC_DB_URL=http://127.0.0.1:5000/search_api
+ENV VEC_DB_URL=vec
 ENV MAIL_USERNAME=mail
 ENV MAIL_PASSWORD=password
 ENV USERNAME=username
 ENV PASSWORD=password
 ENV GEMINI_KEY=gemini_key
 ENV WEB_DRIVER=selenium-hub:4444
-ENV TRANS_URL=http://jiangxicheng.site:15500/trans
-ENV MINIO_URL=http://jiangxicheng.site:9000
+ENV TRANS_URL=trans
+ENV MINIO_URL=minio
 ENV MINIO_ACCESS_KEY=minio
 ENV MINIO_SECRET_KEY=minio
 

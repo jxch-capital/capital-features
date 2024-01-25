@@ -45,6 +45,10 @@ spring:
     user:
       name: admin
       password: admin
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 trans:
   url: http://jiangxicheng.site:15500/trans
