@@ -3,6 +3,7 @@ package org.jxch.capital.utils;
 import com.google.common.math.Stats;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,12 @@ public class MathU {
     public static double[] normalized(double[] values) {
         Stats stats = Stats.of(values);
         return Arrays.stream(values).map(value -> (value - stats.min()) / (stats.max() - stats.min())).toArray();
+    }
+
+    @NotNull
+    public static Float[][][] toFloat3(double[][][] data) {
+        return Arrays.stream(data).map(a -> Arrays.stream(a).map(b -> Arrays.stream(b).mapToObj(c -> (float) c)
+                .toArray(Float[]::new)).toArray(Float[][]::new)).toArray(Float[][][]::new);
     }
 
 }

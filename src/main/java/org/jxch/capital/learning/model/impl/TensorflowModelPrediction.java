@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3Prediction;
-import org.jxch.capital.learning.model.dto.Model3MetaData;
+import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
+import org.jxch.capital.learning.model.dto.TensorflowTFModelMetaData;
+import org.jxch.capital.utils.MathU;
 import org.springframework.stereotype.Service;
 import org.tensorflow.Result;
 import org.tensorflow.SavedModelBundle;
@@ -24,11 +26,12 @@ public class TensorflowModelPrediction implements Model3Prediction {
     private final TensorflowModel3Management tensorflowModel3Management;
 
     @Override
-    public double[] prediction(double[][][] x, @NotNull File modelFile, Model3MetaData metaData) {
+    public double[] prediction(double[][][] x, @NotNull File modelFile, Model3BaseMetaData metaData) {
+        TensorflowTFModelMetaData tfMetaData = (TensorflowTFModelMetaData) metaData;
         try (SavedModelBundle modelBundle = SavedModelBundle.load(modelFile.getAbsolutePath(), "serve");
              Session session = modelBundle.session();
-             Tensor inputTensor = TFloat32.tensorOf(StdArrays.ndCopyOf(x).shape());
-             Result run = session.runner().feed(metaData.getInputname(), inputTensor).fetch(metaData.getOutputname()).run();
+             Tensor inputTensor = TFloat32.tensorOf(StdArrays.ndCopyOf(MathU.toFloat3(x)));
+             Result run = session.runner().feed(tfMetaData.getInputname(), inputTensor).fetch(tfMetaData.getOutputname()).run();
              Tensor outputTensor = run.get(0)) {
 
             FloatDataBuffer buffer = outputTensor.asRawTensor().data().asFloats();

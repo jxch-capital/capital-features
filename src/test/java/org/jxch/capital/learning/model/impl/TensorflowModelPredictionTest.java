@@ -7,9 +7,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.learning.model.Scalers;
-import org.jxch.capital.learning.model.dto.Model3MetaData;
 import org.jxch.capital.learning.model.dto.ModelTypeEnum;
 import org.jxch.capital.learning.model.dto.StandardScaler;
+import org.jxch.capital.learning.model.dto.TensorflowTFModelMetaData;
 import org.jxch.capital.learning.train.TrainService;
 import org.jxch.capital.learning.train.dto.TrainIndicesDataRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ class TensorflowModelPredictionTest {
     @SneakyThrows
     void prediction() {
         File model = new File("D:\\jxch-capital\\capital-features-learning\\notebooks\\model\\model_up_40_ty");
-        Model3MetaData model3MetaData = Model3MetaData.builder()
+        TensorflowTFModelMetaData model3BaseMetaData = TensorflowTFModelMetaData.builder()
                 .type(ModelTypeEnum.TENSORFLOW_MODEL_TF.getName())
                 .inputname("serving_default_input_1:0")
                 .outputname("StatefulPartitionedCall:0")
@@ -41,14 +41,14 @@ class TensorflowModelPredictionTest {
                 .build();
 
         Date now = Calendar.getInstance().getTime();
-        TrainIndicesDataRes trainDataRes = (TrainIndicesDataRes) trainService.predictionData(model3MetaData.getTrainconfigid(), "SPY",
+        TrainIndicesDataRes trainDataRes = (TrainIndicesDataRes) trainService.predictionData(model3BaseMetaData.getTrainconfigid(), "SPY",
                 DateUtil.offset(now, DateField.YEAR, -2), now);
 
         double[][][] featuresT = trainDataRes.getKNodeTrains().getFeaturesT();
 
         StandardScaler standardScaler = Scalers.scalerByJsonFile2(new File("D:\\jxch-capital\\capital-features-learning\\notebooks\\model\\model_up_40_ty_scaler_up.json"));
 
-        double[] prediction = tensorflowModelPrediction.prediction(Scalers.transform3(featuresT, standardScaler), model, model3MetaData);
+        double[] prediction = tensorflowModelPrediction.prediction(Scalers.transform3(featuresT, standardScaler), model, model3BaseMetaData);
         log.info(JSONObject.toJSONString(prediction));
     }
 

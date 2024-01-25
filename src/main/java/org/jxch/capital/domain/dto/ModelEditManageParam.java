@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.jxch.capital.learning.model.dto.Model3MetaData;
+import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
 
 @Data
 @Builder
@@ -14,5 +14,5 @@ import org.jxch.capital.learning.model.dto.Model3MetaData;
 @Accessors(chain = true)
 public class ModelEditManageParam {
     private String oldName;
-    private Model3MetaData metaData;
+    private Model3BaseMetaData metaData;
 }

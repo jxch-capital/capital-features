@@ -4,10 +4,10 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.io.dto.FileMetaData;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,21 +21,16 @@ import java.util.stream.Collectors;
  * 字段名称必须使用小写，因为Minio会自动将元数据全部转为小写
  */
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class Model3MetaData {
+public class Model3BaseMetaData {
     private String filename;
-    private Long trainconfigid;
     private String remark;
+    private String type = ModelTypeEnum.TENSORFLOW_MODEL_TF.getName();
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date uploadtime = Calendar.getInstance().getTime();
-    private String type = ModelTypeEnum.TENSORFLOW_MODEL_TF.getName();
-    private Integer shapex1 = 5;
-    private Integer shapex2 = 40;
-    private String inputname = "input_1";
-    private String outputname = "dense_7";
 
 
     @JsonIgnore
@@ -53,8 +48,8 @@ public class Model3MetaData {
                 .build();
     }
 
-    public static Model3MetaData parseOf(@NotNull FileMetaData fileMetaData) {
-        return JSONObject.parseObject(JSONObject.toJSONString(fileMetaData.getMetaData()), Model3MetaData.class)
+    public static Model3BaseMetaData parseOf(@NotNull FileMetaData fileMetaData) {
+        return JSONObject.parseObject(JSONObject.toJSONString(fileMetaData.getMetaData()), Model3BaseMetaData.class)
                 .setFilename(fileMetaData.getFileName());
     }
 

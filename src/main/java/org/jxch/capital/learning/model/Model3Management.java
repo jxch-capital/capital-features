@@ -1,6 +1,6 @@
 package org.jxch.capital.learning.model;
 
-import org.jxch.capital.learning.model.dto.Model3MetaData;
+import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface Model3Management {
 
-    void uploadModel(MultipartFile file, Model3MetaData metaData);
+    void uploadModel(MultipartFile file, Model3BaseMetaData metaData);
 
-    List<Model3MetaData> allModelMetaData();
+    List<Model3BaseMetaData> allModelMetaData();
 
-    void updateModelMetaData(String name, Model3MetaData metaData);
+    void updateModelMetaData(String name, Model3BaseMetaData metaData);
 
-    Model3MetaData findModelMetaData(String name);
+    Model3BaseMetaData findModelMetaData(String name);
 
     void delModel(String name);
 

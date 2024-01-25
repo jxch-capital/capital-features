@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.ModelEditManageParam;
-import org.jxch.capital.learning.model.dto.Model3MetaData;
+import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
+import org.jxch.capital.learning.model.dto.TensorflowTFModelMetaData;
 import org.jxch.capital.learning.model.impl.TensorflowModel3Management;
 import org.jxch.capital.learning.train.TrainConfigService;
 import org.jxch.capital.utils.Controllers;
@@ -27,7 +28,7 @@ public class TensorflowModel3ViewController {
     @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("model/tensorflow_model_view_index");
-        modelAndView.addObject("metaDataJson", JSONUtils.toJsonAndNull(new Model3MetaData()));
+        modelAndView.addObject("metaDataJson", JSONUtils.toJsonAndNull(new TensorflowTFModelMetaData()));
         modelAndView.addObject("all_model", tensorflowModel3Management.allModelMetaData());
         modelAndView.addObject("all_train_configs", trainConfigService.findAll());
         return modelAndView;
@@ -35,7 +36,7 @@ public class TensorflowModel3ViewController {
 
     @PostMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file, @RequestParam("metaDataJson") String metaDataJson) {
-        tensorflowModel3Management.uploadModel(file, JSONObject.parseObject(metaDataJson, Model3MetaData.class));
+        tensorflowModel3Management.uploadModel(file, JSONObject.parseObject(metaDataJson, Model3BaseMetaData.class));
         return Controllers.redirect("/model_view/index");
     }
 
@@ -55,7 +56,7 @@ public class TensorflowModel3ViewController {
     @Deprecated
     @RequestMapping("/edit/{name}")
     public ModelAndView edit(@PathVariable(value = "name") String name) {
-        Model3MetaData modelMetaData = tensorflowModel3Management.findModelMetaData(name);
+        Model3BaseMetaData modelMetaData = tensorflowModel3Management.findModelMetaData(name);
         ModelAndView modelAndView = new ModelAndView("model/tensorflow_model_view_edit");
         modelAndView.addObject("param", ModelEditManageParam.builder().metaData(modelMetaData).oldName(modelMetaData.getFilename()).build());
         modelAndView.addObject("all_train_configs", trainConfigService.findAll());
