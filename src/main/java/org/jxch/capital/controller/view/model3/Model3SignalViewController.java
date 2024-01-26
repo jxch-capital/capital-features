@@ -46,12 +46,12 @@ public class Model3SignalViewController {
         Model3PredictRes model3PredictRes = model3PredictionCompleteService.predictionCarry(param.getModelNames(), param.getPredictionParam());
         List<KLine> kLine = model3PredictRes.getKLine();
         List<KLineSignal> kLineSignal = KLineSignals.toKLineSignal(model3PredictRes, param);
-
+        // todo 此页面写成模板
         ModelAndView modelAndView = new ModelAndView("model/model3_signal_view_index");
         modelAndView.addObject("param", param);
         modelAndView.addObject("kLines", kLine);
         modelAndView.addObject("ema20", EChartsU.emaXEChartsDto(kLine, 20));
-        modelAndView.addObject("signals", kLineSignal);
+        modelAndView.addObject("signals", KLineSignals.toEChartDtoSignals(kLineSignal));
         modelAndView.addObject("actionSignals", KLineSignals.toEChartDtoActionSignals(kLineSignal));
         modelAndView.addObject("statistics", KLineSignals.toKLineSignalStatistics(kLineSignal, param.getLimitAbs()));
         modelAndView.addObject("all_model", model3Management.allModelMetaData());
