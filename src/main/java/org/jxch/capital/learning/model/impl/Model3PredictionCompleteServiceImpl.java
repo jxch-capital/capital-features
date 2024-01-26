@@ -46,9 +46,12 @@ public class Model3PredictionCompleteServiceImpl implements Model3PredictionComp
 
     @Override
     public Model3PredictRes predictionCarry(@NotNull List<String> modelNames, PredictionParam predictionParam) {
+        predictionParam = setTrainConfigId(modelNames.get(0), predictionParam);
         TrainDataRes trainDataRes = trainService.predictionData(predictionParam);
+
+        PredictionParam finalPredictionParam = predictionParam;
         return modelNames.stream().map(modelName ->
-                model3PredictSignalAutoProcessor.signalProcessor(trainDataRes, prediction(trainDataRes.getFeatures(), modelName), modelName, setTrainConfigId(modelName, predictionParam))
+                model3PredictSignalAutoProcessor.signalProcessor(trainDataRes, prediction(trainDataRes.getFeatures(), modelName), modelName, finalPredictionParam)
         ).reduce(Model3PredictRes::stack).orElseThrow(() -> new IllegalArgumentException("预测集信号叠加异常"));
     }
 

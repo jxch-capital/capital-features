@@ -21,10 +21,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -69,7 +66,7 @@ public class MinioFilManagementService implements FileManagementService {
         path = getNamespacePath(path);
         PutObjectArgs putObjectArgs = PutObjectArgs.builder()
                 .bucket(createPathIfNotExist(path))
-                .object(file.getOriginalFilename())
+                .object(Optional.ofNullable(metaData.getFileName()).orElse(file.getOriginalFilename()))
                 .stream(file.getInputStream(), file.getSize(), -1) // 设置输入流和大小
                 .contentType(file.getContentType()) // 设置内容类型
                 .headers(toMinioMetaData(metaData.getMetaData()))

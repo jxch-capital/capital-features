@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Calendar;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,5 +42,12 @@ class Model3PredictionCompleteServiceImplTest {
 
     @Test
     void testPredictionCarry() {
+        PredictionParam predictionParam = PredictionParam.builder()
+                .code("QQQ")
+                .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -5))
+                .end(Calendar.getInstance().getTime())
+                .build();
+        Model3PredictRes model3PredictRes = model3PredictionCompleteService.predictionCarry(List.of("model_up_40_ty.zip", "model_down_40_ty.zip"), predictionParam);
+        log.info(JSONObject.toJSONString(model3PredictRes.getSignals()));
     }
 }
