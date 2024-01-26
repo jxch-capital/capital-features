@@ -18,6 +18,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class Model3PredictFollowDownSignalProcessor implements Model3PredictSignalProcessor {
     private final Model3Management model3Management;
+
     @Override
     public boolean support(TrainDataRes trainDataRes, double[] prediction, String modelName, PredictionParam predictionParam) {
         Model3BaseMetaData modelMetaData = model3Management.findModelMetaData(modelName);
@@ -26,7 +27,7 @@ public class Model3PredictFollowDownSignalProcessor implements Model3PredictSign
 
     @Override
     public Model3PredictRes signalProcessor(TrainDataRes trainDataRes, double[] prediction, String modelName, PredictionParam predictionParam) {
-        return customSignalProcessor(pred -> pred > 0.7 ? -pred : 0, trainDataRes, prediction, modelName, predictionParam);
+        return customSignalProcessor(pred -> pred > 0.6 ? -pred + 0.6 : 0, trainDataRes, prediction, modelName, predictionParam);
     }
 
 }

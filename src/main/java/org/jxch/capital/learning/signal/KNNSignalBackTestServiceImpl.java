@@ -66,7 +66,7 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
 
                     return KLineSignal.builder()
                             .kLine(kNode.getLastKLine())
-                            .signal(kNodeAnalyzeService.statisticsKNNHasFuture(
+                            .signal((double) kNodeAnalyzeService.statisticsKNNHasFuture(
                                             distanceService.searchHasFuture(futureKNode, futureKNodes, param.getKnnParam().getNeighborSize(), param.getFutureNum())
                                             , param.getFutureNum())
                                     .getFutureSignal())
@@ -84,7 +84,7 @@ public class KNNSignalBackTestServiceImpl implements KNNSignalBackTestService {
         List<KLineSignal> kLineSignalsAppend = kNodes.parallelStream()
                 .map(kNode -> KLineSignal.builder()
                         .kLine(kNode.getLastKLine())
-                        .signal(kNodeAnalyzeService.statisticsKNNHasFuture(
+                        .signal((double) kNodeAnalyzeService.statisticsKNNHasFuture(
                                 distanceService.searchHasFutureNodes(kNode, futureKNodes, param.getKnnParam().getNeighborSize(), param.getFutureNum()),
                                 param.getFutureNum()).getFutureSignal())
                         .code(param.getCode())

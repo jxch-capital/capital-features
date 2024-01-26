@@ -13,6 +13,7 @@ import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.stock.StockService;
 import org.jxch.capital.support.ServiceWrapper;
+import org.jxch.capital.utils.ServiceU;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     private final StockService stockService;
 
     private KNodeTrains setNullIfSimplify(KNodeTrains kNodeTrains, boolean simplify) {
-        if (simplify) {
+        if (simplify && ServiceU.isExternalService()) {
             kNodeTrains.setKNodes(null);
             kNodeTrains.setFeatures(null);
             kNodeTrains.setSignals3(null);

@@ -18,6 +18,6 @@ public class KnnSignalHistoryDto {
     private Long knnSignalConfigId;
     private String code;
     private Date date;
-    private Integer signal;
+    private Double signal;
     private Long knnVersion;
 }

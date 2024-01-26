@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jxch.capital.domain.dto.KLine;
 
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,12 @@ public class Model3PredictRes {
     @JSONField(serialize = false)
     public List<Double> getSignals() {
         return getPredictSignalStacks().stream().map(PredictSignalStack::getSignal).toList();
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public List<KLine> getKLine() {
+        return kLineModelSignals.stream().map(KLineModelSignal::getKLine).toList();
     }
 
     public KLineModelSignal getSignal(int index) {

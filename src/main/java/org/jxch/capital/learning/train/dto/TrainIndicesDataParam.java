@@ -31,7 +31,7 @@ public class TrainIndicesDataParam implements TrainDataParam {
     @Builder.Default
     private Date predictionEndDate = Calendar.getInstance().getTime();
     @Builder.Default
-    private Boolean simplify = true;
+    private Boolean simplify = false;
     @Builder.Default
     private List<ServiceWrapper> filterWrappers = new ArrayList<>();
     @Builder.Default

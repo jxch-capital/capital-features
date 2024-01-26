@@ -28,7 +28,7 @@ public class Model3PredictFollowUpSignalProcessor implements Model3PredictSignal
 
     @Override
     public Model3PredictRes signalProcessor(@NotNull TrainDataRes trainDataRes, @NotNull double[] prediction, String modelName, PredictionParam predictionParam) {
-        return customSignalProcessor(pred -> pred > 0.7 ? pred : 0, trainDataRes, prediction, modelName, predictionParam);
+        return customSignalProcessor(pred -> pred > 0.6 ? pred - 0.6 : 0, trainDataRes, prediction, modelName, predictionParam);
     }
 
 }

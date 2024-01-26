@@ -209,7 +209,7 @@ public class ClassifierModelServiceImpl implements ClassifierModelService {
                 model.predict(KNodes.normalizedIndicesArrH(kNodes)) : model.predict(KNodes.normalizedKArrH(kNodes));
 
         for (int i = 0; i < predictSignal.length; i++) {
-            kLineSignals.get(i).setSignal(predictSignal[i]);
+            kLineSignals.get(i).setSignal((double) predictSignal[i]);
         }
 
         return kLineSignals;

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.learning.train.TrainDataRes;
 import org.jxch.capital.learning.train.TrainService;
 import org.jxch.capital.learning.train.dto.TrainParam;
+import org.jxch.capital.utils.ServiceU;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +22,24 @@ public class TrainDataController {
     @ResponseBody
     @RequestMapping("train_data")
     public TrainDataRes trainData(@RequestBody @NonNull TrainParam param) {
-        return trainService.trainData(param.getTrainConfigId());
+        try {
+            // todo 做切面
+            ServiceU.setExternalService();
+            return trainService.trainData(param.getTrainConfigId());
+        } finally {
+            ServiceU.removeExternalMark();
+        }
     }
 
     @ResponseBody
     @RequestMapping("prediction_data")
     public TrainDataRes predictionData(@RequestBody @NonNull TrainParam param) {
-        return trainService.predictionData(param.getTrainConfigId(), param.getCode(), param.getStart(), param.getEnd());
+        try {
+            ServiceU.setExternalService();
+            return trainService.predictionData(param.getTrainConfigId(), param.getCode(), param.getStart(), param.getEnd());
+        } finally {
+            ServiceU.removeExternalMark();
+        }
     }
 
 }

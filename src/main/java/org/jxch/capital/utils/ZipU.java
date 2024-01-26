@@ -1,6 +1,7 @@
 package org.jxch.capital.utils;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -13,8 +14,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.zip.ZipFile;
 
+@Slf4j
 public class ZipU {
 
     public static boolean isZipFile(File file) {
@@ -40,9 +43,13 @@ public class ZipU {
     }
 
     @NotNull
-    @Contract("_, _ -> param2")
-    @SneakyThrows
     public static File unZip(File zipFile, @NotNull File destDir) {
+        return unZip(zipFile, destDir, false);
+    }
+
+    @NotNull
+    @SneakyThrows
+    public static File unZip(File zipFile, @NotNull File destDir, boolean coverage) {
         FileU.mkdirIfNotExists(destDir);
         File firstUnzipped = null;
 
@@ -59,6 +66,10 @@ public class ZipU {
                 File f = new File(destDir, entry.getName());
                 if (Objects.isNull(firstUnzipped)) {
                     firstUnzipped = f;
+                    if (firstUnzipped.exists() && !coverage) {
+                        log.debug("目录已存在，无需解压");
+                        return firstUnzipped;
+                    }
                 }
 
                 if (entry.isDirectory()) {
@@ -77,7 +88,8 @@ public class ZipU {
                 }
             }
         }
-        return firstUnzipped;
+
+       return Optional.ofNullable(firstUnzipped).orElseThrow(() -> new IllegalArgumentException("解压失败，请查看解压文件和目标目录是否正确"));
     }
 
 }

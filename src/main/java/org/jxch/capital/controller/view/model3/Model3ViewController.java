@@ -1,4 +1,4 @@
-package org.jxch.capital.controller.view;
+package org.jxch.capital.controller.view.model3;
 
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(path = "/model_view")
-public class TensorflowModel3ViewController {
+public class Model3ViewController {
     private final Model3Management model3Management;
     private final TrainConfigService trainConfigService;
 

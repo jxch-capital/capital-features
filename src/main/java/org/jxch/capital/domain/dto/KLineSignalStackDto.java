@@ -14,7 +14,7 @@ import java.util.Map;
 @Accessors(chain = true)
 public class KLineSignalStackDto {
     private KLineSignal kLineSignal;
-    private Map<String, Integer> signals = new HashMap<>();
+    private Map<String, Double> signals = new HashMap<>();
     private Map<String, KnnSignalConfigDto> config = new HashMap<>();
 
     public boolean isOnlyKnnSignal() {

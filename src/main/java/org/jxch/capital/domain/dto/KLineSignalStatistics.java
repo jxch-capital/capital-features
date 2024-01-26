@@ -19,7 +19,7 @@ public class KLineSignalStatistics {
     private Double winRate;
     private Double winBuyRate;
     private Double winSellRate;
-    private int signalLimitAbs = 5;
+    private Double signalLimitAbs = 5.0;
 
     public KLineSignalStatistics(List<KLineSignal> kLineSignals) {
         this.kLineSignals = kLineSignals;
@@ -28,9 +28,26 @@ public class KLineSignalStatistics {
 
     public KLineSignalStatistics(List<KLineSignal> kLineSignals, int signalLimitAbs) {
         this.kLineSignals = kLineSignals;
+        this.signalLimitAbs = (double) signalLimitAbs;
+        this.statistics();
+    }
+
+    public KLineSignalStatistics(List<KLineSignal> kLineSignals, double signalLimitAbs) {
+        this.kLineSignals = kLineSignals;
         this.signalLimitAbs = signalLimitAbs;
         this.statistics();
     }
+
+    public KLineSignalStatistics setSignalLimitAbs(Integer signalLimitAbs) {
+        this.signalLimitAbs = (double) signalLimitAbs;
+        return this;
+    }
+
+    public KLineSignalStatistics setSignalLimitAbs(Double signalLimitAbs) {
+        this.signalLimitAbs = signalLimitAbs;
+        return this;
+    }
+
 
     public void statistics() {
         this.winNum = kLineSignals.stream().filter(KLineSignal -> KLineSignal.isSuccessSignal(signalLimitAbs)).toList().size();

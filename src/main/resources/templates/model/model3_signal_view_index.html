@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模型预测</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-zh_CN.min.js"></script>
+    <script th:src="@{/static/js/main.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+</head>
+<body>
+<form th:action="@{/model3_signal_view/signal}" th:object="${param}" method="post">
+    <label for="modelNames">
+        <span>模型：</span>
+        <select id="modelNames" th:field="*{modelNames}" class="selectpicker" multiple>
+            <option th:each="item: ${all_model}" th:value="${item.filename}" th:text="${item.filename}"
+                    th:attr="trainconfigid=${item.trainconfigid}"></option>
+        </select>
+    </label>
+    <label for="trainConfigId">
+        <span>数据服务：</span>
+        <select id="trainConfigId" th:field="*{predictionParam.trainConfigId}"></select>
+    </label>
+    <label for="code">代码</label>
+    <input type="text" th:field="*{predictionParam.code}" id="code" placeholder="代码" style="max-width: 40px" required>
+    <label for="start">开始时间：</label>
+    <input type="date" th:field="*{predictionParam.start}" id="start" placeholder="开始时间" required>
+    <label for="futureNum">预测数</label>
+    <input type="text" th:field="*{futureNum}" id="futureNum" placeholder="预测数" style="max-width: 40px" required>
+    <label for="limitAbs">信号抑制</label>
+    <input type="text" th:field="*{limitAbs}" id="limitAbs" placeholder="信号抑制" style="max-width: 40px" required>
+
+    <input type="submit" value="确定" class="btn-primary">
+</form>
+<div th:if="${statistics}">
+    <hr/>
+    <table>
+        <tr>
+            <td>
+                <span style="color: gray">买入信号: </span>
+                <span th:text="${statistics.buyNum}"></span>
+            </td>
+            <td>
+                <span style="color: gray">卖出信号: </span>
+                <span th:text="${statistics.sellNum}"></span>
+            </td>
+            <td>
+                <span style="color: gray">成功信号: </span>
+                <span th:text="${statistics.winNum}"></span>
+            </td>
+            <td>
+                <span style="color: gray">买入胜率: </span>
+                <span th:text="${#numbers.formatDecimal(statistics.winBuyRate, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+            <td>
+                <span style="color: gray">卖出胜率: </span>
+                <span th:text="${#numbers.formatDecimal(statistics.winSellRate, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+            <td>
+                <span style="color: gray">总胜率: </span>
+                <span th:text="${#numbers.formatDecimal(statistics.winRate, 1, 'COMMA', 2, 'POINT')}"></span>
+                <span>%</span>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${kLines}">
+    <hr/>
+    <div id="klineChart" style="width: 100%;height:1000px;"></div>
+    <script th:inline="javascript">
+        const myChart = echarts.init(document.getElementById('klineChart'));
+        const upColor = '#00da3c';
+        const upBorderColor = '#008F28';
+        const downColor = '#ec0000';
+        const downBorderColor = '#8A0000';
+        const data = [[${kLines}]];
+        const limit = [[${param.limitAbs}]]
+        const ema20 = [[${ema20}]]
+        const signals = [[${signals}]];
+        const actionSignals = [[${actionSignals}]];
+
+        const actionSignalsData = actionSignals.map(item => {
+            return [item.date, item.value];
+        });
+
+        const signalsData = signals.map(item => {
+            return [item.date, item.value];
+        });
+
+        const ema20Data = ema20.map(item => {
+            return [item.date, item.value];
+        });
+
+
+        const option = {
+            dataset: {
+                source: data
+            },
+            title: {
+                text: 'Data Amount: ' + echarts.format.addCommas(data.length)
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
+                },
+                formatter: function (params) {
+                    const param = params[0];
+                    let dataParam;
+                    let other = ``;
+                    if (param.data.open) {
+                        dataParam = param.data;
+                    } else {
+                        dataParam = data[param.dataIndex]
+                        other = other + `${param.marker} ${param.value} <br/>`
+                    }
+                    const date = echarts.format.formatTime('yyyy-MM-dd', dataParam.date);
+                    const open = dataParam.open.toFixed(2);
+                    const close = dataParam.close.toFixed(2);
+                    const high = dataParam.high.toFixed(2);
+                    const low = dataParam.low.toFixed(2);
+                    const vol = (dataParam.volume / 1000000).toFixed(2);
+                    return `${param.marker} ${date}<br/>
+                            开盘: ${open}<br/>
+                            收盘: ${close}<br/>
+                            最高: ${high}<br/>
+                            最低: ${low}<br/>
+                            成交: ${vol}kk<br/>` + other;
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: false
+                    }
+                }
+            },
+            grid: [
+                {
+                    left: '2%',
+                    right: '2%',
+                    bottom: 80
+                },
+                {
+                    left: '2%',
+                    right: '2%',
+                    height: 80,
+                    bottom: 80
+                },
+                {
+                    left: '2%',
+                    right: '2%',
+                    height: 80,
+                    bottom: 80
+                },
+                {
+                    left: '2%',
+                    right: '2%',
+                    height: 20,
+                    top: 10
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    // inverse: true,
+                    axisLine: {onZero: false},
+                    splitLine: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax',
+                    axisLabel: {
+                        formatter: function (value) {
+                            return echarts.format.formatTime('yyyy\nMM-dd', value)
+                        }
+                    }
+                },
+                {
+                    type: 'category',
+                    gridIndex: 1,
+                    boundaryGap: false,
+                    axisLine: {onZero: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 2,
+                    boundaryGap: false,
+                    axisLine: {onZero: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 3,
+                    boundaryGap: false,
+                    axisLine: {onZero: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: false},
+                    min: 'dataMin',
+                    max: 'dataMax'
+                }
+            ],
+            yAxis: [
+                {
+                    scale: true,
+                    splitArea: {
+                        show: true
+                    }
+                },
+                {
+                    scale: true,
+                    gridIndex: 1,
+                    splitNumber: 2,
+                    axisLabel: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false}
+                },
+                {
+                    scale: true,
+                    gridIndex: 2,
+                    splitNumber: 2,
+                    axisLabel: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false}
+                },
+                {
+                    scale: true,
+                    gridIndex: 3,
+                    splitNumber: 2,
+                    axisLabel: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false}
+                }
+            ],
+            dataZoom: [
+                {
+                    type: 'inside',
+                    xAxisIndex: [0, 1, 2, 3],
+                    start: 10,
+                    end: 100
+                },
+                {
+                    show: true,
+                    xAxisIndex: [0, 1, 2, 3],
+                    type: 'slider',
+                    bottom: 10,
+                    start: 10,
+                    end: 100
+                }
+            ],
+            visualMap: [{
+                show: false,
+                seriesIndex: 1,
+                dimension: 6,
+                pieces: [
+                    {
+                        value: 1,
+                        color: upColor
+                    },
+                    {
+                        value: -1,
+                        color: downColor
+                    }
+                ]
+            }, {
+                show: false,
+                seriesIndex: 2,
+                pieces: [
+                    {
+                        lt: -limit,
+                        color: 'red'
+                    },
+                    {
+                        gt: -limit,
+                        lt: limit,
+                        color: 'gray'
+                    },
+                    {
+                        gt: limit,
+                        color: 'green'
+                    }
+                ]
+            }, {
+                show: false,
+                seriesIndex: 3,
+                pieces: [
+                    {
+                        lt: 0,
+                        color: 'red'
+                    },
+                    {
+                        gt: 0,
+                        color: 'green'
+                    }
+                ]
+            }],
+            series: [
+                {
+                    type: 'candlestick',
+                    itemStyle: {
+                        color: upColor,
+                        color0: downColor,
+                        borderColor: upBorderColor,
+                        borderColor0: downBorderColor
+                    },
+                    encode: {
+                        x: 0,
+                        y: [1, 4, 3, 2]
+                    }
+                },
+                {
+                    name: 'Volumn',
+                    type: 'line',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    itemStyle: {
+                        color: 'gray'
+                    },
+                    large: true,
+                    showSymbol: false,
+                    encode: {
+                        x: 0,
+                        y: 5
+                    }
+                },
+                {
+                    name: 'Signals',
+                    type: 'bar',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    itemStyle: {
+                        color: '#656869'
+                    },
+                    large: true,
+                    data: signalsData
+                }, {
+                    name: 'ActionSignals',
+                    type: 'bar',
+                    xAxisIndex: 3,
+                    yAxisIndex: 3,
+                    itemStyle: {
+                        color: 'rgba(16,13,13,0.75)'
+                    },
+                    large: true,
+                    data: actionSignalsData
+                },
+                {
+                    name: 'EMA20',
+                    type: 'line',
+                    itemStyle: {
+                        color: '#f87e03'
+                    },
+                    showSymbol: false,
+                    large: true,
+                    data: ema20Data
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    </script>
+</div>
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        const allConfigs = [[${all_configs}]]
+
+        const tranConfigSelect = function () {
+            const trainConfigIdSelect = $("#trainConfigId")
+            trainConfigIdSelect.empty();
+
+            let trainconfigids = [];
+            $('#modelNames option:selected').each(function () {
+                trainconfigids.push($(this).attr('trainconfigid'))
+            });
+
+            [...new Set(trainconfigids)].forEach(function (item, index, arr) {
+                trainConfigIdSelect.append($("<option>").val(item).text(allConfigs[item]['name']))
+            })
+        }
+
+        $('#modelNames').change(function () {
+            tranConfigSelect()
+        });
+
+        tranConfigSelect()
+    })
+</script>
+</body>
+</html>

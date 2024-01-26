@@ -39,9 +39,18 @@ public class AppContextHolder implements ApplicationContextAware {
                 .findAny().orElseThrow(() -> new IllegalArgumentException("找不到支持的服务"));
     }
 
-    public static <T> T findFristServiceExcept(Class<T> clazz, Class<?> except, @NotNull Function<T, Boolean> condition) {
+    public static <T> T findFirstServiceExcept(Class<T> clazz, Class<?> except, @NotNull Function<T, Boolean> condition) {
         return allServiceExcept(clazz, except).stream().filter(condition::apply)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("找不到支持的服务"));
+    }
+
+    public static <T> T findFirstService(Class<T> clazz, @NotNull Function<T, Boolean> condition) {
+        return allService(clazz).stream().filter(condition::apply)
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("找不到支持的服务"));
+    }
+
+    public static <T> T findFirstService(Class<T> clazz) {
+        return allService(clazz).stream().findFirst().orElseThrow(() -> new IllegalArgumentException("找不到支持的服务"));
     }
 
     public static <T extends Ordered> T findOrderedFristServiceExcept(Class<T> clazz, Class<?> except, @NotNull Function<T, Boolean> condition) {

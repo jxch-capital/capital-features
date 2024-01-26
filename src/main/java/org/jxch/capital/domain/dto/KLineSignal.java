@@ -16,11 +16,21 @@ public class KLineSignal {
     private String code = null;
     private KLine kLine;
     @Builder.Default
-    private Integer signal = null;
+    private Double signal = null;
     @Builder.Default
     private Integer actionSignal = 0;
     @Builder.Default
     private Double tureSignal = null;
+
+    public KLineSignal setSignal(Integer signal) {
+        this.signal = (double) signal;
+        return this;
+    }
+
+    public KLineSignal setSignal(Double signal) {
+        this.signal = signal;
+        return this;
+    }
 
     public KLineSignal actionSignal() {
         if (signal > 0) {

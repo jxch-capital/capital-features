@@ -12,6 +12,7 @@ import org.jxch.capital.learning.train.TrainService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -32,13 +33,16 @@ public class Model3PredictionCompleteServiceImpl implements Model3PredictionComp
         return prediction(trainService.predictionData(predictionParam).getFeatures(), modelName);
     }
 
-    public PredictionParam setTrainConfigId(String modelName, @NotNull PredictionParam predictionParam) {
-        return predictionParam.setTrainConfigId(model3Management.findModelMetaData(modelName).getTrainconfigid());
+    public PredictionParam setTrainConfigIdIfNull(String modelName, @NotNull PredictionParam predictionParam) {
+        if (Objects.isNull(predictionParam.getTrainConfigId())) {
+            predictionParam.setTrainConfigId(model3Management.findModelMetaData(modelName).getTrainconfigid());
+        }
+        return predictionParam;
     }
 
     @Override
     public Model3PredictRes predictionCarry(String modelName, @NotNull PredictionParam predictionParam) {
-        predictionParam = setTrainConfigId(modelName, predictionParam);
+        predictionParam = setTrainConfigIdIfNull(modelName, predictionParam);
         TrainDataRes trainDataRes = trainService.predictionData(predictionParam);
         double[] prediction = prediction(trainDataRes.getFeatures(), modelName);
         return model3PredictSignalAutoProcessor.signalProcessor(trainDataRes, prediction, modelName, predictionParam);
@@ -46,7 +50,7 @@ public class Model3PredictionCompleteServiceImpl implements Model3PredictionComp
 
     @Override
     public Model3PredictRes predictionCarry(@NotNull List<String> modelNames, PredictionParam predictionParam) {
-        predictionParam = setTrainConfigId(modelNames.get(0), predictionParam);
+        predictionParam = setTrainConfigIdIfNull(modelNames.get(0), predictionParam);
         TrainDataRes trainDataRes = trainService.predictionData(predictionParam);
 
         PredictionParam finalPredictionParam = predictionParam;
