@@ -11,10 +11,12 @@ import org.jxch.capital.learning.train.dto.TrainIndicesDataParam;
 import org.jxch.capital.learning.train.dto.TrainIndicesDataRes;
 import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.KNodeService;
+import org.jxch.capital.stock.StockService;
 import org.jxch.capital.support.ServiceWrapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -25,6 +27,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     private final AutoTrainDataSignalBalancePreProcessor autoTrainDataSignalBalancePreProcessor;
     private final IndicesCombinationService indicesCombinationService;
     private final KNodeService kNodeService;
+    private final StockService stockService;
 
     private KNodeTrains setNullIfSimplify(KNodeTrains kNodeTrains, boolean simplify) {
         if (simplify) {
@@ -63,7 +66,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     }
 
     @Override
-    public TrainDataRes predictionData(TrainDataParam param) {
+    public TrainDataRes predictionData(TrainDataParam param, boolean offset) {
         TrainIndicesDataParam indicesDataParam = (TrainIndicesDataParam) param;
         KNodeParam kNodeParam = indicesDataParam.getKNodeParam();
         List<String> indicatorNames = new ArrayList<>();
@@ -76,7 +79,14 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         if (indicesDataParam.getOnlyPredictionData()) {
             kNodes.add(kNodeService.kNode(kNodeParam));
         } else {
-            kNodes = kNodeService.kNodes(kNodeParam, indicesDataParam.getPredictionStartDate(), indicesDataParam.getPredictionEndDate());
+            Date startDate = indicesDataParam.getPredictionStartDate();
+            if (offset) {
+                startDate = stockService.getStartOffsetDay(kNodeParam.getSize() + kNodeParam.getMaxLength(), startDate, kNodeParam.getCode());
+                kNodes = kNodeService.kNodes(kNodeParam, startDate, indicesDataParam.getPredictionEndDate())
+                        .stream().filter(kNode -> kNode.getLastKLine().getDate().getTime() >= indicesDataParam.getPredictionStartDate().getTime()).toList();
+            } else {
+                kNodes = kNodeService.kNodes(kNodeParam, startDate, indicesDataParam.getPredictionEndDate());
+            }
         }
 
         List<KNodeTrain> kNodeTrains = kNodes.stream().map(kNode -> KNodeTrain.builder().code(kNode.getCode()).kNode(kNode).futureNum(0).build()).toList();

@@ -32,4 +32,9 @@ public class MathU {
                 .toArray(Float[]::new)).toArray(Float[][]::new)).toArray(Float[][][]::new);
     }
 
+    public static boolean hasNan3(double[][][] array) {
+        return Arrays.stream(array).flatMap(Arrays::stream).flatMapToDouble(Arrays::stream)
+                .noneMatch(Double::isNaN);
+    }
+
 }

@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.learning.model.Scalers;
-import org.jxch.capital.learning.model.dto.ModelTypeEnum;
+import org.jxch.capital.learning.model.ModelTypeEnum;
 import org.jxch.capital.learning.model.dto.StandardScaler;
 import org.jxch.capital.learning.model.dto.TensorflowTFModelMetaData;
 import org.jxch.capital.learning.train.TrainService;
@@ -32,7 +32,7 @@ class TensorflowModelPredictionTest {
     void prediction() {
         File model = new File("D:\\jxch-capital\\capital-features-learning\\notebooks\\model\\model_up_40_ty");
         TensorflowTFModelMetaData model3BaseMetaData = TensorflowTFModelMetaData.builder()
-                .type(ModelTypeEnum.TENSORFLOW_MODEL_TF.getName())
+                .modeltype(ModelTypeEnum.TENSORFLOW_MODEL_TF_ZIP.getName())
                 .inputname("serving_default_input_1:0")
                 .outputname("StatefulPartitionedCall:0")
                 .shapex1(5)
@@ -46,7 +46,7 @@ class TensorflowModelPredictionTest {
 
         double[][][] featuresT = trainDataRes.getKNodeTrains().getFeaturesT();
 
-        StandardScaler standardScaler = Scalers.scalerByJsonFile2(new File("D:\\jxch-capital\\capital-features-learning\\notebooks\\model\\model_up_40_ty_scaler_up.json"));
+        StandardScaler standardScaler = Scalers.scalerByJsonFile(new File("D:\\jxch-capital\\capital-features-learning\\notebooks\\model\\model_up_40_ty_scaler_up.json"));
 
         double[] prediction = tensorflowModelPrediction.prediction(Scalers.transform3(featuresT, standardScaler), model, model3BaseMetaData);
         log.info(JSONObject.toJSONString(prediction));

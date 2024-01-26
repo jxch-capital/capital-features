@@ -19,6 +19,7 @@ ENV TRANS_URL=trans
 ENV MINIO_URL=minio
 ENV MINIO_ACCESS_KEY=minio
 ENV MINIO_SECRET_KEY=minio
+ENV IO_NAMESPACE=pred-
 
 VOLUME /capital/features
 ADD target/capital-features.jar app.jar

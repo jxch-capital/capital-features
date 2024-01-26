@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface Model3Management {
 
+    boolean support(MultipartFile file, Model3BaseMetaData metaData);
+
     void uploadModel(MultipartFile file, Model3BaseMetaData metaData);
 
     List<Model3BaseMetaData> allModelMetaData();
@@ -19,5 +21,7 @@ public interface Model3Management {
     void delModel(String name);
 
     File getModelFile(String name);
+
+    boolean hasModel(String name);
 
 }

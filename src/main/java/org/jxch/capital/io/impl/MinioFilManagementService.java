@@ -1,13 +1,14 @@
 package org.jxch.capital.io.impl;
 
 import io.minio.*;
+import io.minio.errors.ErrorResponseException;
 import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.jxch.capital.config.MinioConfig;
+import org.jxch.capital.config.IOConfig;
 import org.jxch.capital.io.FileManagementService;
 import org.jxch.capital.io.dto.FileMetaData;
 import org.jxch.capital.utils.FileU;
@@ -34,8 +35,12 @@ import java.util.stream.StreamSupport;
 public class MinioFilManagementService implements FileManagementService {
     private final static String META_SUFFIX = "X-Amz-Meta-";
     private final MinioClient minioClient;
-    private final MinioConfig minioConfig;
+    private final IOConfig ioConfig;
 
+
+    public String getNamespacePath(@NotNull String path) {
+        return ioConfig.getNamespace() + path.replaceFirst(ioConfig.getNamespace(), "");
+    }
 
     public Map<String, String> toMinioMetaData(@NotNull Map<String, String> metaData) {
         return metaData.entrySet().stream().collect(Collectors.toMap(entry -> META_SUFFIX + entry.getKey(), Map.Entry::getValue));
@@ -44,12 +49,14 @@ public class MinioFilManagementService implements FileManagementService {
     @Override
     @SneakyThrows
     public String getFullPath(String path, String name) {
+        path = getNamespacePath(path);
         return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder().bucket(path).object(name).method(Method.GET).build());
     }
 
     @Override
     @SneakyThrows
     public String createPathIfNotExist(String path) {
+        path = getNamespacePath(path);
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(path).build())) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(path).build());
         }
@@ -59,6 +66,7 @@ public class MinioFilManagementService implements FileManagementService {
     @Override
     @SneakyThrows
     public String upload(String path, @NotNull MultipartFile file, @NotNull FileMetaData metaData) {
+        path = getNamespacePath(path);
         PutObjectArgs putObjectArgs = PutObjectArgs.builder()
                 .bucket(createPathIfNotExist(path))
                 .object(file.getOriginalFilename())
@@ -80,13 +88,14 @@ public class MinioFilManagementService implements FileManagementService {
     @Override
     @SneakyThrows
     public List<FileMetaData> allFileMetaData(String path) {
-        return StreamSupport.stream(minioClient.listObjects(ListObjectsArgs.builder().bucket(createPathIfNotExist(path)).recursive(true).build()).spliterator(), false)
-                .map(itemResult -> itemResultToFileMetaData(itemResult, path)).toList();
+        return StreamSupport.stream(minioClient.listObjects(ListObjectsArgs.builder().bucket(createPathIfNotExist(getNamespacePath(path))).recursive(true).build()).spliterator(), false)
+                .map(itemResult -> itemResultToFileMetaData(itemResult, getNamespacePath(path))).toList();
     }
 
     @Override
     @SneakyThrows
     public String updateFileMetaData(String path, String oldName, @NotNull FileMetaData metaData) {
+        path = getNamespacePath(path);
         if (!Objects.equals(metaData.getFileName(), oldName)) {
             CopyObjectArgs args = CopyObjectArgs.builder()
                     .bucket(path)
@@ -122,6 +131,7 @@ public class MinioFilManagementService implements FileManagementService {
     @Override
     @SneakyThrows
     public FileMetaData getFileMetaData(String path, String name) {
+        path = getNamespacePath(path);
         StatObjectResponse objectResponse = minioClient.statObject(StatObjectArgs.builder().bucket(path).object(name).build());
         return FileMetaData.builder().fileName(name).metaData(objectResponse.userMetadata()).build();
     }
@@ -129,21 +139,44 @@ public class MinioFilManagementService implements FileManagementService {
     @Override
     @SneakyThrows
     public void delFile(String path, String name) {
+        path = getNamespacePath(path);
         minioClient.removeObject(RemoveObjectArgs.builder().bucket(path).object(name).build());
     }
 
     @Override
     @SneakyThrows
-    public File getFile(String path, String name) {
-        try (InputStream stream = minioClient.getObject(GetObjectArgs.builder().bucket(path).object(name).build())) {
-            Path dir = Path.of(minioConfig.getLocalPath()).resolve(path);
-            FileU.mkdir(dir.toAbsolutePath().toString());
-            File file = dir.resolve(name).toFile();
+    public File getFile(String path, String name, boolean refreshLocal) {
+        path = getNamespacePath(path);
+        Path dir = Path.of(ioConfig.getMinio().getLocalPath()).resolve(path);
+        FileU.mkdirIfNotExists(dir.toAbsolutePath().toString());
+        File file = dir.resolve(name).toFile();
 
-            Files.copy(stream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            log.info("文件从Minio下载成功，保存到: {}", file.toPath());
-
+        if (file.exists() && !refreshLocal) {
+            log.debug("本地文件已存在，无需从Minio下载：{}", file.toPath());
             return file;
+        } else if (file.exists() && refreshLocal) {
+            file.deleteOnExit();
+        }
+
+        try (InputStream stream = minioClient.getObject(GetObjectArgs.builder().bucket(path).object(name).build())) {
+            Files.copy(stream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            log.debug("文件从Minio下载成功，保存到: {}", file.toPath());
+            return file;
+        }
+    }
+
+    @Override
+    @SneakyThrows
+    public boolean hasFile(String path, String name) {
+        path = getNamespacePath(path);
+        try {
+            minioClient.statObject(StatObjectArgs.builder().bucket(path).object(name).build());
+            return true;
+        } catch (ErrorResponseException e) {
+            if (e.errorResponse().code().equals("NoSuchKey")) {
+                return false;
+            }
+            throw e;
         }
     }
 

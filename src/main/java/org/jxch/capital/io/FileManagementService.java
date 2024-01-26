@@ -22,6 +22,12 @@ public interface FileManagementService {
 
     void delFile(String path, String name);
 
-    File getFile(String path, String name);
+    default File getFile(String path, String name) {
+        return getFile(path, name, true);
+    }
+
+    File getFile(String path, String name, boolean refreshLocal);
+
+    boolean hasFile(String path, String name);
 
 }

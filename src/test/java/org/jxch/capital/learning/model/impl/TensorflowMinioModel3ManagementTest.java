@@ -9,13 +9,13 @@ import java.io.File;
 
 @Slf4j
 @SpringBootTest
-class TensorflowModel3ManagementTest {
+class TensorflowMinioModel3ManagementTest {
     @Autowired
-    private TensorflowModel3Management tensorflowModel3Management;
+    private TensorflowMinioModel3Management tensorflowMinioModel3Management;
 
     @Test
     void getModelFile() {
-        File file = tensorflowModel3Management.getModelFile("");
+        File file = tensorflowMinioModel3Management.getModelFile("");
         log.info(file.toPath().toString());
     }
 }

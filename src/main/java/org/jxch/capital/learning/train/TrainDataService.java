@@ -4,7 +4,11 @@ public interface TrainDataService {
 
     TrainDataRes trainData(TrainDataParam param);
 
-    TrainDataRes predictionData(TrainDataParam param);
+    default TrainDataRes predictionData(TrainDataParam param) {
+        return predictionData(param, true);
+    }
+
+    TrainDataRes predictionData(TrainDataParam param, boolean offset);
 
     default String name() {
         return getClass().getSimpleName();

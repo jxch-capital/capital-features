@@ -41,8 +41,10 @@ driver:
 trans:
   url: ${TRANS_URL}
 
-minio:
-  url: ${MINIO_URL}
-  access-key: ${MINIO_ACCESS_KEY}
-  secret-key: ${MINIO_SECRET_KEY}
-  local-path: /capital/features/minio/
+io:
+  minio:
+    url: ${MINIO_URL}
+    access-key: ${MINIO_ACCESS_KEY}
+    secret-key: ${MINIO_SECRET_KEY}
+    local-path: /capital/features/minio/
+  namespace: ${IO_NAMESPACE}

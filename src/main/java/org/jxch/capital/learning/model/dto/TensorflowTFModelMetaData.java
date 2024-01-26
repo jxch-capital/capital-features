@@ -11,19 +11,26 @@ import java.util.Objects;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class TensorflowTFModelMetaData extends Model3BaseMetaData {
     private Integer shapex1;
     private Integer shapex2;
     private String inputname;
     private String outputname;
-    private Long trainconfigid;
     private String scalername;
+    private String tags = "serve";
 
     @JsonIgnore
     @JSONField(serialize = false)
     public boolean needScaler() {
         return Objects.nonNull(scalername) && !scalername.isBlank();
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public String[] getTagArr() {
+        return this.tags.split(",");
     }
 
 }

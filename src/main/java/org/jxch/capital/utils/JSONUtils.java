@@ -9,4 +9,8 @@ public class JSONUtils {
         return JSONObject.toJSONString(obj, JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNullListAsEmpty);
     }
 
+    public static String toJsonAndNullPretty(Object obj) {
+        return JSONObject.toJSONString(obj, JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.WriteNullListAsEmpty, JSONWriter.Feature.PrettyFormat);
+    }
+
 }

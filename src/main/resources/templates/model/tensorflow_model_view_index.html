@@ -10,46 +10,88 @@
 </head>
 <body>
 <form th:action="@{/model_view/upload}" method="post" enctype="multipart/form-data">
-    <label for="metaData">元数据：</label>
-    <input type="text" id="metaData" name="metaDataJson" th:value="${metaDataJson}" style="width: 1000px"/>
 
-    <table>
-        <tr>
-            <td>名称</td>
-            <td>训练配置</td>
-            <td>备注</td>
-            <td>上传时间</td>
-            <td>更新时间</td>
-            <td>操作</td>
-        </tr>
-        <tr>
-            <td>Auto</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <input type="submit" value="Upload"/>
-                <input type="file" name="file"/>
-            </td>
-        </tr>
-        <tr th:each="item,iter: ${all_model}">
-            <td th:text="${item.filename}"></td>
-            <td>
-                <label th:for="'trainconfigid' + ${iter.index}">
-                    <select th:id="'groupService' + ${iter.index}" disabled>
-                        <option th:each="itemOp: ${all_train_configs}" th:value="${itemOp.id}" th:text="${itemOp.name}"
-                                th:selected="${itemOp.id == item.trainconfigid}"></option>
+    <div style="display: flex; justify-content: start; align-items: start">
+        <table>
+            <tr>
+                <td>名称</td>
+                <td>训练配置</td>
+                <td>备注</td>
+                <td>上传时间</td>
+                <td>更新时间</td>
+                <td>操作</td>
+            </tr>
+            <tr>
+                <td>Auto</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="submit" value="Upload"/>
+                </td>
+            </tr>
+            <tr th:each="item,iter: ${all_model}">
+                <td th:text="${item.filename}"></td>
+                <td>
+                    <label th:for="'trainconfigid' + ${iter.index}">
+                        <select th:id="'groupService' + ${iter.index}" disabled>
+                            <option th:each="itemOp: ${all_train_configs}" th:value="${itemOp.id}"
+                                    th:text="${itemOp.name}"
+                                    th:selected="${itemOp.id == item.trainconfigid}"></option>
+                        </select>
+                    </label>
+                </td>
+                <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
+                <td th:text="${#dates.format(item.uploadtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td>
+                    <a th:href="@{'/model_view/del/' + ${item.filename}}">删除</a>
+                    <a href="#" th:id="'meta_data_show' + ${iter.index}">元数据</a>
+                    <script th:inline="javascript">
+                        $(document).ready(function () {
+                            document.getElementById('meta_data_show' + [[${iter.index}]]).onclick = function () {
+                                $('#metaData').text(JSON.stringify([[${item}]], null, 2))
+                            }
+                        })
+                    </script>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <div>
+                <label for="modelType">
+                    <select id="modelType" required>
                     </select>
                 </label>
-            </td>
-            <td th:text="${#strings.abbreviate(item.remark, 20)}" th:title="${item.remark}"></td>
-            <td th:text="${#dates.format(item.uploadtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td>
-                <a th:href="@{'/model_view/del/' + ${item.filename}}">删除</a>
-            </td>
-        </tr>
-    </table>
+
+                <input type="file" name="file" accept=".zip"/>
+                <br/>
+                <label for="metaData">元数据：</label>
+            </div>
+            <textarea id="metaData" name="metaDataJson" cols="200" rows="40"></textarea>
+            <p>
+                tensorflow 模型可以通过这个命令查找输入输出层的名称: saved_model_cli show --dir ./path_to_model_dir
+                --all
+            </p>
+            <p style="color: brown">元数据不可修改，请认真填写</p>
+
+            <script th:inline="javascript">
+                const types = [[${all_type_metas}]]
+                $(document).ready(function () {
+                    for (let type in types) {
+                        $('#modelType').append($("<option>").text(type).val(type))
+                    }
+
+                    $('#modelType').change(function () {
+                        $('#metaData').text(types[$(this).find('option:selected').text()])
+                    })
+
+                    $("#modelType").val($("#modelType option:first").val()).trigger('change');
+                })
+            </script>
+        </div>
+    </div>
+
 </form>
 </body>
 </html>

@@ -1,5 +1,8 @@
 package org.jxch.capital.learning.train;
 
+import org.jetbrains.annotations.NotNull;
+import org.jxch.capital.learning.model.dto.PredictionParam;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,6 +18,10 @@ public interface TrainService {
 
     default TrainDataRes predictionData(Long trainConfigId, String code, Date start) {
         return predictionData(trainConfigId, code, start, Calendar.getInstance().getTime());
+    }
+
+    default TrainDataRes predictionData(@NotNull PredictionParam param) {
+        return predictionData(param.getTrainConfigId(), param.getCode(), param.getStart(), param.getEnd());
     }
 
 }

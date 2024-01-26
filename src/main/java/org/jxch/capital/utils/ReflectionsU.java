@@ -40,4 +40,10 @@ public class ReflectionsU {
                 .toList();
     }
 
+    @NotNull
+    @SneakyThrows
+    public static <T> T newInstance(@NotNull Class<T> clazz) {
+        return clazz.getDeclaredConstructor().newInstance();
+    }
+
 }

@@ -10,7 +10,7 @@ import java.nio.file.Files;
 
 public class Scalers {
     @SneakyThrows
-    public static StandardScaler scalerByJsonFile2(@NotNull File scalerJsonFile) {
+    public static StandardScaler scalerByJsonFile(@NotNull File scalerJsonFile) {
         return JSONObject.parseObject(new String(Files.readAllBytes(scalerJsonFile.toPath())), StandardScaler.class);
     }
 
@@ -52,6 +52,11 @@ public class Scalers {
         }
 
         return scaledData;
+    }
+
+    @NotNull
+    public static double[][][] transform3ByScalerFile(@NotNull double[][][] data, @NotNull File scalerJsonFile) {
+        return transform3(data, scalerByJsonFile(scalerJsonFile));
     }
 
 }
