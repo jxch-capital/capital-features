@@ -48,3 +48,7 @@ io:
     secret-key: ${MINIO_SECRET_KEY}
     local-path: /capital/features/minio/
   namespace: ${IO_NAMESPACE}
+
+milvus:
+  url: ${MILVUS_URL}
+  dimension: ${MILVUS_DIMENSION}
