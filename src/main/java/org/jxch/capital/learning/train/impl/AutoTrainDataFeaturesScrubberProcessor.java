@@ -23,11 +23,6 @@ public class AutoTrainDataFeaturesScrubberProcessor implements TrainDataFeatures
                 .map(ServiceWrapperSupport::getDefaultServiceWrapper).toList();
     }
 
-    @Override
-    public boolean support(double[][][] features, ServiceWrapper serviceWrapper) {
-        return false;
-    }
-
     public KNodeTrains featuresPostProcessor(@NotNull KNodeTrains kNodeTrains, @NotNull List<ServiceWrapper> serviceWrappers) {
         for (ServiceWrapper serviceWrapper : serviceWrappers) {
             kNodeTrains = featuresPostProcessor(kNodeTrains, serviceWrapper);
@@ -36,13 +31,17 @@ public class AutoTrainDataFeaturesScrubberProcessor implements TrainDataFeatures
     }
 
     @Override
-    public double[][][] featuresPostProcessor(double[][][] features, ServiceWrapper serviceWrapper) {
-        for (TrainDataFeaturesScrubberProcessor processor : AppContextHolder.allServiceExcept(TrainDataFeaturesScrubberProcessor.class, getClass())) {
-            if (processor.support(features, serviceWrapper)) {
-                features = processor.featuresPostProcessor(features, serviceWrapper);
-            }
-        }
-        return features;
+    public boolean support(KNodeTrains kNodeTrains, ServiceWrapper serviceWrapper) {
+        return false;
     }
 
+    @Override
+    public KNodeTrains featuresPostProcessor(@NotNull KNodeTrains kNodeTrains, ServiceWrapper serviceWrapper) {
+        for (TrainDataFeaturesScrubberProcessor processor : AppContextHolder.allServiceExcept(TrainDataFeaturesScrubberProcessor.class, getClass())) {
+            if (processor.support(kNodeTrains, serviceWrapper)) {
+                kNodeTrains = processor.featuresPostProcessor(kNodeTrains, serviceWrapper);
+            }
+        }
+        return kNodeTrains;
+    }
 }

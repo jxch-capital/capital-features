@@ -7,13 +7,7 @@ import org.jxch.capital.support.ServiceWrapperSupport;
 
 public interface TrainDataFeaturesScrubberProcessor extends ServiceWrapperSupport {
 
-    boolean support(double[][][] features, ServiceWrapper serviceWrapper);
+    boolean support(KNodeTrains kNodeTrains, ServiceWrapper serviceWrapper);
 
-    double[][][] featuresPostProcessor(double[][][] features, ServiceWrapper serviceWrapper);
-
-    default KNodeTrains featuresPostProcessor(@NotNull KNodeTrains kNodeTrains, ServiceWrapper serviceWrapper) {
-        return kNodeTrains.setFeatures(featuresPostProcessor(kNodeTrains.getFeatures(), serviceWrapper))
-                .setFeaturesT(featuresPostProcessor(kNodeTrains.getFeaturesT(), serviceWrapper));
-    }
-
+    KNodeTrains featuresPostProcessor(@NotNull KNodeTrains kNodeTrains, ServiceWrapper serviceWrapper);
 }
