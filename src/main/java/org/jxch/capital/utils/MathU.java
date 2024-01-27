@@ -3,6 +3,7 @@ package org.jxch.capital.utils;
 import com.google.common.math.Stats;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.ejml.simple.SimpleMatrix;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -32,9 +33,28 @@ public class MathU {
                 .toArray(Float[]::new)).toArray(Float[][]::new)).toArray(Float[][][]::new);
     }
 
+    public static boolean hasInvalid3(double[][][] array) {
+        return Arrays.stream(array).flatMap(Arrays::stream).flatMapToDouble(Arrays::stream).parallel()
+                .anyMatch(value -> Double.isNaN(value) || Double.isInfinite(value));
+    }
+
+    public static boolean hasInvalid2(double[][] array) {
+        return Arrays.stream(array).flatMapToDouble(Arrays::stream).parallel()
+                .anyMatch(value -> Double.isNaN(value) || Double.isInfinite(value));
+    }
+
     public static boolean hasNan3(double[][][] array) {
-        return Arrays.stream(array).flatMap(Arrays::stream).flatMapToDouble(Arrays::stream)
-                .noneMatch(Double::isNaN);
+        return Arrays.stream(array).flatMap(Arrays::stream).flatMapToDouble(Arrays::stream).parallel()
+                .anyMatch(Double::isNaN);
+    }
+
+    public static boolean hasInf3(double[][][] array) {
+        return Arrays.stream(array).flatMap(Arrays::stream).flatMapToDouble(Arrays::stream).parallel()
+                .anyMatch(Double::isInfinite);
+    }
+
+    public static  double[][] toT(double[][] t) {
+        return new SimpleMatrix(t).transpose().toArray2();
     }
 
 }

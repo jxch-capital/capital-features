@@ -26,7 +26,7 @@ public class TrainConfigViewController {
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("train/train_config_index");
         modelAndView.addObject("param", new TrainConfigDto());
-        modelAndView.addObject("all_configs", trainConfigService.findAll());
+        modelAndView.addObject("all_configs", trainConfigService.findAllInSort());
         modelAndView.addObject("all_train_service", Trains.allTrainDataServiceNames());
         return modelAndView;
     }

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import org.jxch.capital.http.config.RetrySuccessInterceptor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.time.Duration;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -38,7 +36,6 @@ public class YahooConfig {
         }
 
         return builder
-                .addInterceptor(RetrySuccessInterceptor.builder().maxRetry(3).retryWait(Duration.ofMillis(500)).build())
                 .build();
     }
 

@@ -18,4 +18,6 @@ public interface StockPoolService {
     void update(List<Long> ids);
 
     void updateToNow(List<Long> ids);
+
+    void updateNewCode(Long id);
 }

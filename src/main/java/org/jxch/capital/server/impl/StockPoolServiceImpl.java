@@ -136,4 +136,21 @@ public class StockPoolServiceImpl implements StockPoolService {
         }
     }
 
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public void updateNewCode(Long stockPoolId) {
+        List<StockHistoryDto> historyDtoList = stockHistoryService.findByStockPoolId(stockPoolId);
+        List<String> dbCodes = historyDtoList.stream().map(StockHistoryDto::getStockCode).distinct().toList();
+
+        StockPoolDto stockPoolDto = findById(stockPoolId);
+        List<String> configCodes = stockPoolDto.getPoolStockList();
+        List<String> newCodes = new ArrayList<>(configCodes);
+        newCodes.removeAll(dbCodes);
+
+        log.info("新增股票：{}", String.join(",", newCodes));
+        this.updateCodes(newCodes, stockPoolDto);
+
+        log.info("更新股票池成功：{}", stockPoolDto.getPoolName());
+    }
+
 }

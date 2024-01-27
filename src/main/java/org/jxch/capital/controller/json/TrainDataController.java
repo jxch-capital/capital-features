@@ -25,9 +25,12 @@ public class TrainDataController {
         try {
             // todo 做切面
             ServiceU.setExternalService();
-            return trainService.trainData(param.getTrainConfigId());
+            TrainDataRes trainDataRes = trainService.trainData(param.getTrainConfigId());
+            log.info("开始返回数据");
+            return trainDataRes;
         } finally {
             ServiceU.removeExternalMark();
+            log.info("end.");
         }
     }
 

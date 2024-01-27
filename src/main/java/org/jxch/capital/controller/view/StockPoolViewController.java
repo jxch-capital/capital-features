@@ -55,6 +55,12 @@ public class StockPoolViewController {
         return redirect();
     }
 
+    @RequestMapping(value = "/update_new_codes/{id}")
+    public String updateNewCodes(@PathVariable(value = "id") Long id) {
+        stockPoolService.updateNewCode(id);
+        return redirect();
+    }
+
     @RequestMapping(value = "/update_to_now/{id}")
     public String updateToNow(@PathVariable(value = "id") Long id) {
         stockPoolService.updateToNow(Collections.singletonList(id));

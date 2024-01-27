@@ -29,6 +29,8 @@ public class TrainIndicesDataRes implements TrainDataRes {
     }
 
     @Override
+    @JsonIgnore
+    @JSONField(serialize = false)
     public List<KLine> getSourceKLines() {
         return kNodeTrains.getKNodes().stream().map(kNodeTrain -> kNodeTrain.getKLines().get(kNodeTrain.getEndIndex())).toList();
     }

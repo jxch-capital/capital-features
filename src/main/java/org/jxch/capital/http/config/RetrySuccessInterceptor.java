@@ -47,7 +47,7 @@ public class RetrySuccessInterceptor implements Interceptor {
 
             if (needRetryWait(retryNum)) {
                 try {
-                    Thread.sleep(retryWait.toMillis());
+                    Thread.sleep(retryWait.toMillis() * (retryNum + 1));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     // 中断后，仍需决定是否继续重试或退出

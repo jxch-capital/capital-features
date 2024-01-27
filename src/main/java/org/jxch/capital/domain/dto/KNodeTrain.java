@@ -1,5 +1,7 @@
 package org.jxch.capital.domain.dto;
 
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -55,6 +57,8 @@ public class KNodeTrain {
                 / this.kLines.get(this.endIndex).getClose() * 100;
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public KNodeTrain resetUpToFlat() {
         up = false;
         flat = true;
@@ -62,6 +66,8 @@ public class KNodeTrain {
         return this;
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public KNodeTrain resetDownToFlat() {
         down = false;
         flat = true;
@@ -69,6 +75,8 @@ public class KNodeTrain {
         return this;
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public double[][] getIndices() {
         return this.kLines.subList(startIndex, endIndex + 1).stream().map(kLine -> {
             KLineIndices indices = (KLineIndices) kLine;
@@ -76,10 +84,35 @@ public class KNodeTrain {
         }).toArray(double[][]::new);
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double[][] getIndices(List<String> names) {
+        return this.kLines.subList(startIndex, endIndex + 1).stream().map(kLine -> {
+            KLineIndices indices = (KLineIndices) kLine;
+            return indices.get(names).stream().mapToDouble(v -> v).toArray();
+        }).toArray(double[][]::new);
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double[][] getFeatures(List<String> names) {
+        return getIndices(names);
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double[][] getFeaturesT(List<String> names) {
+        return getT(getIndices(names));
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
     public double[][] getFeatures() {
         return getIndices();
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     // todo 相关特征的转变应该属于KLineFeaturesDto的职责
     public double[][] getFeatures(Function<KLine, KLineFeatures> featureFunc) {
         return this.kLines.subList(startIndex, endIndex + 1).stream().map(featureFunc).map(KLineFeatures::getFeatures)
@@ -87,34 +120,50 @@ public class KNodeTrain {
                 .toArray(double[][]::new);
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     private double[][] getT(double[][] t) {
         return new SimpleMatrix(t).transpose().toArray2();
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public double[][] getIndicesT() {
         return getT(getIndices());
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public double[][] getFeaturesT() {
         return getT(getFeatures());
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public double[][] getFeaturesT(Function<KLine, KLineFeatures> featureFunc) {
         return getT(getFeatures(featureFunc));
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public int upSignal() {
         return up ? 1 : 0;
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public int downSignal() {
         return down ? 1 : 0;
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public int flatSignal() {
         return flat ? 1 : 0;
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public int signal3() {
         return up ? 1 : down ? -1 : 0;
     }

@@ -5,11 +5,16 @@ import cn.hutool.core.date.DateUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.*;
-import org.jxch.capital.server.*;
+import org.jxch.capital.server.IndexService;
+import org.jxch.capital.server.IndicesCombinationService;
+import org.jxch.capital.server.KNodeService;
+import org.jxch.capital.server.StockHistoryService;
 import org.jxch.capital.stock.StockService;
+import org.jxch.capital.utils.AsyncU;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -138,39 +143,43 @@ public class KNodeServiceImpl implements KNodeService {
     }
 
 
+    @SneakyThrows
     private List<KNode> getComparisonList(@NonNull KNodeParam kNodeParam) {
         if (kNodeParam.hasIndicesComId()) {
             kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
         }
 
         if (kNodeParam.hasIndicatorWrappers()) {
-            return stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
-                    .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
-                    .entrySet().stream().flatMap(entry -> {
-                                List<KLine> kLines = kLineMapper.toKLineByStockHistoryDto(entry.getValue());
+            return AsyncU.newForkJoinPool().submit(() ->
+                    stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
+                            .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                            .entrySet().stream().parallel().flatMap(entry -> {
+                                        List<KLine> kLines = kLineMapper.toKLineByStockHistoryDto(entry.getValue());
 
-                                List<KLine> kLineIndices;
-                                if (kNodeParam.getNormalized()) {
-                                    kLineIndices = indexService.indexAndNormalized(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
-                                            .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
-                                } else {
-                                    kLineIndices = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
-                                            .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
-                                }
+                                        List<KLine> kLineIndices;
+                                        if (kNodeParam.getNormalized()) {
+                                            kLineIndices = indexService.indexAndNormalized(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                                                    .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
+                                        } else {
+                                            kLineIndices = indexService.index(kLines, Duration.ofDays(1), kNodeParam.getIndicatorWrappers())
+                                                    .stream().map(kLineInd -> (KLine) kLineInd).toList().subList(kNodeParam.getMaxLength(), kLines.size());
+                                        }
 
-                                return IntStream.range(0, kLineIndices.size() - kNodeParam.getSize() + 1)
-                                        .mapToObj(start -> kLineIndices.subList(start, start + kNodeParam.getSize()))
-                                        .map(kIndList -> KNode.builder().code(entry.getKey()).kLines(kIndList).build());
-                            }
-                    ).toList();
+                                        log.info("处理完成：{}", entry.getKey());
+                                        return IntStream.range(0, kLineIndices.size() - kNodeParam.getSize() + 1)
+                                                .mapToObj(start -> kLineIndices.subList(start, start + kNodeParam.getSize()))
+                                                .map(kIndList -> KNode.builder().code(entry.getKey()).kLines(kIndList).build());
+                                    }
+                            ).toList()).get();
         } else {
-            return stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
-                    .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
-                    .entrySet().stream().flatMap(entry ->
-                            IntStream.range(0, entry.getValue().size() - kNodeParam.getSize() + 1)
-                                    .mapToObj(start -> entry.getValue().subList(start, start + kNodeParam.getSize()))
-                                    .map(kLines -> KNode.builder().code(entry.getKey()).kLines(kLineMapper.toKLineByStockHistoryDto(kLines)).build())
-                    ).toList();
+            return AsyncU.newForkJoinPool().submit(() ->
+                    stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
+                            .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                            .entrySet().stream().parallel().flatMap(entry ->
+                                    IntStream.range(0, entry.getValue().size() - kNodeParam.getSize() + 1)
+                                            .mapToObj(start -> entry.getValue().subList(start, start + kNodeParam.getSize()))
+                                            .map(kLines -> KNode.builder().code(entry.getKey()).kLines(kLineMapper.toKLineByStockHistoryDto(kLines)).build())
+                            ).toList()).get();
         }
     }
 
