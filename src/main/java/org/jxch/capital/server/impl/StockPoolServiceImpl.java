@@ -35,6 +35,11 @@ public class StockPoolServiceImpl implements StockPoolService {
     }
 
     @Override
+    public List<StockPoolDto> findAllInSorted() {
+        return findAll().stream().sorted(Comparator.comparing(StockPoolDto::getPoolName)).toList();
+    }
+
+    @Override
     public StockPoolDto findById(Long id) {
         return stockPoolMapper.toStockPoolDto(stockPoolRepository.findById(id).orElseThrow());
     }
@@ -65,7 +70,7 @@ public class StockPoolServiceImpl implements StockPoolService {
                     .interval(stockPoolDto.getInterval())
                     .engine(EngineEnum.pares(stockPoolDto.getEngine()))
                     .build());
-            List<StockHistoryDto> stockHistoryList = kLineMapper.toStockHistoryDtoByKLine(history).stream()
+            List<StockHistoryDto> stockHistoryList = kLineMapper.toStockHistoryDtoByKLine(history).parallelStream()
                     .map(stockHistory -> stockHistory.setStockPoolId(stockPoolDto.getId()).setStockCode(code))
                     .filter(stockHistoryDto -> Objects.nonNull(stockHistoryDto.getClose()) && stockHistoryDto.getDate().getTime() <= stockPoolDto.getEndDate().getTime())
                     .toList();

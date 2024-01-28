@@ -108,7 +108,7 @@ public interface KLineMapper {
     }
 
     default List<KLine> toKLineByYahooChartRes(@NonNull ChartRes chartRes) {
-        return IntStream.range(0, chartRes.getLengthThrow()).mapToObj(index -> new KLine()
+        return IntStream.range(0, chartRes.getLengthThrow()).parallel().mapToObj(index -> new KLine()
                 .setDate(chartRes.getDate(index))
                 .setClose(chartRes.getClose(index))
                 .setOpen(chartRes.getOpen(index))

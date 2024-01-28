@@ -22,7 +22,7 @@ public class StockPoolViewController {
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("stock_pool_index");
         modelAndView.addObject("stockPool", new StockPoolDto());
-        modelAndView.addObject("stockPools", stockPoolService.findAll());
+        modelAndView.addObject("stockPools", stockPoolService.findAllInSorted());
         return modelAndView;
     }
 

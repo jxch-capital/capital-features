@@ -7,6 +7,8 @@ import java.util.List;
 public interface StockPoolService {
     List<StockPoolDto> findAll();
 
+    List<StockPoolDto> findAllInSorted();
+
     StockPoolDto findById(Long id);
 
     List<StockPoolDto> findById(List<Long> ids);
