@@ -10,8 +10,8 @@ import org.jxch.capital.learning.model.Scalers;
 import org.jxch.capital.learning.model.ModelTypeEnum;
 import org.jxch.capital.learning.model.dto.StandardScaler;
 import org.jxch.capital.learning.model.dto.TensorflowTFModelMetaData;
-import org.jxch.capital.learning.train.TrainService;
-import org.jxch.capital.learning.train.dto.TrainIndicesDataRes;
+import org.jxch.capital.learning.train.data.TrainService;
+import org.jxch.capital.learning.train.param.dto.TrainIndicesDataRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

@@ -5,7 +5,7 @@ import org.jxch.capital.learning.model.dto.KLineModelSignal;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
 import org.jxch.capital.learning.model.dto.PredictSignalStack;
 import org.jxch.capital.learning.model.dto.PredictionParam;
-import org.jxch.capital.learning.train.TrainDataRes;
+import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.springframework.core.Ordered;
 
 import java.util.List;

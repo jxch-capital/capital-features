@@ -7,8 +7,8 @@ import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3PredictionCompleteService;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
 import org.jxch.capital.learning.model.dto.PredictionParam;
-import org.jxch.capital.learning.train.TrainDataRes;
-import org.jxch.capital.learning.train.TrainService;
+import org.jxch.capital.learning.train.param.TrainDataRes;
+import org.jxch.capital.learning.train.data.TrainService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

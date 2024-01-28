@@ -9,7 +9,7 @@ import org.jxch.capital.learning.model.PredictSignalTypeEnum;
 import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
 import org.jxch.capital.learning.model.dto.PredictionParam;
-import org.jxch.capital.learning.train.TrainDataRes;
+import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

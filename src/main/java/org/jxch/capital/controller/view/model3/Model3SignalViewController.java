@@ -10,7 +10,7 @@ import org.jxch.capital.domain.vo.Model3SignalParam;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3PredictionCompleteService;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.train.TrainConfigService;
+import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.utils.EChartsU;
 import org.jxch.capital.utils.KLineSignals;
 import org.springframework.stereotype.Controller;

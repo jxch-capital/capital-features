@@ -1,7 +1,7 @@
 package org.jxch.capital.server.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.learning.train.TrainIndicesDataService;
+import org.jxch.capital.learning.train.data.TrainIndicesDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

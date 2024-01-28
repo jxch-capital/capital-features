@@ -3,7 +3,7 @@ package org.jxch.capital.controller.view;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.TrainConfigDto;
-import org.jxch.capital.learning.train.TrainConfigService;
+import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.learning.train.Trains;
 import org.jxch.capital.utils.Controllers;
 import org.springframework.stereotype.Controller;
