@@ -4,6 +4,7 @@ import org.jxch.capital.domain.dto.StockHistoryDto;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface StockHistoryService {
 
@@ -12,6 +13,8 @@ public interface StockHistoryService {
     void delByStockPoolId(List<Long> stockPoolIds);
 
     List<StockHistoryDto> findByStockPoolId(Long stockPoolId);
+
+    Map<String, List<StockHistoryDto>> findMapByStockPoolId(Long stockPoolId, Integer maxLength);
 
     List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode);
 

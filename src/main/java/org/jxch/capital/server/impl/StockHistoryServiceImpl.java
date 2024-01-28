@@ -2,16 +2,21 @@ package org.jxch.capital.server.impl;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.StockHistoryRepository;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.dto.StockHistoryDto;
 import org.jxch.capital.server.StockHistoryService;
+import org.jxch.capital.utils.AsyncU;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,6 +43,23 @@ public class StockHistoryServiceImpl implements StockHistoryService {
 //    @Cacheable(value = "findByStockPoolId",  unless = "#result == null")
     public List<StockHistoryDto> findByStockPoolId(Long stockPoolId) {
         return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolId(stockPoolId));
+    }
+
+    @Override
+    @SneakyThrows
+    public Map<String, List<StockHistoryDto>> findMapByStockPoolId(Long stockPoolId, Integer maxLength) {
+        return AsyncU.newForkJoinPool().submit(() ->
+                findByStockPoolId(stockPoolId).parallelStream()
+                        .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                        .entrySet().parallelStream()
+                        .filter(entry -> entry.getValue().size() > maxLength)
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> entry.getValue().stream()
+                                        .sorted(Comparator.comparing(StockHistoryDto::getDate))
+                                        .collect(Collectors.toList())
+                        ))
+        ).get();
     }
 
     @Override

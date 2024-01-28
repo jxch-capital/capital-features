@@ -8,7 +8,10 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.convert.KLineMapper;
-import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.domain.dto.HistoryParam;
+import org.jxch.capital.domain.dto.KLine;
+import org.jxch.capital.domain.dto.KNode;
+import org.jxch.capital.domain.dto.KNodeParam;
 import org.jxch.capital.server.IndexService;
 import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.KNodeService;
@@ -23,7 +26,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -151,8 +153,7 @@ public class KNodeServiceImpl implements KNodeService {
 
         if (kNodeParam.hasIndicatorWrappers()) {
             return AsyncU.newForkJoinPool().submit(() ->
-                    stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
-                            .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                    stockHistoryService.findMapByStockPoolId(kNodeParam.getStockPoolId(), kNodeParam.getMaxLength())
                             .entrySet().stream().parallel().flatMap(entry -> {
                                         List<KLine> kLines = kLineMapper.toKLineByStockHistoryDto(entry.getValue());
 
@@ -173,8 +174,7 @@ public class KNodeServiceImpl implements KNodeService {
                             ).toList()).get();
         } else {
             return AsyncU.newForkJoinPool().submit(() ->
-                    stockHistoryService.findByStockPoolId(kNodeParam.getStockPoolId()).stream()
-                            .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                    stockHistoryService.findMapByStockPoolId(kNodeParam.getStockPoolId(), kNodeParam.getSize())
                             .entrySet().stream().parallel().flatMap(entry ->
                                     IntStream.range(0, entry.getValue().size() - kNodeParam.getSize() + 1)
                                             .mapToObj(start -> entry.getValue().subList(start, start + kNodeParam.getSize()))
