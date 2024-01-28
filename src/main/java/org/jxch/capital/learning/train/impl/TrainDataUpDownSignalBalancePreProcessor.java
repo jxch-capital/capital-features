@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KNodeTrain;
 import org.jxch.capital.learning.train.TrainDataSignalBalancePreProcessor;
 import org.jxch.capital.learning.train.dto.TrainDataSignalBalanceParam;
-import org.jxch.capital.learning.train.dto.TrainDataUpSignalBalanceParam;
 import org.jxch.capital.support.ServiceWrapper;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +14,22 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TrainDataUpSignalBalancePreProcessor implements TrainDataSignalBalancePreProcessor {
-
+public class TrainDataUpDownSignalBalancePreProcessor implements TrainDataSignalBalancePreProcessor {
     @Override
     public List<KNodeTrain> kNodeTrainsPostProcess(@NotNull List<KNodeTrain> kNodeTrains, @NotNull ServiceWrapper serviceWrapper) {
+        kNodeTrains = remove(kNodeTrains, kNodeTrain -> kNodeTrain.isReset() || kNodeTrain.isFlat());
         double threshold = serviceWrapper.getParamObj(TrainDataSignalBalanceParam.class).getThreshold();
-        return shuffle(threshold(remove(kNodeTrains, KNodeTrain::isReset), KNodeTrain::isUp, threshold, serviceWrapper));
+        return shuffle(threshold(kNodeTrains, KNodeTrain::isUp, threshold, serviceWrapper));
     }
 
     @Override
     public Object getDefaultParam() {
-        return new TrainDataUpSignalBalanceParam();
+        return new TrainDataSignalBalanceParam();
     }
 
     @Override
     public String name() {
-        return "上涨信号平衡器";
+        return "涨跌信号平衡器";
     }
 
 }
