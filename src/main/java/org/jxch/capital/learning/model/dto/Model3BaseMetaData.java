@@ -37,7 +37,7 @@ public class Model3BaseMetaData {
     private Long trainconfigid;
     private String modeltype = ModelTypeEnum.TENSORFLOW_MODEL_TF_ZIP.getName();
     private String storagetype = ModelStorageTypeEnum.MINIO.getName();
-    private String predictsignaltype = PredictSignalTypeEnum.FOLLOW_UP.getName();
+    private String predictsignaltype = PredictSignalTypeEnum.FOLLOW_UP_DOWN.getName();
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date uploadtime = Calendar.getInstance().getTime();
     private String remark;

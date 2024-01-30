@@ -11,6 +11,7 @@ import java.util.Objects;
 public enum PredictSignalTypeEnum {
     FOLLOW_UP("follow_up"),
     FOLLOW_DOWN("follow_down"),
+    FOLLOW_UP_DOWN("follow_up_down"),
     ;
     private final String name;
 

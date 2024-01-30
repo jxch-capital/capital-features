@@ -4,6 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class Controllers {
 
@@ -20,6 +23,11 @@ public class Controllers {
         String contextPath = request.getContextPath();
         String wsUrl = serverName + ":" + serverPort + contextPath + subPath;
         return "ws://" + wsUrl;
+    }
+
+    public static boolean isHttpRequestThread() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        return requestAttributes instanceof ServletRequestAttributes;
     }
 
 }
