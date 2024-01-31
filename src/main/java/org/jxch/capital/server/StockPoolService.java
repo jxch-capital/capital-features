@@ -22,4 +22,6 @@ public interface StockPoolService {
     void updateToNow(List<Long> ids);
 
     void updateNewCode(Long id);
+
+    Long getTopPoolId(Long id);
 }

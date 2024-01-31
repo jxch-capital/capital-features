@@ -29,6 +29,7 @@
     <table>
         <tr>
             <th>ID</th>
+            <th>父池ID</th>
             <th>股票池</th>
             <th>引擎</th>
             <th>时间间隔</th>
@@ -39,6 +40,10 @@
         </tr>
         <tr>
             <td>Auto</td>
+            <td>
+                <label for="parentId"></label>
+                <input type="text" th:field="*{parentId}" id="parentId" placeholder="父池ID" style="width: 60px">
+            </td>
             <td>
                 <label for="poolName"></label>
                 <input type="text" th:field="*{poolName}" id="poolName" placeholder="股票池名称">
@@ -70,6 +75,7 @@
 
         <tr th:each="item,iter: ${stockPools}">
             <td th:text="${item.id}" style="color: gray; margin-left: 4px"></td>
+            <td th:text="${item.parentId}"></td>
             <td th:text="${item.poolName}"></td>
             <td th:text="${item.engine}"></td>
             <td th:text="${item.interval}"></td>
@@ -79,9 +85,9 @@
             <td>
                 <a th:href="@{'/stock_pool/edit/' + ${item.id}}">修改</a>
                 <a th:href="@{'/stock_pool/del/' + ${item.id}}">删除</a>
-                <a th:href="@{'/stock_pool/update/' + ${item.id}}">更新</a>
-                <a th:href="@{'/stock_pool/update_new_codes/' + ${item.id}}">更新新增股票</a>
-                <a th:href="@{'/stock_pool/update_to_now/' + ${item.id}}">更新至当前</a>
+                <a th:href="@{'/stock_pool/update/' + ${item.id}}" th:unless="${item.parentId}">更新</a>
+                <a th:href="@{'/stock_pool/update_new_codes/' + ${item.id}}" th:unless="${item.parentId}">更新新增股票</a>
+                <a th:href="@{'/stock_pool/update_to_now/' + ${item.id}}" th:unless="${item.parentId}">更新至当前</a>
             </td>
         </tr>
     </table>

@@ -63,8 +63,30 @@ public class StockHistoryServiceImpl implements StockHistoryService {
     }
 
     @Override
+    @SneakyThrows
+    public Map<String, List<StockHistoryDto>> findMapByStockPoolId(Long stockPoolId, List<String> codes, Integer maxLength) {
+        return AsyncU.newForkJoinPool().submit(() ->
+                findByStockPoolIdAndStockCode(stockPoolId, codes).parallelStream()
+                        .collect(Collectors.groupingBy(StockHistoryDto::getStockCode))
+                        .entrySet().parallelStream()
+                        .filter(entry -> entry.getValue().size() > maxLength)
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> entry.getValue().stream()
+                                        .sorted(Comparator.comparing(StockHistoryDto::getDate))
+                                        .collect(Collectors.toList())
+                        ))
+        ).get();
+    }
+
+    @Override
     public List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode) {
         return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolIdAndStockCode(stockPoolId, stockCode));
+    }
+
+    @Override
+    public List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, List<String> stockCodes) {
+        return kLineMapper.toStockHistoryDto(stockHistoryRepository.findByStockPoolIdAndStockCode(stockPoolId, stockCodes));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.jxch.capital.domain.dto;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +9,7 @@ import org.jxch.capital.stock.EngineEnum;
 import org.jxch.capital.stock.IntervalEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Accessors(chain = true)
@@ -25,20 +24,36 @@ public class StockPoolDto {
     private Date startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
+    private Long parentId;
 
-
+    @JsonIgnore
+    @JSONField(serialize = false)
     public List<String> getPoolStockList() {
         return Arrays.stream(this.poolStocks.split(",")).map(String::trim).toList();
     }
 
     @JsonIgnore
+    @JSONField(serialize = false)
     public IntervalEnum getIntervalEnum() {
         return IntervalEnum.valueOf(this.interval);
     }
 
     @JsonIgnore
+    @JSONField(serialize = false)
     public EngineEnum getEngineEnum() {
         return EngineEnum.pares(this.engine);
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public Boolean isSubPool() {
+        return Objects.nonNull(parentId);
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public Long getTopPoolId() {
+        return Optional.ofNullable(parentId).orElse(id);
     }
 
 }

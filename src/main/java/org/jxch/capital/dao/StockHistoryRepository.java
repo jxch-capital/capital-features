@@ -16,6 +16,9 @@ public interface StockHistoryRepository extends JpaRepository<StockHistory, Long
     @Query("select h from stock_history h where h.stockPoolId = ?1 and h.stockCode = ?2")
     List<StockHistory> findByStockPoolIdAndStockCode(Long id, String stockCode);
 
+    @Query("select h from stock_history h where h.stockPoolId = ?1 and h.stockCode in ?2")
+    List<StockHistory> findByStockPoolIdAndStockCode(Long id, List<String> stockCodes);
+
     @Query("select h from stock_history h where h.stockPoolId = ?1 and h.stockCode = ?2 and h.date between ?3 and ?4")
     List<StockHistory> findByStockPoolIdAndStockCode(Long id, String stockCode, Date startDate, Date endDate);
 

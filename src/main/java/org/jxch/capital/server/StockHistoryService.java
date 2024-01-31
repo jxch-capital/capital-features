@@ -16,7 +16,11 @@ public interface StockHistoryService {
 
     Map<String, List<StockHistoryDto>> findMapByStockPoolId(Long stockPoolId, Integer maxLength);
 
+    Map<String, List<StockHistoryDto>> findMapByStockPoolId(Long stockPoolId, List<String> codes, Integer maxLength);
+
     List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode);
+
+    List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, List<String> stockCodes);
 
     List<StockHistoryDto> findByStockPoolIdAndStockCode(Long stockPoolId, String stockCode, Date startDate, Date endDate);
 

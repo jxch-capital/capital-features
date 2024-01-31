@@ -158,4 +158,9 @@ public class StockPoolServiceImpl implements StockPoolService {
         log.info("更新股票池成功：{}", stockPoolDto.getPoolName());
     }
 
+    @Override
+    public Long getTopPoolId(Long id) {
+        return findById(id).getTopPoolId();
+    }
+
 }

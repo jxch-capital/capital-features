@@ -23,4 +23,5 @@ public class StockPool {
     private String interval;
     private Date startDate;
     private Date endDate;
+    private Long parentId;
 }
