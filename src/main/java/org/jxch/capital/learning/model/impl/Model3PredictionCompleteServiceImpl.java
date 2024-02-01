@@ -7,12 +7,11 @@ import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3PredictionCompleteService;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
 import org.jxch.capital.learning.model.dto.PredictionParam;
-import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.jxch.capital.learning.train.data.TrainService;
+import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -33,16 +32,13 @@ public class Model3PredictionCompleteServiceImpl implements Model3PredictionComp
         return prediction(trainService.predictionData(predictionParam).getFeatures(), modelName);
     }
 
-    public PredictionParam setTrainConfigIdIfNull(String modelName, @NotNull PredictionParam predictionParam) {
-        if (Objects.isNull(predictionParam.getTrainConfigId())) {
-            predictionParam.setTrainConfigId(model3Management.findModelMetaData(modelName).getTrainconfigid());
-        }
-        return predictionParam;
+    public PredictionParam setTrainConfigId(String modelName, @NotNull PredictionParam predictionParam) {
+        return predictionParam.setTrainConfigId(model3Management.findModelMetaData(modelName).getTrainconfigid());
     }
 
     @Override
     public Model3PredictRes predictionCarry(String modelName, @NotNull PredictionParam predictionParam) {
-        predictionParam = setTrainConfigIdIfNull(modelName, predictionParam);
+        predictionParam = setTrainConfigId(modelName, predictionParam);
         TrainDataRes trainDataRes = trainService.predictionData(predictionParam);
         double[] prediction = prediction(trainDataRes.getFeatures(), modelName);
         return model3PredictSignalAutoProcessor.signalProcessor(trainDataRes, prediction, modelName, predictionParam);
@@ -50,12 +46,12 @@ public class Model3PredictionCompleteServiceImpl implements Model3PredictionComp
 
     @Override
     public Model3PredictRes predictionCarry(@NotNull List<String> modelNames, PredictionParam predictionParam) {
-        predictionParam = setTrainConfigIdIfNull(modelNames.get(0), predictionParam);
-        TrainDataRes trainDataRes = trainService.predictionData(predictionParam);
-
-        PredictionParam finalPredictionParam = predictionParam;
-        return modelNames.stream().map(modelName ->
-                model3PredictSignalAutoProcessor.signalProcessor(trainDataRes, prediction(trainDataRes.getFeatures(), modelName), modelName, finalPredictionParam)
+        return modelNames.stream().map(modelName -> {
+                    setTrainConfigId(modelName, predictionParam);
+                    TrainDataRes trainDataRes = trainService.predictionData(predictionParam);
+                    return model3PredictSignalAutoProcessor.signalProcessor(trainService.predictionData(predictionParam),
+                            prediction(trainDataRes.getFeatures(), modelName), modelName, predictionParam);
+                }
         ).reduce(Model3PredictRes::stack).orElseThrow(() -> new IllegalArgumentException("预测集信号叠加异常"));
     }
 

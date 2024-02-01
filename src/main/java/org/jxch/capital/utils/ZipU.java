@@ -68,7 +68,11 @@ public class ZipU {
                     firstUnzipped = f;
                     if (firstUnzipped.exists() && !coverage) {
                         log.debug("目录已存在，无需解压");
-                        return firstUnzipped;
+                        if (firstUnzipped.getName().equals("assets")) {
+                            return firstUnzipped.toPath().getParent().toFile();
+                        } else {
+                            return firstUnzipped;
+                        }
                     }
                 }
 

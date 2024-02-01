@@ -20,4 +20,7 @@ public class Model3SignalParam {
     private Double limitAbs = 0.05;
     private Integer futureNum = 8;
     private Boolean maskContinuousSignals = false;
+
+    @Builder.Default
+    private List<String> filters = null;
 }

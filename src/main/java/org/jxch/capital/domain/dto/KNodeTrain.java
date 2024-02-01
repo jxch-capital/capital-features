@@ -59,6 +59,12 @@ public class KNodeTrain {
 
     @JsonIgnore
     @JSONField(serialize = false)
+    public Double absFuturePercent() {
+        return Math.abs(getFuturePercent());
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
     public KNodeTrain resetUpToFlat() {
         up = false;
         flat = true;
@@ -70,6 +76,16 @@ public class KNodeTrain {
     @JSONField(serialize = false)
     public KNodeTrain resetDownToFlat() {
         down = false;
+        flat = true;
+        isReset = true;
+        return this;
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public KNodeTrain resetToFlat() {
+        down = false;
+        up = false;
         flat = true;
         isReset = true;
         return this;

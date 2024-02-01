@@ -12,9 +12,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class TrainDataSignalBalanceParam {
+public class TrainDataFutureThParam {
     @Builder.Default
-    private Double threshold = 0.5;
-    @Builder.Default
-    private Double cut = 0.01;
+    private Double threshold = 0.02;
 }

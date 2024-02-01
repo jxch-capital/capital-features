@@ -42,7 +42,12 @@
     <input type="text" th:field="*{futureNum}" id="futureNum" placeholder="预测数" style="max-width: 40px" required>
     <label for="limitAbs">信号抑制</label>
     <input type="text" th:field="*{limitAbs}" id="limitAbs" placeholder="信号抑制" style="max-width: 40px" required>
-
+    <label for="filters">
+        <span>过滤器：</span>
+        <select id="filters" th:field="*{filters}" multiple class="selectpicker" data-live-search="true">
+            <option th:each="item: ${all_filters}" th:value="${item}" th:text="${item}"></option>
+        </select>
+    </label>
     <input type="submit" value="确定" class="btn-primary">
 </form>
 <div th:if="${statistics}">

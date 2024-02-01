@@ -38,7 +38,7 @@ public interface TrainDataSignalBalancePreProcessor extends ServiceWrapperSuppor
             kNodeTrains = new LinkedList<>(upList);
             kNodeTrains.addAll(notUpList);
         } else if ((double) upCount / totalCount > threshold) {
-            // 移除上信号节点 (up - x) / (size - x) = th
+            // 移除上信号节点 (up - x) / (size - x) = th   val train in
             int x = (int) Math.floor((upCount - threshold * totalCount) / (1 - threshold)); // 计算要移除的上信号数
             List<KNodeTrain> notUpList = kNodeTrains.parallelStream().filter(kNodeTrain -> !signalFunc.apply(kNodeTrain)).toList();
             List<KNodeTrain> upList = kNodeTrains.parallelStream().filter(signalFunc::apply)

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
@@ -38,6 +39,12 @@ public class PredictionParam {
     @Override
     public int hashCode() {
         return Objects.hash(trainConfigId, code, start, end);
+    }
+
+    public boolean isSame(@NotNull PredictionParam predictionParam) {
+        return Objects.equals(code, predictionParam.getCode()) &&
+                Objects.equals(start, predictionParam.getStart()) &&
+                Objects.equals(end, predictionParam.getEnd());
     }
 
 }

@@ -1,5 +1,6 @@
 package org.jxch.capital.learning.model.dto;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -64,10 +65,10 @@ public class Model3PredictRes {
     }
 
     public Boolean canStack(@NotNull Model3PredictRes predictRes) {
-        return Objects.equals(predictRes.getPredictionParam(), getPredictionParam()) &&
+        return getPredictionParam().isSame(predictRes.getPredictionParam()) &&
                 Objects.equals(predictRes.getSize(), getSize()) &&
-                Objects.equals(predictRes.getStartDate(), getStartDate()) &&
-                Objects.equals(predictRes.getEndDate(), getEndDate());
+                DateUtil.isSameDay(predictRes.getStartDate(), getStartDate()) &&
+                DateUtil.isSameDay(predictRes.getEndDate(), getEndDate());
     }
 
     public Model3PredictRes stack(Model3PredictRes predictRes) {
