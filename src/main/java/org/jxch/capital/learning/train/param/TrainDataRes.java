@@ -8,6 +8,14 @@ public interface TrainDataRes {
 
     double[][][] getFeatures();
 
+    int[] getUpSignals();
+
+    int[] getDownSignals();
+
+    int[] get3Signals();
+
     List<KLine> getSourceKLines();
+
+    int[] getSignals(SignalType signalType);
 
 }
