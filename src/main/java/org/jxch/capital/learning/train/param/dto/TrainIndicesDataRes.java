@@ -25,7 +25,7 @@ public class TrainIndicesDataRes implements TrainDataRes {
     @JsonIgnore
     @JSONField(serialize = false)
     public double[][][] getFeatures() {
-        return kNodeTrains.getFeaturesT();
+        return kNodeTrains.getFeatures();
     }
 
     @Override

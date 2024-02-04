@@ -57,7 +57,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         kNodeTrains = autoTrainDataSignalFilterPreprocessor.kNodeTrainsPostProcess(kNodeTrains, filterWrappers);
         kNodeTrains = autoTrainDataSignalBalancePreProcessor.kNodeTrainsPostProcess(kNodeTrains, trainIndicesDataParam.getBalancerWrappers());
 
-        KNodeTrains theKNodeTrains = new KNodeTrains(kNodeTrains, indicatorNames, trainIndicesDataParam.getSimplify() && ServiceU.isExternalService());
+        KNodeTrains theKNodeTrains = new KNodeTrains(kNodeTrains, indicatorNames, trainIndicesDataParam.getSimplify() && ServiceU.isExternalService(), trainIndicesDataParam.getTranspose());
         theKNodeTrains = autoTrainDataFeaturesScrubberProcessor.featuresPostProcessor(theKNodeTrains, trainIndicesDataParam.getScrubberWrappers());
         return new TrainIndicesDataRes(theKNodeTrains);
     }
@@ -87,7 +87,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         }
 
         List<KNodeTrain> kNodeTrains = kNodes.stream().map(kNode -> KNodeTrain.builder().code(kNode.getCode()).kNode(kNode).futureNum(0).build()).toList();
-        KNodeTrains theKNodeTrains = new KNodeTrains(kNodeTrains, indicatorNames, indicesDataParam.getSimplify() && ServiceU.isExternalService());
+        KNodeTrains theKNodeTrains = new KNodeTrains(kNodeTrains, indicatorNames, indicesDataParam.getSimplify() && ServiceU.isExternalService(), indicesDataParam.getTranspose());
         return new TrainIndicesDataRes(theKNodeTrains);
     }
 

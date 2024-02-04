@@ -16,7 +16,6 @@ import java.util.function.Function;
 public class KNodeTrains {
     private List<KNodeTrain> kNodes;
     private double[][][] features;
-    private double[][][] featuresT;
     private int[] upSignals;
     private int[] downSignals;
     private int[] signals3;
@@ -25,27 +24,30 @@ public class KNodeTrains {
     public KNodeTrains(List<KNodeTrain> kNodes) {
         this.kNodes = kNodes;
         this.features = this.kNodes.parallelStream().map(KNodeTrain::getFeatures).toArray(double[][][]::new);
-        this.featuresT = this.kNodes.parallelStream().map(KNodeTrain::getFeaturesT).toArray(double[][][]::new);
         this.upSignals = this.kNodes.parallelStream().mapToInt(KNodeTrain::upSignal).toArray();
         this.downSignals = this.kNodes.parallelStream().mapToInt(KNodeTrain::downSignal).toArray();
         this.signals3 = this.kNodes.parallelStream().mapToInt(KNodeTrain::signal3).toArray();
     }
 
-    public KNodeTrains(@NotNull List<KNodeTrain> kNodes, List<String> featureNames, boolean simplify) {
+    public KNodeTrains(@NotNull List<KNodeTrain> kNodes, List<String> featureNames, boolean simplify, boolean transpose) {
         this.upSignals = kNodes.parallelStream().mapToInt(KNodeTrain::upSignal).toArray();
         this.downSignals = kNodes.parallelStream().mapToInt(KNodeTrain::downSignal).toArray();
-        this.featuresT = kNodes.parallelStream().map(kNodeTrain -> kNodeTrain.getFeaturesT(featureNames)).toArray(double[][][]::new);
 
         if (!simplify) {
             this.kNodes = kNodes;
             this.signals3 = kNodes.parallelStream().mapToInt(KNodeTrain::signal3).toArray();
+        }
+
+        if (transpose) {
+            this.features = kNodes.parallelStream().map(kNodeTrain -> kNodeTrain.getFeaturesT(featureNames)).toArray(double[][][]::new);
+        } else {
             this.features = kNodes.parallelStream().map(kNodeTrain -> kNodeTrain.getFeatures(featureNames)).toArray(double[][][]::new);
         }
+
     }
 
     public KNodeTrains feature(Function<KLine, KLineFeatures> featureFunc) {
         this.features = this.kNodes.parallelStream().map(train -> train.getFeatures(featureFunc)).toArray(double[][][]::new);
-        this.featuresT = this.kNodes.parallelStream().map(train -> train.getFeaturesT(featureFunc)).toArray(double[][][]::new);
         return this;
     }
 
