@@ -33,6 +33,8 @@ public class TrainIndicesDataParam implements TrainDataParam {
     @Builder.Default
     private Boolean simplify = false;
     @Builder.Default
+    private Boolean transpose = false;
+    @Builder.Default
     private List<ServiceWrapper> filterWrappers = new ArrayList<>();
     @Builder.Default
     private List<ServiceWrapper> balancerWrappers = null;

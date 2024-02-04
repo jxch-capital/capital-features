@@ -22,8 +22,7 @@ public class TrainDataFeaturesTDefaultScrubberProcessor implements TrainDataFeat
     public boolean support(KNodeTrains kNodeTrains, @NotNull ServiceWrapper serviceWrapper) {
         return Objects.equals(serviceWrapper.getName(), name()) &&
                 (
-                        (Objects.nonNull(kNodeTrains.getFeaturesT()) && MathU.hasInvalid3(kNodeTrains.getFeaturesT()))
-//                                || (Objects.nonNull(kNodeTrains.getFeatures()) && MathU.hasInvalid3(kNodeTrains.getFeatures()))
+                        (Objects.nonNull(kNodeTrains.getFeatures()) && MathU.hasInvalid3(kNodeTrains.getFeatures()))
                 );
     }
 
@@ -33,7 +32,7 @@ public class TrainDataFeaturesTDefaultScrubberProcessor implements TrainDataFeat
         List<Integer> yUp = new ArrayList<>();
         List<Integer> yDown = new ArrayList<>();
 
-        double[][][] featuresT = kNodeTrains.getFeaturesT();
+        double[][][] featuresT = kNodeTrains.getFeatures();
         int[] upSignals = kNodeTrains.getUpSignals();
         int[] downSignals = kNodeTrains.getDownSignals();
 
@@ -45,7 +44,7 @@ public class TrainDataFeaturesTDefaultScrubberProcessor implements TrainDataFeat
             }
         }
 
-        return kNodeTrains.setFeaturesT(x.toArray(new double[0][][]))
+        return kNodeTrains.setFeatures(x.toArray(new double[0][][]))
                 .setUpSignals(yUp.stream().mapToInt(i -> i).toArray())
                 .setDownSignals(yDown.stream().mapToInt(i -> i).toArray());
     }
