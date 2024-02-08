@@ -7,8 +7,8 @@ import org.jxch.capital.learning.model.Model3PredictSignalProcessor;
 import org.jxch.capital.learning.model.PredictSignalTypeEnum;
 import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.model.dto.PredictionParam;
-import org.jxch.capital.learning.train.param.TrainDataRes;
+import org.jxch.capital.learning.train.param.PredictionDataParam;
+import org.jxch.capital.learning.train.param.PredictionDataRes;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -20,14 +20,14 @@ public class Model3PredictFollowUpDownSignalProcessor implements Model3PredictSi
     private final Model3Management model3Management;
 
     @Override
-    public boolean support(TrainDataRes trainDataRes, double[] prediction, String modelName, PredictionParam predictionParam) {
+    public boolean support(PredictionDataRes predictionDataRes, double[] prediction, String modelName, PredictionDataParam predictionParam) {
         Model3BaseMetaData modelMetaData = model3Management.findModelMetaData(modelName);
         return Objects.equals(PredictSignalTypeEnum.parseOf(modelMetaData.getPredictsignaltype()), PredictSignalTypeEnum.FOLLOW_UP_DOWN);
     }
 
     @Override
-    public Model3PredictRes signalProcessor(TrainDataRes trainDataRes, double[] prediction, String modelName, PredictionParam predictionParam) {
-        return customSignalProcessor(pred -> pred > 0.5 ? pred - 0.5 : pred < 0.5 ? pred - 0.5 : 0, trainDataRes, prediction, modelName, predictionParam);
+    public Model3PredictRes signalProcessor(PredictionDataRes predictionDataRes, double[] prediction, String modelName, PredictionDataParam predictionParam) {
+        return customSignalProcessor(pred -> pred > 0.5 ? pred - 0.5 : pred < 0.5 ? pred - 0.5 : 0, predictionDataRes, prediction, modelName, predictionParam);
     }
 
 }

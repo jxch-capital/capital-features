@@ -1,7 +1,7 @@
 package org.jxch.capital.learning.model;
 
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.model.dto.PredictionParam;
+import org.jxch.capital.learning.train.param.dto.PredictionParam;
 
 import java.util.List;
 

@@ -3,6 +3,8 @@ package org.jxch.capital.controller.json;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.dto.PredictionParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.jxch.capital.learning.train.data.TrainService;
 import org.jxch.capital.learning.train.param.dto.TrainParam;
@@ -36,10 +38,10 @@ public class TrainDataController {
 
     @ResponseBody
     @RequestMapping("prediction_data")
-    public TrainDataRes predictionData(@RequestBody @NonNull TrainParam param) {
+    public PredictionDataRes predictionData(@RequestBody @NonNull PredictionParam param) {
         try {
             ServiceU.setExternalService();
-            return trainService.predictionData(param.getTrainConfigId(), param.getCode(), param.getStart(), param.getEnd());
+            return trainService.predictionData(param);
         } finally {
             ServiceU.removeExternalMark();
         }

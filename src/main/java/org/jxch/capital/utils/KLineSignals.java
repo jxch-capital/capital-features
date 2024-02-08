@@ -70,7 +70,6 @@ public class KLineSignals {
     }
 
     @NotNull
-    @Contract("_, _ -> new")
     public static KLineSignalStatistics toKLineSignalStatistics(@NonNull List<KLineSignal> kLineSignals, int limitAbs, int futureSize) {
         return new KLineSignalStatistics(kLineSignals, limitAbs).resetTureSignalByFutureSize(futureSize);
     }
@@ -79,7 +78,7 @@ public class KLineSignals {
         List<KLine> kLine = model3PredictRes.getKLine();
         List<Double> signals = model3PredictRes.getSignals();
         List<KLineSignal> kLineSignals = IntStream.range(0, kLine.size()).mapToObj(index -> KLineSignal.builder()
-                        .code(model3PredictRes.getPredictionParam().getCode())
+                        .code(model3PredictRes.getPredictionDataParam().getCode())
                         .kLine(kLine.get(index))
                         .signal(signals.get(index))
                         .tureSignal(param.getFutureNum() + index < kLine.size() ? kLine.get(param.getFutureNum() + index).getClose() - kLine.get(index).getClose() : null)

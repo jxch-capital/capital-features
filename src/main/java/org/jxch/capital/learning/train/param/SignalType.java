@@ -4,4 +4,5 @@ public enum SignalType {
     UP,
     DOWN,
     UP_DOWN,
+    DEFAULT,
 }

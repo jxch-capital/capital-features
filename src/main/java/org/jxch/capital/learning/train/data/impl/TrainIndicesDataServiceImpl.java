@@ -3,7 +3,11 @@ package org.jxch.capital.learning.train.data.impl;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.learning.train.config.TrainConfigService;
+import org.jxch.capital.learning.train.param.PredictionDataParam;
+import org.jxch.capital.learning.train.param.PredictionDataRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.jxch.capital.learning.train.data.TrainIndicesDataService;
@@ -31,6 +35,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     private final AutoTrainDataSignalBalancePreProcessor autoTrainDataSignalBalancePreProcessor;
     private final AutoTrainDataFeaturesScrubberProcessor autoTrainDataFeaturesScrubberProcessor;
     private final IndicesCombinationService indicesCombinationService;
+    private final TrainConfigService trainConfigService;
     private final KNodeService kNodeService;
     private final StockService stockService;
 
@@ -63,27 +68,25 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
     }
 
     @Override
-    public TrainDataRes predictionData(TrainDataParam param, boolean offset) {
-        TrainIndicesDataParam indicesDataParam = (TrainIndicesDataParam) param;
-        KNodeParam kNodeParam = indicesDataParam.getKNodeParam();
+    public PredictionDataRes predictionData(@NotNull PredictionDataParam param, boolean offset) {
+        TrainConfigDto config = trainConfigService.findById(param.getTrainConfigId());
+        TrainIndicesDataParam indicesDataParam = getParam(config.getParams(), TrainIndicesDataParam.class);
+
+        KNodeParam kNodeParam = indicesDataParam.getKNodeParam().setCode(param.getCode());
         List<String> indicatorNames = new ArrayList<>();
         if (kNodeParam.hasIndicesComId()) {
             kNodeParam.addIndicators(indicesCombinationService.getIndicatorWrapper(kNodeParam.getIndicesComId()));
             indicatorNames.addAll(kNodeParam.getIndicatorNames());
         }
 
-        List<KNode> kNodes = new ArrayList<>();
-        if (indicesDataParam.getOnlyPredictionData()) {
-            kNodes.add(kNodeService.kNode(kNodeParam));
+        List<KNode> kNodes;
+        Date startDate = param.getStart();
+        if (offset) {
+            startDate = stockService.getStartOffsetDay(kNodeParam.getSize() + kNodeParam.getMaxLength(), startDate, kNodeParam.getCode());
+            kNodes = kNodeService.kNodes(kNodeParam, startDate, param.getEnd())
+                    .stream().filter(kNode -> kNode.getLastKLine().getDate().getTime() >= param.getStart().getTime()).toList();
         } else {
-            Date startDate = indicesDataParam.getPredictionStartDate();
-            if (offset) {
-                startDate = stockService.getStartOffsetDay(kNodeParam.getSize() + kNodeParam.getMaxLength(), startDate, kNodeParam.getCode());
-                kNodes = kNodeService.kNodes(kNodeParam, startDate, indicesDataParam.getPredictionEndDate())
-                        .stream().filter(kNode -> kNode.getLastKLine().getDate().getTime() >= indicesDataParam.getPredictionStartDate().getTime()).toList();
-            } else {
-                kNodes = kNodeService.kNodes(kNodeParam, startDate, indicesDataParam.getPredictionEndDate());
-            }
+            kNodes = kNodeService.kNodes(kNodeParam, startDate, param.getEnd());
         }
 
         List<KNodeTrain> kNodeTrains = kNodes.stream().map(kNode -> KNodeTrain.builder().code(kNode.getCode()).kNode(kNode).futureNum(0).build()).toList();

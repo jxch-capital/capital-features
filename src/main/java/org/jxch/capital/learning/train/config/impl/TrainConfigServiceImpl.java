@@ -29,6 +29,11 @@ public class TrainConfigServiceImpl implements TrainConfigService {
     }
 
     @Override
+    public String findParamsById(Long id) {
+        return findById(id).getParams();
+    }
+
+    @Override
     public void del(List<Long> ids) {
         trainConfigRepository.deleteAllById(ids);
     }

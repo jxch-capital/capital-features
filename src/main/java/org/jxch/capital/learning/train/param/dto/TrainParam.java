@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainParam {
+public class TrainParam implements TrainDataParam {
     private Long trainConfigId;
     private String code;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

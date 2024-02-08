@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3Prediction;
 import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
-import org.jxch.capital.learning.model.dto.PredictionParam;
+import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.learning.train.data.TrainDataDistillerService;
 import org.jxch.capital.learning.train.data.TrainService;
-import org.jxch.capital.learning.train.param.SignalType;
+import org.jxch.capital.learning.train.param.PredictionDataParam;
+import org.jxch.capital.learning.train.param.PredictionDataRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.jxch.capital.learning.train.param.dto.TrainDataDistillerParam;
@@ -26,6 +27,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TrainDataDistillerServiceImpl implements TrainDataDistillerService {
+    private final TrainConfigService trainConfigService;
     private final Model3Management model3Management;
     private final Model3Prediction model3Prediction;
     private final TrainService trainService;
@@ -42,7 +44,7 @@ public class TrainDataDistillerServiceImpl implements TrainDataDistillerService 
 
         double[][][] features = trainDataRes.getFeatures();
         double[] prediction = model3Prediction.predictionComplete(features, model3Management.getModelFile(distillerParam.getModel()), modelMetaData);
-        int[] signals = trainDataRes.getSignals(SignalType.valueOf(distillerParam.getType()));
+        int[] signals = trainDataRes.getDefaultSignals();
 
         List<double[][]> filteredFeatures = new ArrayList<>();
         List<Integer> filteredSignals = new ArrayList<>();
@@ -60,21 +62,14 @@ public class TrainDataDistillerServiceImpl implements TrainDataDistillerService 
         }
 
         log.debug("蒸馏结束[{}m.], 数据蒸馏后的总数：{} / {}", timer.intervalMinute(), filteredSignalsArray.length, signals.length);
-        return TrainDataDistillerRes.builder().features(filteredFeaturesArray).signals(filteredSignalsArray).signalType(distillerParam.getType()).build();
+        return TrainDataDistillerRes.builder().features(filteredFeaturesArray).signals(filteredSignalsArray).build();
     }
 
     @Override
-    public TrainDataRes predictionData(TrainDataParam param, boolean offset) {
-        return trainService.predictionData(toPredictionParam((TrainDataDistillerParam) param));
-    }
-
-    private PredictionParam toPredictionParam(@NotNull TrainDataDistillerParam distillerParam) {
-        return PredictionParam.builder()
-                .code(distillerParam.getCode())
-                .start(distillerParam.getPredictionStartDate())
-                .end(distillerParam.getPredictionEndDate())
-                .trainConfigId(model3Management.findModelMetaData(distillerParam.getModel()).getTrainconfigid())
-                .build();
+    public PredictionDataRes predictionData(@NotNull PredictionDataParam param, boolean offset) {
+        var distillerParam = getParam(trainConfigService.findParamsById(param.getTrainConfigId()), TrainDataDistillerParam.class);
+        Long modelTrainConfigId = model3Management.findModelMetaData(distillerParam.getModel()).getTrainconfigid();
+        return trainService.predictionData(param.setTrainConfigId(modelTrainConfigId));
     }
 
     @Override

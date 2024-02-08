@@ -15,6 +15,8 @@ public interface TrainConfigService {
 
     TrainConfigDto findById(Long id);
 
+    String findParamsById(Long id);
+
     void del(List<Long> ids);
 
     Integer save(List<TrainConfigDto> dtoList);

@@ -1,28 +1,18 @@
 package org.jxch.capital.learning.train.data;
 
-import org.jetbrains.annotations.NotNull;
-import org.jxch.capital.learning.model.dto.PredictionParam;
+import org.jxch.capital.learning.train.param.PredictionDataParam;
+import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public interface TrainService {
 
     TrainDataRes trainData(Long trainConfigId);
 
-    TrainDataRes predictionData(Long trainConfigId);
+    PredictionDataRes predictionData(PredictionDataParam param);
 
-    TrainDataRes predictionData(Long trainConfigId, String code);
+    TrainDataService findServiceByTrainConfigId(Long trainConfigId);
 
-    TrainDataRes predictionData(Long trainConfigId, String code, Date start, Date end);
-
-    default TrainDataRes predictionData(Long trainConfigId, String code, Date start) {
-        return predictionData(trainConfigId, code, start, Calendar.getInstance().getTime());
-    }
-
-    default TrainDataRes predictionData(@NotNull PredictionParam param) {
-        return predictionData(param.getTrainConfigId(), param.getCode(), param.getStart(), param.getEnd());
-    }
+    TrainDataParam findParamsByTrainConfigId(Long trainConfigId);
 
 }

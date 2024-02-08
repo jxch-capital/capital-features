@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.jxch.capital.learning.model.dto.PredictionParam;
+import org.jxch.capital.learning.train.param.dto.PredictionParam;
 
 import java.util.List;
 

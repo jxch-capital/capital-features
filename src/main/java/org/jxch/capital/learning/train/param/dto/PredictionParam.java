@@ -1,4 +1,4 @@
-package org.jxch.capital.learning.model.dto;
+package org.jxch.capital.learning.train.param.dto;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jxch.capital.learning.train.param.PredictionDataParam;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
@@ -19,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class PredictionParam {
+public class PredictionParam implements PredictionDataParam {
     @Builder.Default
     private Long trainConfigId = null;
     private String code = "SPY";
@@ -41,10 +42,6 @@ public class PredictionParam {
         return Objects.hash(trainConfigId, code, start, end);
     }
 
-    public boolean isSame(@NotNull PredictionParam predictionParam) {
-        return Objects.equals(code, predictionParam.getCode()) &&
-                Objects.equals(start, predictionParam.getStart()) &&
-                Objects.equals(end, predictionParam.getEnd());
-    }
+
 
 }

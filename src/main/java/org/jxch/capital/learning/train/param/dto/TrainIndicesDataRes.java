@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KNodeTrains;
+import org.jxch.capital.learning.train.param.PredictionDataRes;
 import org.jxch.capital.learning.train.param.SignalType;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainIndicesDataRes implements TrainDataRes {
+public class TrainIndicesDataRes implements TrainDataRes, PredictionDataRes {
     private KNodeTrains kNodeTrains;
 
     @Override
@@ -28,27 +29,6 @@ public class TrainIndicesDataRes implements TrainDataRes {
     @JSONField(serialize = false)
     public double[][][] getFeatures() {
         return kNodeTrains.getFeatures();
-    }
-
-    @Override
-    @JsonIgnore
-    @JSONField(serialize = false)
-    public int[] getUpSignals() {
-        return kNodeTrains.getUpSignals();
-    }
-
-    @Override
-    @JsonIgnore
-    @JSONField(serialize = false)
-    public int[] getDownSignals() {
-        return kNodeTrains.getDownSignals();
-    }
-
-    @Override
-    @JsonIgnore
-    @JSONField(serialize = false)
-    public int[] get3Signals() {
-        return kNodeTrains.getSignals3();
     }
 
     @Override
@@ -63,9 +43,9 @@ public class TrainIndicesDataRes implements TrainDataRes {
     @JSONField(serialize = false)
     public int[] getSignals(@NotNull SignalType signalType) {
         return switch (signalType) {
-            case UP -> getUpSignals();
-            case DOWN -> getDownSignals();
-            case UP_DOWN -> get3Signals();
+            case UP -> kNodeTrains.getUpSignals();
+            case DOWN -> kNodeTrains.getDownSignals();
+            case UP_DOWN, DEFAULT -> kNodeTrains.getSignals3();
         };
     }
 

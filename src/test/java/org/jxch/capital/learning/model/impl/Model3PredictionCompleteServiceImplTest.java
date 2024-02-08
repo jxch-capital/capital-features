@@ -6,14 +6,12 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.model.dto.PredictionParam;
+import org.jxch.capital.learning.train.param.dto.PredictionParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Calendar;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
