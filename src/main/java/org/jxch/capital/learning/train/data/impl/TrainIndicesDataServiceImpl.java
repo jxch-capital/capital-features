@@ -6,14 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.*;
 import org.jxch.capital.learning.train.config.TrainConfigService;
-import org.jxch.capital.learning.train.param.PredictionDataParam;
-import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.jxch.capital.learning.train.data.TrainIndicesDataService;
 import org.jxch.capital.learning.train.balancer.AutoTrainDataSignalBalancePreProcessor;
 import org.jxch.capital.learning.train.param.dto.TrainIndicesDataParam;
-import org.jxch.capital.learning.train.param.dto.TrainIndicesDataRes;
+import org.jxch.capital.learning.train.param.dto.TrainIndicesDataOneStockRes;
 import org.jxch.capital.learning.train.filter.AutoTrainDataSignalFilterPreprocessor;
 import org.jxch.capital.learning.train.scrubber.AutoTrainDataFeaturesScrubberProcessor;
 import org.jxch.capital.server.IndicesCombinationService;
@@ -64,11 +64,11 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
 
         KNodeTrains theKNodeTrains = new KNodeTrains(kNodeTrains, indicatorNames, trainIndicesDataParam.getSimplify() && ServiceU.isExternalService(), trainIndicesDataParam.getTranspose());
         theKNodeTrains = autoTrainDataFeaturesScrubberProcessor.featuresPostProcessor(theKNodeTrains, trainIndicesDataParam.getScrubberWrappers());
-        return new TrainIndicesDataRes(theKNodeTrains);
+        return new TrainIndicesDataOneStockRes(theKNodeTrains);
     }
 
     @Override
-    public PredictionDataRes predictionData(@NotNull PredictionDataParam param, boolean offset) {
+    public PredictionDataOneStockRes predictionOneStockData(@NotNull PredictionDataOneStockParam param, boolean offset) {
         TrainConfigDto config = trainConfigService.findById(param.getTrainConfigId());
         TrainIndicesDataParam indicesDataParam = getParam(config.getParams(), TrainIndicesDataParam.class);
 
@@ -91,7 +91,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
 
         List<KNodeTrain> kNodeTrains = kNodes.stream().map(kNode -> KNodeTrain.builder().code(kNode.getCode()).kNode(kNode).futureNum(0).build()).toList();
         KNodeTrains theKNodeTrains = new KNodeTrains(kNodeTrains, indicatorNames, indicesDataParam.getSimplify() && ServiceU.isExternalService(), indicesDataParam.getTranspose());
-        return new TrainIndicesDataRes(theKNodeTrains);
+        return new TrainIndicesDataOneStockRes(theKNodeTrains);
     }
 
     @Override

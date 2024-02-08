@@ -12,8 +12,8 @@ import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
 import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.learning.train.data.TrainDataDistillerService;
 import org.jxch.capital.learning.train.data.TrainService;
-import org.jxch.capital.learning.train.param.PredictionDataParam;
-import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.jxch.capital.learning.train.param.dto.TrainDataDistillerParam;
@@ -66,10 +66,10 @@ public class TrainDataDistillerServiceImpl implements TrainDataDistillerService 
     }
 
     @Override
-    public PredictionDataRes predictionData(@NotNull PredictionDataParam param, boolean offset) {
+    public PredictionDataOneStockRes predictionOneStockData(@NotNull PredictionDataOneStockParam param, boolean offset) {
         var distillerParam = getParam(trainConfigService.findParamsById(param.getTrainConfigId()), TrainDataDistillerParam.class);
         Long modelTrainConfigId = model3Management.findModelMetaData(distillerParam.getModel()).getTrainconfigid();
-        return trainService.predictionData(param.setTrainConfigId(modelTrainConfigId));
+        return trainService.predictionOneStockData(param.setTrainConfigId(modelTrainConfigId));
     }
 
     @Override

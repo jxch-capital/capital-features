@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 import java.util.Objects;
 
-public interface PredictionDataParam {
+public interface PredictionDataOneStockParam {
 
     Long getTrainConfigId();
 
-    PredictionDataParam setTrainConfigId(Long trainConfigId);
+    PredictionDataOneStockParam setTrainConfigId(Long trainConfigId);
 
     String getCode();
 
@@ -17,7 +17,7 @@ public interface PredictionDataParam {
 
     Date getEnd();
 
-    default boolean isSame(@NotNull PredictionDataParam param) {
+    default boolean isSame(@NotNull PredictionDataOneStockParam param) {
         return Objects.equals(getCode(), param.getCode()) &&
                 Objects.equals(getStart(), param.getStart()) &&
                 Objects.equals(getEnd(), param.getEnd());

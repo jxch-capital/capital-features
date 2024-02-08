@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KLine;
 import org.jxch.capital.domain.dto.KNodeTrains;
-import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.learning.train.param.SignalType;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainIndicesDataRes implements TrainDataRes, PredictionDataRes {
+public class TrainIndicesDataOneStockRes implements TrainDataRes, PredictionDataOneStockRes {
     private KNodeTrains kNodeTrains;
 
     @Override

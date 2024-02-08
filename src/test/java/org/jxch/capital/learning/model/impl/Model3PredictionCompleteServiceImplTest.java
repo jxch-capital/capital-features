@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.train.param.dto.PredictionParam;
+import org.jxch.capital.learning.train.param.dto.PredictionOneStockParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -29,7 +29,7 @@ class Model3PredictionCompleteServiceImplTest {
 
     @Test
     void predictionCarry() {
-        PredictionParam predictionParam = PredictionParam.builder()
+        PredictionOneStockParam predictionParam = PredictionOneStockParam.builder()
                 .code("QQQ")
                 .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -5))
                 .end(Calendar.getInstance().getTime())
@@ -40,7 +40,7 @@ class Model3PredictionCompleteServiceImplTest {
 
     @Test
     void testPredictionCarry() {
-        PredictionParam predictionParam = PredictionParam.builder()
+        PredictionOneStockParam predictionParam = PredictionOneStockParam.builder()
                 .code("QQQ")
                 .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -5))
                 .end(Calendar.getInstance().getTime())

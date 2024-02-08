@@ -1,8 +1,8 @@
 package org.jxch.capital.learning.train.data;
 
 import com.alibaba.fastjson2.JSONObject;
-import org.jxch.capital.learning.train.param.PredictionDataParam;
-import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 
@@ -10,11 +10,11 @@ public interface TrainDataService {
 
     TrainDataRes trainData(TrainDataParam param);
 
-    default PredictionDataRes predictionData(PredictionDataParam param) {
-        return predictionData(param, true);
+    default PredictionDataOneStockRes predictionOneStockData(PredictionDataOneStockParam param) {
+        return predictionOneStockData(param, true);
     }
 
-    PredictionDataRes predictionData(PredictionDataParam param, boolean offset);
+    PredictionDataOneStockRes predictionOneStockData(PredictionDataOneStockParam param, boolean offset);
 
     default String name() {
         return getClass().getSimpleName();

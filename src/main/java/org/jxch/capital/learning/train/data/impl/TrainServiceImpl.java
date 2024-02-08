@@ -7,8 +7,8 @@ import org.jxch.capital.learning.train.Trains;
 import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.learning.train.data.TrainDataService;
 import org.jxch.capital.learning.train.data.TrainService;
-import org.jxch.capital.learning.train.param.PredictionDataParam;
-import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,8 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public PredictionDataRes predictionData(@NotNull PredictionDataParam param) {
-        return findServiceByTrainConfigId(param.getTrainConfigId()).predictionData(param);
+    public PredictionDataOneStockRes predictionOneStockData(@NotNull PredictionDataOneStockParam param) {
+        return findServiceByTrainConfigId(param.getTrainConfigId()).predictionOneStockData(param);
     }
 
     @Override

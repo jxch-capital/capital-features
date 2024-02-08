@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.learning.train.param.PredictionDataParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
 
 import java.util.Date;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.Objects;
 @Accessors(chain = true)
 public class Model3PredictRes {
     private List<KLineModelSignal> kLineModelSignals;
-    private PredictionDataParam predictionDataParam;
+    private PredictionDataOneStockParam predictionDataOneStockParam;
 
     @JsonIgnore
     @JSONField(serialize = false)
@@ -66,7 +66,7 @@ public class Model3PredictRes {
     }
 
     public Boolean canStack(@NotNull Model3PredictRes predictRes) {
-        return getPredictionDataParam().isSame(predictRes.getPredictionDataParam()) &&
+        return getPredictionDataOneStockParam().isSame(predictRes.getPredictionDataOneStockParam()) &&
                 Objects.equals(predictRes.getSize(), getSize()) &&
                 DateUtil.isSameDay(predictRes.getStartDate(), getStartDate()) &&
                 DateUtil.isSameDay(predictRes.getEndDate(), getEndDate());

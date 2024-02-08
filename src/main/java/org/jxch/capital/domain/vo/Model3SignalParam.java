@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.jxch.capital.learning.train.param.dto.PredictionParam;
+import org.jxch.capital.learning.train.param.dto.PredictionOneStockParam;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class Model3SignalParam {
     private List<String> modelNames;
-    private PredictionParam predictionParam;
+    private PredictionOneStockParam predictionParam;
     private Double limitAbs = 0.05;
     private Integer futureNum = 8;
     private Boolean maskContinuousSignals = false;

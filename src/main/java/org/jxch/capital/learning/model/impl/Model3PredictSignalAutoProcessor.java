@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.learning.model.Model3PredictSignalProcessor;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.train.param.PredictionDataParam;
-import org.jxch.capital.learning.train.param.PredictionDataRes;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.utils.AppContextHolder;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -17,18 +17,18 @@ import org.springframework.stereotype.Service;
 public class Model3PredictSignalAutoProcessor implements Model3PredictSignalProcessor {
 
     @Override
-    public boolean support(PredictionDataRes predictionDataRes, double[] prediction, String modelName, PredictionDataParam predictionParam) {
+    public boolean support(PredictionDataOneStockRes predictionDataOneStockRes, double[] prediction, String modelName, PredictionDataOneStockParam predictionParam) {
         return false;
     }
 
-    public Model3PredictSignalProcessor getSupportProcessor(PredictionDataRes predictionDataRes, double[] prediction, String modelName, PredictionDataParam predictionParam) {
-        return AppContextHolder.findOrderedFristServiceExcept(Model3PredictSignalProcessor.class, getClass(), service -> service.support(predictionDataRes, prediction, modelName, predictionParam));
+    public Model3PredictSignalProcessor getSupportProcessor(PredictionDataOneStockRes predictionDataOneStockRes, double[] prediction, String modelName, PredictionDataOneStockParam predictionParam) {
+        return AppContextHolder.findOrderedFristServiceExcept(Model3PredictSignalProcessor.class, getClass(), service -> service.support(predictionDataOneStockRes, prediction, modelName, predictionParam));
     }
 
     @Override
-    public Model3PredictRes signalProcessor(PredictionDataRes predictionDataRes, double[] prediction, String modelName, PredictionDataParam predictionParam) {
-        return getSupportProcessor(predictionDataRes, prediction, modelName, predictionParam)
-                .signalProcessor(predictionDataRes, prediction, modelName, predictionParam);
+    public Model3PredictRes signalProcessor(PredictionDataOneStockRes predictionDataOneStockRes, double[] prediction, String modelName, PredictionDataOneStockParam predictionParam) {
+        return getSupportProcessor(predictionDataOneStockRes, prediction, modelName, predictionParam)
+                .signalProcessor(predictionDataOneStockRes, prediction, modelName, predictionParam);
     }
 
 }

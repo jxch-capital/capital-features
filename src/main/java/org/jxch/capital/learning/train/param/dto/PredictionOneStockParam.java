@@ -7,8 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.jetbrains.annotations.NotNull;
-import org.jxch.capital.learning.train.param.PredictionDataParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
@@ -20,7 +19,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class PredictionParam implements PredictionDataParam {
+public class PredictionOneStockParam implements PredictionDataOneStockParam {
     @Builder.Default
     private Long trainConfigId = null;
     private String code = "SPY";
@@ -33,7 +32,7 @@ public class PredictionParam implements PredictionDataParam {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PredictionParam that = (PredictionParam) o;
+        PredictionOneStockParam that = (PredictionOneStockParam) o;
         return Objects.equals(trainConfigId, that.trainConfigId) && Objects.equals(code, that.code) && Objects.equals(start, that.start) && Objects.equals(end, that.end);
     }
 

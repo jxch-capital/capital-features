@@ -1,23 +1,11 @@
 package org.jxch.capital.learning.model.impl;
 
-import cn.hutool.core.date.DateField;
-import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson2.JSONObject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.jxch.capital.learning.model.Scalers;
-import org.jxch.capital.learning.model.ModelTypeEnum;
-import org.jxch.capital.learning.model.dto.StandardScaler;
-import org.jxch.capital.learning.model.dto.TensorflowTFModelMetaData;
 import org.jxch.capital.learning.train.data.TrainService;
-import org.jxch.capital.learning.train.param.dto.TrainIndicesDataRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 
 @Slf4j
 @SpringBootTest

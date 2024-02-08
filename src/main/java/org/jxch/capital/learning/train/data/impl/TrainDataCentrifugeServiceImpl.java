@@ -38,10 +38,10 @@ public class TrainDataCentrifugeServiceImpl implements TrainDataDistillerService
     }
 
     @Override
-    public PredictionDataRes predictionData(@NotNull PredictionDataParam param, boolean offset) {
+    public PredictionDataOneStockRes predictionOneStockData(@NotNull PredictionDataOneStockParam param, boolean offset) {
         var centrifugeParam = getParam(trainConfigService.findParamsById(param.getTrainConfigId()), TrainDataCentrifugeParam.class);
         Long modelTrainConfigId = model3Management.findModelMetaData(centrifugeParam.getModel()).getTrainconfigid();
-        return trainService.predictionData(param.setTrainConfigId(modelTrainConfigId));
+        return trainService.predictionOneStockData(param.setTrainConfigId(modelTrainConfigId));
     }
 
     @Override
