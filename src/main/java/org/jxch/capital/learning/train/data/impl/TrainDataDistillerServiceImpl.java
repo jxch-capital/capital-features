@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.train.config.TrainConfigService;
-import org.jxch.capital.learning.train.data.TrainDataDistillerService;
+import org.jxch.capital.learning.train.data.TrainDataPurifierService;
 import org.jxch.capital.learning.train.data.TrainService;
 import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
 import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TrainDataDistillerServiceImpl implements TrainDataDistillerService {
+public class TrainDataDistillerServiceImpl implements TrainDataPurifierService {
     private final TrainConfigService trainConfigService;
     private final Model3Management model3Management;
     private final TrainService trainService;
