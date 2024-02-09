@@ -1,6 +1,8 @@
 package org.jxch.capital.learning.train.param.dto;
 
 import cn.hutool.core.util.ArrayUtil;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,11 +28,15 @@ public class TrainDataCentrifugeRes implements TrainDataRes {
     private List<Integer> oppositeSignals = new ArrayList<>();
 
     @Override
+    @JsonIgnore
+    @JSONField(serialize = false)
     public double[][][] getFeatures() {
         return CollU.toDoubleArr3(targetFeatures);
     }
 
     @Override
+    @JsonIgnore
+    @JSONField(serialize = false)
     public int[] getSignals(SignalType signalType) {
         if (Objects.equals(signalType, SignalType.DEFAULT)) {
             return ArrayUtil.addAll(CollU.toIntArr1(targetSignals), CollU.toIntArr1(oppositeSignals));

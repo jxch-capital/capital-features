@@ -26,6 +26,8 @@ public class TrainDataDistillerRes implements TrainDataRes {
     private List<Integer> targetSignals = new ArrayList<>();
 
     @Override
+    @JsonIgnore
+    @JSONField(serialize = false)
     public double[][][] getFeatures() {
         return CollU.toDoubleArr3(targetFeatures);
     }
