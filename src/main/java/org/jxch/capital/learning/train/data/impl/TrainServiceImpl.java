@@ -48,7 +48,7 @@ public class TrainServiceImpl implements TrainService {
 
         return TestDataRes.builder()
                 .features(features)
-                .prediction(prediction)
+                .predictions(prediction)
                 .signals(signals)
                 .build();
     }

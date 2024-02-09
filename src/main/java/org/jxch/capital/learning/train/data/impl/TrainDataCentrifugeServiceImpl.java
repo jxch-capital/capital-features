@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3Management;
-import org.jxch.capital.learning.model.Model3Prediction;
 import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.learning.train.data.TrainDataDistillerService;
 import org.jxch.capital.learning.train.data.TrainService;
@@ -15,10 +14,8 @@ import org.jxch.capital.learning.train.param.TrainDataRes;
 import org.jxch.capital.learning.train.param.dto.TestDataRes;
 import org.jxch.capital.learning.train.param.dto.TrainDataCentrifugeParam;
 import org.jxch.capital.learning.train.param.dto.TrainDataCentrifugeRes;
-import org.jxch.capital.utils.CollU;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -27,41 +24,25 @@ import java.util.List;
 public class TrainDataCentrifugeServiceImpl implements TrainDataDistillerService {
     private final TrainConfigService trainConfigService;
     private final Model3Management model3Management;
-    private final Model3Prediction model3Prediction;
     private final TrainService trainService;
 
     @Override
     public TrainDataRes trainData(TrainDataParam param) {
         var centrifugeParam = (TrainDataCentrifugeParam) param;
-
         TestDataRes testDataRes = trainService.testData(centrifugeParam.getTrainConfigId(), centrifugeParam.getModel(), centrifugeParam.getEType());
-        double[] prediction = testDataRes.getPrediction();
-
-        List<double[][]> filteredFeatures = new ArrayList<>();
-        List<Integer> filteredSignals = new ArrayList<>();
-        List<double[][]> filteredOppositeFeatures = new ArrayList<>();
-        List<Integer> filteredOppositeSignals = new ArrayList<>();
-
-        for (int i = 0; i < prediction.length; i++) {
-            boolean isBelowDownTh = prediction[i] < centrifugeParam.getDownTh();
-            boolean isAboveUpTh = prediction[i] > centrifugeParam.getUpTh();
-
+        TrainDataCentrifugeRes res = new TrainDataCentrifugeRes();
+        testDataRes.foreach((feature, prediction, signal) -> {
+            boolean isBelowDownTh = prediction < centrifugeParam.getDownTh();
+            boolean isAboveUpTh = prediction > centrifugeParam.getUpTh();
             if (isBelowDownTh || isAboveUpTh) {
-                boolean isSignalOne = testDataRes.getSignals()[i] == 1;
-                List<double[][]> targetFeatureList = (isSignalOne ^ isBelowDownTh) ? filteredFeatures : filteredOppositeFeatures;
-                List<Integer> targetSignalList = (isSignalOne ^ isBelowDownTh) ? filteredSignals : filteredOppositeSignals;
-
-                targetFeatureList.add(testDataRes.getFeatures()[i]);
-                targetSignalList.add(testDataRes.getSignals()[i]);
+                boolean isSignalOne = signal == 1;
+                List<double[][]> targetFeatureList = (isSignalOne ^ isBelowDownTh) ? res.getTargetFeatures() : res.getOppositeFeatures();
+                List<Integer> targetSignalList = (isSignalOne ^ isBelowDownTh) ? res.getTargetSignals() : res.getOppositeSignals();
+                targetFeatureList.add(feature);
+                targetSignalList.add(signal);
             }
-        }
-
-        return TrainDataCentrifugeRes.builder()
-                .signals(CollU.toIntArr1(filteredSignals))
-                .oppositeSignals(CollU.toIntArr1(filteredOppositeSignals))
-                .features(CollU.toDoubleArr3(filteredFeatures))
-                .oppositeFeatures(CollU.toDoubleArr3(filteredOppositeFeatures))
-                .build();
+        });
+        return res;
     }
 
     @Override

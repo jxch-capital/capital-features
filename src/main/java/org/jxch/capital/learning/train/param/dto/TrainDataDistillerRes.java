@@ -10,7 +10,10 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.train.param.SignalType;
 import org.jxch.capital.learning.train.param.TrainDataRes;
+import org.jxch.capital.utils.CollU;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -19,12 +22,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainDataDistillerRes implements TrainDataRes {
-    private double[][][] features;
-    private int[] signals;
+    private List<double[][]> targetFeatures = new ArrayList<>();
+    private List<Integer> targetSignals = new ArrayList<>();
 
     @Override
     public double[][][] getFeatures() {
-        return features;
+        return CollU.toDoubleArr3(targetFeatures);
     }
 
     @Override
@@ -32,7 +35,7 @@ public class TrainDataDistillerRes implements TrainDataRes {
     @JSONField(serialize = false)
     public int[] getSignals(@NotNull SignalType signalType) {
         if (Objects.equals(signalType, SignalType.DEFAULT)) {
-            return signals;
+            return CollU.toIntArr1(targetSignals);
         }
 
         throw new IllegalArgumentException("不支持这种类型的信号：" + signalType);
