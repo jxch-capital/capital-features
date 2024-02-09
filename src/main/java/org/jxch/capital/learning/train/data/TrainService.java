@@ -1,9 +1,7 @@
 package org.jxch.capital.learning.train.data;
 
-import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
-import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
-import org.jxch.capital.learning.train.param.TrainDataParam;
-import org.jxch.capital.learning.train.param.TrainDataRes;
+import org.jxch.capital.learning.train.param.*;
+import org.jxch.capital.learning.train.param.dto.TestDataRes;
 
 public interface TrainService {
 
@@ -15,4 +13,5 @@ public interface TrainService {
 
     TrainDataParam findParamsByTrainConfigId(Long trainConfigId);
 
+    TestDataRes testData(Long trainConfigId, String model, SignalType type);
 }

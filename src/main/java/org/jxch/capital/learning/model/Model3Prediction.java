@@ -1,6 +1,8 @@
 package org.jxch.capital.learning.model;
 
+import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
+import org.jxch.capital.utils.AppContextHolder;
 
 import java.io.File;
 
@@ -26,6 +28,15 @@ public interface Model3Prediction {
         double[] prediction = prediction(newData, newModelFile, metaData);
         modelPostprocessing(newModelFile, metaData);
         return prediction;
+    }
+
+    default double[] predictionComplete(double[][][] features, String modelName, @NotNull Model3Management model3Management) {
+        Model3BaseMetaData modelMetaData = model3Management.findModelMetaData(modelName);
+        return predictionComplete(features, model3Management.getModelFile(modelName), modelMetaData);
+    }
+
+    default double[] predictionComplete(double[][][] features, String modelName) {
+        return predictionComplete(features, modelName, AppContextHolder.getContext().getBean(Model3Management.class));
     }
 
 }

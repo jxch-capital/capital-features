@@ -1,5 +1,6 @@
 package org.jxch.capital.learning.train.param.dto;
 
+import cn.hutool.core.util.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,22 +9,26 @@ import lombok.experimental.Accessors;
 import org.jxch.capital.learning.train.param.SignalType;
 import org.jxch.capital.learning.train.param.TrainDataRes;
 
+import java.util.Objects;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TrainDataCentrifugeRes implements TrainDataRes {
+    private double[][][] features;
     private int[] signals;
-
-
-    @Override
-    public double[][][] getFeatures() {
-        return new double[0][][];
-    }
+    private double[][][] oppositeFeatures;
+    private int[] oppositeSignals;
 
     @Override
     public int[] getSignals(SignalType signalType) {
-        return new int[0];
+        if (Objects.equals(signalType, SignalType.DEFAULT)) {
+            return ArrayUtil.addAll(signals, oppositeSignals);
+        }
+
+        throw new IllegalArgumentException("不支持这种类型的信号：" + signalType);
     }
+
 }

@@ -34,4 +34,17 @@ public class CollU {
     }
 
 
+    public static int[] toIntArr1(@NotNull List<Integer> integers) {
+        return integers.stream().mapToInt(v -> v).toArray();
+    }
+
+    @NotNull
+    public static double[][][] toDoubleArr3(@NotNull List<double[][]> doubles) {
+        double[][][] arr3 = new double[doubles.size()][][];
+        for (int i = 0; i < doubles.size(); i++) {
+            arr3[i] = doubles.get(i);
+        }
+        return arr3;
+    }
+
 }

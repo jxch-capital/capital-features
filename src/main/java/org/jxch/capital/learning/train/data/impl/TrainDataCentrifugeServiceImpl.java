@@ -5,13 +5,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3Prediction;
-import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
 import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.learning.train.data.TrainDataDistillerService;
 import org.jxch.capital.learning.train.data.TrainService;
-import org.jxch.capital.learning.train.param.*;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
+import org.jxch.capital.learning.train.param.TrainDataParam;
+import org.jxch.capital.learning.train.param.TrainDataRes;
+import org.jxch.capital.learning.train.param.dto.TestDataRes;
 import org.jxch.capital.learning.train.param.dto.TrainDataCentrifugeParam;
+import org.jxch.capital.learning.train.param.dto.TrainDataCentrifugeRes;
+import org.jxch.capital.utils.CollU;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -26,15 +34,34 @@ public class TrainDataCentrifugeServiceImpl implements TrainDataDistillerService
     public TrainDataRes trainData(TrainDataParam param) {
         var centrifugeParam = (TrainDataCentrifugeParam) param;
 
-        Model3BaseMetaData modelMetaData = model3Management.findModelMetaData(centrifugeParam.getModel());
-        TrainDataRes trainDataRes = trainService.trainData(centrifugeParam.getTrainConfigId());
+        TestDataRes testDataRes = trainService.testData(centrifugeParam.getTrainConfigId(), centrifugeParam.getModel(), centrifugeParam.getEType());
+        double[] prediction = testDataRes.getPrediction();
 
-        double[][][] features = trainDataRes.getFeatures();
-        double[] prediction = model3Prediction.predictionComplete(features, model3Management.getModelFile(centrifugeParam.getModel()), modelMetaData);
-        int[] signals = trainDataRes.getSignals(SignalType.valueOf(centrifugeParam.getType()));
+        List<double[][]> filteredFeatures = new ArrayList<>();
+        List<Integer> filteredSignals = new ArrayList<>();
+        List<double[][]> filteredOppositeFeatures = new ArrayList<>();
+        List<Integer> filteredOppositeSignals = new ArrayList<>();
 
+        for (int i = 0; i < prediction.length; i++) {
+            boolean isBelowDownTh = prediction[i] < centrifugeParam.getDownTh();
+            boolean isAboveUpTh = prediction[i] > centrifugeParam.getUpTh();
 
-        return null;
+            if (isBelowDownTh || isAboveUpTh) {
+                boolean isSignalOne = testDataRes.getSignals()[i] == 1;
+                List<double[][]> targetFeatureList = (isSignalOne ^ isBelowDownTh) ? filteredFeatures : filteredOppositeFeatures;
+                List<Integer> targetSignalList = (isSignalOne ^ isBelowDownTh) ? filteredSignals : filteredOppositeSignals;
+
+                targetFeatureList.add(testDataRes.getFeatures()[i]);
+                targetSignalList.add(testDataRes.getSignals()[i]);
+            }
+        }
+
+        return TrainDataCentrifugeRes.builder()
+                .signals(CollU.toIntArr1(filteredSignals))
+                .oppositeSignals(CollU.toIntArr1(filteredOppositeSignals))
+                .features(CollU.toDoubleArr3(filteredFeatures))
+                .oppositeFeatures(CollU.toDoubleArr3(filteredOppositeFeatures))
+                .build();
     }
 
     @Override

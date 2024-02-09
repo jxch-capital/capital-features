@@ -1,14 +1,11 @@
 package org.jxch.capital.learning.train.data.impl;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.date.TimeInterval;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3Prediction;
-import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
 import org.jxch.capital.learning.train.config.TrainConfigService;
 import org.jxch.capital.learning.train.data.TrainDataDistillerService;
 import org.jxch.capital.learning.train.data.TrainService;
@@ -16,6 +13,7 @@ import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
 import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
+import org.jxch.capital.learning.train.param.dto.TestDataRes;
 import org.jxch.capital.learning.train.param.dto.TrainDataDistillerParam;
 import org.jxch.capital.learning.train.param.dto.TrainDataDistillerRes;
 import org.springframework.stereotype.Service;
@@ -36,22 +34,15 @@ public class TrainDataDistillerServiceImpl implements TrainDataDistillerService 
     public TrainDataRes trainData(TrainDataParam param) {
         var distillerParam = (TrainDataDistillerParam) param;
 
-        TimeInterval timer = DateUtil.timer();
-        log.debug("使用{}模型开始蒸馏：{}", distillerParam.getModel(), JSONObject.toJSONString(distillerParam));
-
-        Model3BaseMetaData modelMetaData = model3Management.findModelMetaData(distillerParam.getModel());
-        TrainDataRes trainDataRes = trainService.trainData(distillerParam.getTrainConfigId());
-
-        double[][][] features = trainDataRes.getFeatures();
-        double[] prediction = model3Prediction.predictionComplete(features, model3Management.getModelFile(distillerParam.getModel()), modelMetaData);
-        int[] signals = trainDataRes.getDefaultSignals();
+        TestDataRes testDataRes = trainService.testData(distillerParam.getTrainConfigId(), distillerParam.getModel(), distillerParam.getEType());
+        double[] prediction = testDataRes.getPrediction();
 
         List<double[][]> filteredFeatures = new ArrayList<>();
         List<Integer> filteredSignals = new ArrayList<>();
         for (int i = 0; i < prediction.length; i++) {
             if (prediction[i] > distillerParam.getUpTh() || prediction[i] < distillerParam.getDownTh()) {
-                filteredFeatures.add(features[i]);
-                filteredSignals.add(signals[i]);
+                filteredFeatures.add(testDataRes.getFeatures()[i]);
+                filteredSignals.add(testDataRes.getSignals()[i]);
             }
         }
 
@@ -61,7 +52,6 @@ public class TrainDataDistillerServiceImpl implements TrainDataDistillerService 
             filteredFeaturesArray[i] = filteredFeatures.get(i);
         }
 
-        log.debug("蒸馏结束[{}m.], 数据蒸馏后的总数：{} / {}", timer.intervalMinute(), filteredSignalsArray.length, signals.length);
         return TrainDataDistillerRes.builder().features(filteredFeaturesArray).signals(filteredSignalsArray).build();
     }
 

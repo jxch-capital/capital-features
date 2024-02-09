@@ -23,4 +23,8 @@ public class TrainDataCentrifugeParam implements TrainDataParam {
     @Builder.Default
     private Double downTh = 0.2;
 
+    public SignalType getEType() {
+        return SignalType.valueOf(this.type);
+    }
+
 }
