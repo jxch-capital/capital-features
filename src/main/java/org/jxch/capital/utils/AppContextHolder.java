@@ -30,6 +30,10 @@ public class AppContextHolder implements ApplicationContextAware {
         return context.getBeansOfType(clazz).values().stream().toList();
     }
 
+    public static <T extends Ordered> List<T> allServiceSorted(Class<T> clazz) {
+        return context.getBeansOfType(clazz).values().stream().sorted(Comparator.comparing(Ordered::getOrder)).toList();
+    }
+
     public static <T> List<T> allServiceExcept(Class<T> clazz, Class<?> except) {
         return context.getBeansOfType(clazz).values().stream().filter(service -> !Objects.equals(except, service.getClass())).toList();
     }
