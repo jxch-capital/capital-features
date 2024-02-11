@@ -33,6 +33,7 @@ public class KNodeTrain {
     private boolean flat = false;
     private double futurePercent;
     private boolean isReset = false;
+    private boolean isResetToFlat = false;
 
     @Builder
     public KNodeTrain(String code, @NonNull KNode kNode, int futureNum) {
@@ -59,6 +60,30 @@ public class KNodeTrain {
 
     @JsonIgnore
     @JSONField(serialize = false)
+    public void checkFutureOffset(int futureOffset) {
+        if (futureOffset >= futureNum) {
+            throw new IllegalArgumentException("偏移量大于预测数：" + futureOffset + " - " + futureNum);
+        }
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public boolean hasFutureUp(int futureOffset) {
+        checkFutureOffset(futureOffset);
+        return kLines.subList(kLines.size() - futureOffset, kLines.size()).stream()
+                .anyMatch(kLine -> kLine.getHigh() > kLines.get(endIndex).getClose());
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public boolean hasFutureDown(int futureOffset) {
+        checkFutureOffset(futureOffset);
+        return kLines.subList(kLines.size() - futureOffset, kLines.size()).stream()
+                .anyMatch(kLine -> kLine.getLow() < kLines.get(endIndex).getClose());
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
     public Double absFuturePercent() {
         return Math.abs(getFuturePercent());
     }
@@ -69,6 +94,27 @@ public class KNodeTrain {
         up = false;
         flat = true;
         isReset = true;
+        isResetToFlat = true;
+        return this;
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public KNodeTrain resetToUp() {
+        up = true;
+        down =  false;
+        flat = false;
+        isReset = true;
+        return this;
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public KNodeTrain resetToDown() {
+        up = false;
+        down =  true;
+        flat = false;
+        isReset = true;
         return this;
     }
 
@@ -78,6 +124,7 @@ public class KNodeTrain {
         down = false;
         flat = true;
         isReset = true;
+        isResetToFlat = true;
         return this;
     }
 
@@ -88,6 +135,7 @@ public class KNodeTrain {
         up = false;
         flat = true;
         isReset = true;
+        isResetToFlat = true;
         return this;
     }
 

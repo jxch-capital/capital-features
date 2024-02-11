@@ -19,7 +19,7 @@ public class TrainDataUpSignalBalancePreProcessor implements TrainDataSignalBala
     @Override
     public List<KNodeTrain> kNodeTrainsPostProcess(@NotNull List<KNodeTrain> kNodeTrains, @NotNull ServiceWrapper serviceWrapper) {
         double threshold = serviceWrapper.getParamObj(TrainDataSignalBalanceParam.class).getThreshold();
-        return shuffle(threshold(remove(kNodeTrains, KNodeTrain::isReset), KNodeTrain::isUp, threshold, serviceWrapper));
+        return shuffle(threshold(remove(kNodeTrains, KNodeTrain::isResetToFlat), KNodeTrain::isUp, threshold, serviceWrapper));
     }
 
     @Override

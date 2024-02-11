@@ -35,4 +35,9 @@ public class ServiceWrapperSupports {
         }
     }
 
+    public static List<ServiceWrapper> allServiceWrapper(Class<? extends ServiceWrapperSupport> clazz) {
+        return AppContextHolder.allService(clazz).stream().map(ServiceWrapperSupport::getDefaultServiceWrapper).toList();
+    }
+
+
 }

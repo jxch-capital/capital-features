@@ -21,15 +21,15 @@ public class TrainIndicesDataParam implements TrainDataParam {
     @Builder.Default
     private KNodeParam kNodeParam = new KNodeParam().setNormalized(true).setMaxLength(100);
     @Builder.Default
-    private Boolean onlyPredictionData = false;
-    @Builder.Default
     private Boolean simplify = false;
     @Builder.Default
     private Boolean transpose = false;
     @Builder.Default
     private List<ServiceWrapper> filterWrappers = new ArrayList<>();
     @Builder.Default
-    private List<ServiceWrapper> balancerWrappers = null;
+    private List<ServiceWrapper> boosterWrappers = new ArrayList<>();
     @Builder.Default
-    private List<ServiceWrapper> scrubberWrappers = null;
+    private List<ServiceWrapper> balancerWrappers = new ArrayList<>();
+    @Builder.Default
+    private List<ServiceWrapper> scrubberWrappers = new ArrayList<>();
 }

@@ -17,7 +17,7 @@ import java.util.List;
 public class TrainDataUpDownSignalBalancePreProcessor implements TrainDataSignalBalancePreProcessor {
     @Override
     public List<KNodeTrain> kNodeTrainsPostProcess(@NotNull List<KNodeTrain> kNodeTrains, @NotNull ServiceWrapper serviceWrapper) {
-        kNodeTrains = remove(kNodeTrains, kNodeTrain -> kNodeTrain.isReset() || kNodeTrain.isFlat());
+        kNodeTrains = remove(kNodeTrains, kNodeTrain -> kNodeTrain.isResetToFlat() || kNodeTrain.isFlat());
         double threshold = serviceWrapper.getParamObj(TrainDataSignalBalanceParam.class).getThreshold();
         return shuffle(threshold(kNodeTrains, KNodeTrain::isUp, threshold, serviceWrapper));
     }

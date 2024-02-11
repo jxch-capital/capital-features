@@ -5,21 +5,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.learning.train.balancer.AutoTrainDataSignalBalancePreProcessor;
+import org.jxch.capital.learning.train.booster.TrainDataSignalBooster;
+import org.jxch.capital.learning.train.booster.TrainDataSignalBoosters;
 import org.jxch.capital.learning.train.config.TrainConfigService;
+import org.jxch.capital.learning.train.data.TrainIndicesDataService;
+import org.jxch.capital.learning.train.filter.AutoTrainDataSignalFilterPreprocessor;
 import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
 import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
 import org.jxch.capital.learning.train.param.TrainDataParam;
 import org.jxch.capital.learning.train.param.TrainDataRes;
-import org.jxch.capital.learning.train.data.TrainIndicesDataService;
-import org.jxch.capital.learning.train.balancer.AutoTrainDataSignalBalancePreProcessor;
-import org.jxch.capital.learning.train.param.dto.TrainIndicesDataParam;
 import org.jxch.capital.learning.train.param.dto.TrainIndicesDataOneStockRes;
-import org.jxch.capital.learning.train.filter.AutoTrainDataSignalFilterPreprocessor;
+import org.jxch.capital.learning.train.param.dto.TrainIndicesDataParam;
 import org.jxch.capital.learning.train.scrubber.AutoTrainDataFeaturesScrubberProcessor;
 import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.KNodeService;
 import org.jxch.capital.stock.StockService;
 import org.jxch.capital.support.ServiceWrapper;
+import org.jxch.capital.support.ServiceWrapperSupports;
 import org.jxch.capital.utils.ServiceU;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +64,7 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
                 KNodeTrain.builder().code(k.getCode()).kNode(k).futureNum(finalKNodeParam.getFutureNum()).build()).toList();
         kNodeTrains = autoTrainDataSignalFilterPreprocessor.kNodeTrainsPostProcess(kNodeTrains, filterWrappers);
         kNodeTrains = autoTrainDataSignalBalancePreProcessor.kNodeTrainsPostProcess(kNodeTrains, trainIndicesDataParam.getBalancerWrappers());
+        kNodeTrains = TrainDataSignalBoosters.booster(kNodeTrains, trainIndicesDataParam.getBoosterWrappers());
 
         KNodeTrains theKNodeTrains = new KNodeTrains(kNodeTrains, indicatorNames, trainIndicesDataParam.getSimplify() && ServiceU.isExternalService(), trainIndicesDataParam.getTranspose());
         theKNodeTrains = autoTrainDataFeaturesScrubberProcessor.featuresPostProcessor(theKNodeTrains, trainIndicesDataParam.getScrubberWrappers());
@@ -104,7 +108,8 @@ public class TrainIndicesDataServiceImpl implements TrainIndicesDataService {
         return new TrainIndicesDataParam()
                 .setFilterWrappers(autoTrainDataSignalFilterPreprocessor.allPreprocessorWrappers())
                 .setBalancerWrappers(autoTrainDataSignalBalancePreProcessor.allServiceWrapper())
-                .setScrubberWrappers(autoTrainDataFeaturesScrubberProcessor.allServiceWrapper());
+                .setScrubberWrappers(autoTrainDataFeaturesScrubberProcessor.allServiceWrapper())
+                .setBoosterWrappers(ServiceWrapperSupports.allServiceWrapper(TrainDataSignalBooster.class));
     }
 
     @Override
