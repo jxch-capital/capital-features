@@ -14,7 +14,7 @@ import org.jxch.capital.learning.train.param.SignalType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class OptimalFutureSignalBoosterParam {
+public class FutureSignalBoosterParam {
     private String signalType = SignalType.UP.toString();
     private Integer offset = 1;
 
