@@ -2,11 +2,13 @@ package org.jxch.capital.utils;
 
 import cn.hutool.core.date.DateUtil;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KLine;
 
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -65,6 +67,10 @@ public class KLines {
                         return "r" + (index - closeIndex);
                     }
                 }).toList();
+    }
+
+    public static <R> List<R> getKLineItem(@NotNull List<KLine> kLines, Function<KLine, R> itemFunc) {
+        return kLines.stream().map(itemFunc).toList();
     }
 
 }
