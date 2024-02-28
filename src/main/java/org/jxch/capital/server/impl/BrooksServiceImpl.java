@@ -52,7 +52,8 @@ public class BrooksServiceImpl implements BrooksService {
     }
 
     private String transAi(String text) {
-        return CollU.last(geminiApi.questionTextChain(transAiParam().addText(text)).chainText());
+        String res = CollU.last(geminiApi.questionTextChain(transAiParam().addText(text)).chainText());
+        return Objects.equals(res, "NULL") ? text : res;
     }
 
     private TextAiParam transAiParam() {

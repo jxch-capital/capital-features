@@ -229,6 +229,7 @@
             <artifactId>commons-compress</artifactId>
             <version>${compress.version}</version>
         </dependency>
+
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-milvus</artifactId>

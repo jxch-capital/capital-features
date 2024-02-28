@@ -9,9 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 import org.ejml.simple.SimpleMatrix;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 @Data
 @NoArgsConstructor
@@ -231,5 +233,43 @@ public class KNodeTrain {
     public int signal3() {
         return up ? 1 : down ? -1 : 0;
     }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double getFutureMax() {
+        return kLines.subList(endIndex, kLines.size()).stream().mapToDouble(KLine::getHigh).max().orElse(kLines.get(endIndex).getHigh());
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double getFutureMaxIndex() {
+        return IntStream.range(endIndex, kLines.size())
+                .boxed()
+                .max(Comparator.comparingDouble(i -> kLines.get(i).getHigh()))
+                .orElse(endIndex);
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double getFutureMin() {
+        return kLines.subList(endIndex, kLines.size()).stream().mapToDouble(KLine::getLow).min().orElse(kLines.get(endIndex).getLow());
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double getFutureMinIndex() {
+        return IntStream.range(endIndex, kLines.size())
+                .boxed()
+                .min(Comparator.comparingDouble(i -> kLines.get(i).getLow()))
+                .orElse(endIndex);
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public double getEndClose() {
+        return kLines.get(endIndex).getClose();
+    }
+
+
 
 }
