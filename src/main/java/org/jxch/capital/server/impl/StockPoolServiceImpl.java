@@ -6,17 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.dao.StockPoolRepository;
 import org.jxch.capital.domain.convert.KLineMapper;
 import org.jxch.capital.domain.convert.StockPoolMapper;
-import org.jxch.capital.domain.dto.HistoryParam;
-import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.domain.dto.StockHistoryDto;
-import org.jxch.capital.domain.dto.StockPoolDto;
+import org.jxch.capital.domain.dto.*;
+import org.jxch.capital.server.IndexService;
+import org.jxch.capital.server.IndicesCombinationService;
 import org.jxch.capital.server.StockHistoryService;
 import org.jxch.capital.server.StockPoolService;
 import org.jxch.capital.stock.EngineEnum;
 import org.jxch.capital.stock.StockService;
+import org.jxch.capital.utils.CollU;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.*;
 
 @Slf4j
@@ -28,6 +29,8 @@ public class StockPoolServiceImpl implements StockPoolService {
     private final StockService stockService;
     private final StockHistoryService stockHistoryService;
     private final KLineMapper kLineMapper;
+    private final IndicesCombinationService indicesCombinationService;
+    private final IndexService indexService;
 
     @Override
     public List<StockPoolDto> findAll() {
@@ -161,6 +164,28 @@ public class StockPoolServiceImpl implements StockPoolService {
     @Override
     public Long getTopPoolId(Long id) {
         return findById(id).getTopPoolId();
+    }
+
+    @Override
+    public List<List<List<Double>>> stockPoolPrices(Long stockPoolId, int maxLength) {
+        StockPoolDto stockPoolDto = findById(stockPoolId);
+        return stockHistoryService.findMapByStockPoolId(getTopPoolId(stockPoolId), stockPoolDto.getPoolStockList(), maxLength).values().parallelStream()
+                .map(stockHistoryDtoList -> stockHistoryDtoList.stream()
+                        .filter(stockHistoryDto -> stockHistoryDto.getDate().getTime() >= stockPoolDto.getStartDate().getTime() && stockHistoryDto.getDate().getTime() <= stockPoolDto.getEndDate().getTime())
+                        .map(stockHistoryDto -> Arrays.asList(stockHistoryDto.getOpen(), stockHistoryDto.getHigh(), stockHistoryDto.getLow(), stockHistoryDto.getClose())).toList()).toList();
+    }
+
+    @Override
+    public List<List<List<Double>>> stockPoolPricesByIc(Long stockPoolId, Long icId, int maxLength) {
+        List<IndicatorWrapper> indicatorWrappers = indicesCombinationService.getIndicatorWrapper(icId);
+        List<String> indicators = indicatorWrappers.stream().map(IndicatorWrapper::getName).toList();
+        StockPoolDto stockPoolDto = findById(stockPoolId);
+        return stockHistoryService.findMapByStockPoolId(getTopPoolId(stockPoolId), stockPoolDto.getPoolStockList(), maxLength).values().parallelStream()
+                .map(kLineMapper::toKLineByStockHistoryDto)
+                .map(kLines -> indexService.indexAndNormalized(kLines, Duration.ofDays(1), indicatorWrappers))
+                .map(kLineIndices -> kLineIndices.subList(maxLength, kLineIndices.size()))
+                .map(kLineIndices -> kLineIndices.stream().filter(kLine -> kLine.getDate().getTime() >= stockPoolDto.getStartDate().getTime() && kLine.getDate().getTime() <= stockPoolDto.getEndDate().getTime()).toList())
+                .map(kLineIndices -> kLineIndices.stream().map(kline -> CollU.addAllToArrayList(Arrays.asList(kline.getOpen(), kline.getHigh(), kline.getLow(), kline.getClose()), kline.get(indicators))).toList()).toList();
     }
 
 }

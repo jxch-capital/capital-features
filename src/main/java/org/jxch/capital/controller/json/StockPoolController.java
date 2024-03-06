@@ -6,12 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.domain.dto.KDashNode;
 import org.jxch.capital.domain.dto.RealPricePoolDashParam;
 import org.jxch.capital.domain.dto.StockPoolDto;
-import org.jxch.capital.server.RealPricePoolDashboardService;
-import org.jxch.capital.server.StockPoolService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.jxch.capital.server.*;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +18,9 @@ import java.util.List;
 public class StockPoolController {
     private final RealPricePoolDashboardService realPricePoolDashboardService;
     private final StockPoolService stockPoolService;
+    private final IndicesCombinationService indicesCombinationService;
+    private final IndexService indexService;
+    private final StockHistoryService stockHistoryService;
 
     @ResponseBody
     @RequestMapping("/all")
@@ -34,6 +33,20 @@ public class StockPoolController {
     public List<KDashNode> searchKDashByStockPool(@RequestBody @NonNull RealPricePoolDashParam param) {
         return realPricePoolDashboardService.realDashNodes(param.getStockPoolId(), param.getOffset()).stream()
                 .map(kDashNode -> kDashNode.setL(param.getPl(), param.getXl(), param.getYl())).toList();
+    }
+
+    @ResponseBody
+    @RequestMapping("/stock_pool_prices")
+    public List<List<List<Double>>> stockPoolPrices(@RequestParam(value = "stockPoolId") Long stockPoolId, @RequestParam(value = "maxLength") Integer maxLength) {
+        return stockPoolService.stockPoolPrices(stockPoolId, maxLength);
+    }
+
+    @ResponseBody
+    @RequestMapping("/stock_pool_prices_by_ic")
+    public List<List<List<Double>>> stockPoolPricesByIc(@RequestParam(value = "stockPoolId") Long stockPoolId,
+                                                        @RequestParam(value = "icId") Long icId,
+                                                        @RequestParam(value = "maxLength") Integer maxLength) {
+        return stockPoolService.stockPoolPricesByIc(stockPoolId, icId, maxLength);
     }
 
 }

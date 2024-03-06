@@ -2,8 +2,8 @@ package org.jxch.capital.config;
 
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.OnnxEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.milvus.MilvusEmbeddingStore;
@@ -21,34 +21,22 @@ class MilvusConfigTest {
 
     @Test
     void milvusEmbeddingStore() {
+//        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
+        EmbeddingModel embeddingModel = new OnnxEmbeddingModel("D:\\huggingface\\shibing624\\text2vec-base-chinese\\onnx\\model.onnx");
+
 
         EmbeddingStore<TextSegment> embeddingStore = MilvusEmbeddingStore.builder()
                 .host("localhost")
                 .port(19530)
-                .dimension(384)
+                .dimension(768)
                 .build();
 
 
-        EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
-
-        TextSegment segment1 = TextSegment.from("""
-                有一个可靠的信号来判断上升趋势中或交易区间内的回撤走势已经结束，那就是当前K线的高点至少高于前一根K线的高点1个最小报价单位。数出此类现象发生的次数，就是“数K线”。在上升行情或交易区间的横向或向下调整中，第一根高点高与前一根K线高点的K线被称为高1. 高1终结了第一波横向或向下的调整走势，不过这一波调整可能只是一波更大规模调整的一部分.。如果市场没有立即转入升势，而是继续盘整或下跌，那么第二次出现的高点高于前一根K线高点的K线就是高2. 高2终结了第二波横向或向下的调整。
-                                
-                上升趋势中的高2和下跌趋势中的低2相当于ABC调整。第一波是A，高1或低1是方向改变的B，最后一波回调是C。在上升行情的ABC回调中，终结C的是高2入场K线；在下跌行情的ABC回调中，终结C的是低2入场K线。
-                                
-                如果上升趋势的回调走势出现了第3波，那么终结这一波调整的就是高3，通常类似楔形牛旗；如果下降趋势的回调走势出现第3波，终结调整的就是低3卖出形态，通常是一种楔形熊旗。
-                                
-                有些上升行情中的调整可以进一步延伸并出现高4. 高4的形成有时候是从高2开始的，只不过这个高2很快就夭折了，而是又出现两波下跌，形成第二个高2. 所以整个价格行为只是更高一个时间级别上的一个高2. 在其他情况下，高4是一轮小规模的“急速与通道”下降趋势.，第一波或第二波向下推动为急速下跌，后面的向下推动走势构成一个下降通道。如果高4仍未能让市场恢复上升趋势，价格跌破其低点，那么市场就很可能不再是上升途中的回调，而是已经进入下跌趋势。我们需要等待进一步的价格行为才能入场交易。
-                                
-                低1、低2等也是一样的，只不过对应下跌行情或震荡行情中的调整。当下跌趋势或震荡行情发生横向或向上的调整，第一根低点低于前一根K线低点的K线为低1. 低1终结了第一波调整，但这一终结也可能非常短暂，比如只有一根K线。随后再次出现的类似情况分别为低2、低3和低4卖点。如果低4失败（即在触发低4做空信号之后，一根K线涨至低4信号K线的高点之上），那么价格行为所发出的信号是空头已经失去控制权，接下来市场要么进入双向交易模式、多空交替掌权，要么多头夺取控制权。不论哪种情况，空头都可以用强力击穿一根上升趋势线的方式来宣告自己重新夺权。
-                                
-                                
-                
-                """);
+        TextSegment segment1 = TextSegment.from("突破K线通常具有高成交量,有时候其成交量将是普通K线的10至20倍。成交量越高,以及急速拉升的K线越多,出现重大后续行情的几率就越高。在突破之前,多头和空头均在分批建仓,争夺市场的控制权,双方均试图在各自方向成功突破。一旦出现明确的突破,输的一方会很快斩仓止损,而赢的一方甚至会更为激进地加仓。结果是一根或多根趋势K线,通常伴有高成交量。成交量并非总是特别高,但是当其为近期K线平均水平的10倍或更高时,成功突破的概率就更高。成功突破指的是拥有多根后续K线。此外,在几根K线之内失败的突破也可能伴有非比寻常的高成交量,但是这种情况较不常见。成交量的可靠性不足以指导决策,而构成急速拉升的大型趋势K线已经告诉你突破是否很可能会成功。试图将成交量纳人考虑,更多时候会让你分心,妨碍你发挥最佳水平。");
         Embedding embedding1 = embeddingModel.embed(segment1).content();
         embeddingStore.add(embedding1, segment1);
 
-        Embedding queryEmbedding = embeddingModel.embed("高1是什么?").content();
+        Embedding queryEmbedding = embeddingModel.embed("如K线重卺,影线越来越长,反方向的趋势K线和回调K线。尽管趋势可能持续很长时间,但是这一段趋势通常会被回撤,成为交易区间的一部分。举例而言,在个急速与通道的上涨趋势形态中,急速拉升是突破,通道通常成为交易区间的第一腿,因此经常被回撤。").content();
         List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 8);
         EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(0);
 

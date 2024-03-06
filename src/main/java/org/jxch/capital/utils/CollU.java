@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,13 @@ public class CollU {
             arr3[i] = doubles.get(i);
         }
         return arr3;
+    }
+
+    @NotNull
+    public static  <T> List<T> addAllToArrayList(List<T> a, List<T> b) {
+        List<T> al = new ArrayList<>(a);
+        al.addAll(b);
+        return al;
     }
 
 }

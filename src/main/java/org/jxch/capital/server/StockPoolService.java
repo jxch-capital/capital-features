@@ -24,4 +24,9 @@ public interface StockPoolService {
     void updateNewCode(Long id);
 
     Long getTopPoolId(Long id);
+
+    List<List<List<Double>>> stockPoolPrices(Long stockPoolId, int maxLength);
+
+    List<List<List<Double>>> stockPoolPricesByIc(Long stockPoolId, Long icId, int maxLength);
+
 }

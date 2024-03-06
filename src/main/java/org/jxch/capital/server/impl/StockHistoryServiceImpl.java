@@ -12,10 +12,7 @@ import org.jxch.capital.utils.AsyncU;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -103,5 +100,12 @@ public class StockHistoryServiceImpl implements StockHistoryService {
     public void delByStockPoolIdAndCodes(Long stockPoolId, List<String> codes) {
         stockHistoryRepository.deleteAllByStockPoolIdAndStockCodes(stockPoolId, codes);
     }
+
+    @Override
+    public List<List<List<Double>>> stockPoolPrices(Long stockPoolId, List<String> codes, int maxLength) {
+        return findMapByStockPoolId(stockPoolId, codes, maxLength).values().parallelStream().map(stockHistoryDtoList ->
+                stockHistoryDtoList.stream().map(stockHistoryDto -> Arrays.asList(stockHistoryDto.getOpen(), stockHistoryDto.getHigh(), stockHistoryDto.getLow(), stockHistoryDto.getClose())).toList()).toList();
+    }
+
 
 }

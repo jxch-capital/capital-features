@@ -28,4 +28,8 @@ public class KLineIndices extends KLine {
         return names.stream().map(indices::get).toList();
     }
 
+    public List<Double> getValues() {
+        return indices.values().stream().toList();
+    }
+
 }

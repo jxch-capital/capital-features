@@ -27,4 +27,8 @@ public interface StockHistoryService {
     List<StockHistoryDto> findByStockCodeAndDate(String stockCode, Date start, Date end);
 
     void delByStockPoolIdAndCodes(Long stockPoolId, List<String> codes);
+
+    List<List<List<Double>>> stockPoolPrices(Long stockPoolId, List<String> codes, int maxLength);
+
+
 }
