@@ -9,7 +9,6 @@ import org.jxch.capital.learning.old.train.Trains;
 import org.jxch.capital.learning.old.train.config.TrainConfigService;
 import org.jxch.capital.learning.old.train.data.TrainDataService;
 import org.jxch.capital.learning.old.train.data.TrainService;
-import org.jxch.capital.learning.train.param.*;
 import org.jxch.capital.learning.old.train.param.dto.TestDataRes;
 import org.springframework.stereotype.Service;
 

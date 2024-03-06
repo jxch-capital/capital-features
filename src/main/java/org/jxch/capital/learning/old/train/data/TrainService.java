@@ -2,7 +2,6 @@ package org.jxch.capital.learning.old.train.data;
 
 import org.jxch.capital.learning.old.train.param.*;
 import org.jxch.capital.learning.old.train.param.dto.TestDataRes;
-import org.jxch.capital.learning.train.param.*;
 
 public interface TrainService {
 
