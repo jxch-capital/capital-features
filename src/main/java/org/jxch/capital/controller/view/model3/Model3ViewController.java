@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.ModelEditManageParam;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.dto.Model3BaseMetaData;
-import org.jxch.capital.learning.train.config.TrainConfigService;
+import org.jxch.capital.learning.old.train.config.TrainConfigService;
 import org.jxch.capital.utils.Controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

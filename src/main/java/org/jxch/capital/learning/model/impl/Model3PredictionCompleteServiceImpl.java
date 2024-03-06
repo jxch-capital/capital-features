@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3PredictionCompleteService;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.train.data.TrainService;
-import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
-import org.jxch.capital.learning.train.param.dto.PredictionOneStockParam;
+import org.jxch.capital.learning.old.train.data.TrainService;
+import org.jxch.capital.learning.old.train.param.PredictionDataOneStockRes;
+import org.jxch.capital.learning.old.train.param.dto.PredictionOneStockParam;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

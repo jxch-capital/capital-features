@@ -11,7 +11,7 @@ import org.jxch.capital.learning.model.Model3Management;
 import org.jxch.capital.learning.model.Model3PredictionCompleteService;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
 import org.jxch.capital.learning.signal.filter.SignalFilters;
-import org.jxch.capital.learning.train.config.TrainConfigService;
+import org.jxch.capital.learning.old.train.config.TrainConfigService;
 import org.jxch.capital.utils.EChartsU;
 import org.jxch.capital.utils.KLineSignals;
 import org.springframework.stereotype.Controller;

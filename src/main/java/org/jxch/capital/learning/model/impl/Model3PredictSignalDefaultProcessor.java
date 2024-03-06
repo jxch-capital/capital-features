@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.Model3PredictSignalProcessor;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
-import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
+import org.jxch.capital.learning.old.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.old.train.param.PredictionDataOneStockRes;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 

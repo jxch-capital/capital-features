@@ -3,7 +3,7 @@ package org.jxch.capital.learning.model.impl;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.jxch.capital.learning.train.data.TrainService;
+import org.jxch.capital.learning.old.train.data.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

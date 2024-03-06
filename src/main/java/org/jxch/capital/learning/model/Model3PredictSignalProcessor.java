@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.learning.model.dto.KLineModelSignal;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
 import org.jxch.capital.learning.model.dto.PredictSignalStack;
-import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
-import org.jxch.capital.learning.train.param.PredictionDataOneStockRes;
+import org.jxch.capital.learning.old.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.old.train.param.PredictionDataOneStockRes;
 import org.springframework.core.Ordered;
 
 import java.util.List;

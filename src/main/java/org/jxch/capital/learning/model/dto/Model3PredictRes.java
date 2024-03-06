@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.KLine;
-import org.jxch.capital.learning.train.param.PredictionDataOneStockParam;
+import org.jxch.capital.learning.old.train.param.PredictionDataOneStockParam;
 
 import java.util.Date;
 import java.util.List;

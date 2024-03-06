@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.learning.model.dto.Model3PredictRes;
-import org.jxch.capital.learning.train.param.dto.PredictionOneStockParam;
+import org.jxch.capital.learning.old.train.param.dto.PredictionOneStockParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
