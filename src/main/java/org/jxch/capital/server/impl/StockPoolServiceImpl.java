@@ -185,7 +185,9 @@ public class StockPoolServiceImpl implements StockPoolService {
                 .map(kLines -> indexService.indexAndNormalized(kLines, Duration.ofDays(1), indicatorWrappers))
                 .map(kLineIndices -> kLineIndices.subList(maxLength, kLineIndices.size()))
                 .map(kLineIndices -> kLineIndices.stream().filter(kLine -> kLine.getDate().getTime() >= stockPoolDto.getStartDate().getTime() && kLine.getDate().getTime() <= stockPoolDto.getEndDate().getTime()).toList())
-                .map(kLineIndices -> kLineIndices.stream().map(kline -> CollU.addAllToArrayList(Arrays.asList(kline.getOpen(), kline.getHigh(), kline.getLow(), kline.getClose()), kline.get(indicators))).toList()).toList();
+                .map(kLineIndices -> kLineIndices.stream().map(kline -> CollU.addAllToArrayList(Arrays.asList(kline.getOpen(), kline.getHigh(), kline.getLow(), kline.getClose()), kline.get(indicators))).toList())
+                .filter(lists -> lists.stream().noneMatch(doubles -> doubles.stream().anyMatch(value -> Double.isNaN(value) || Double.isInfinite(value))))
+                .toList();
     }
 
 }

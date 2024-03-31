@@ -9,6 +9,8 @@ import org.jsoup.select.Elements;
 import org.jxch.capital.http.ai.gemini.GeminiApi;
 import org.jxch.capital.http.ai.TextAiParam;
 import org.jxch.capital.http.brooks.BrooksBlogApi;
+import org.jxch.capital.http.trans.TransApi;
+import org.jxch.capital.http.trans.TransParam;
 import org.jxch.capital.server.BrooksService;
 import org.jxch.capital.utils.CollU;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.Objects;
 public class BrooksServiceImpl implements BrooksService {
     private final BrooksBlogApi brooksBlogApi;
     private final GeminiApi geminiApi;
+    private final TransApi transApi;
 
 
     @Override
@@ -44,11 +47,15 @@ public class BrooksServiceImpl implements BrooksService {
 
         Elements lis = doc.select("li,p");
         for (int i = 0; i < lis.size(); i++) {
-            lis.get(i).text(transAi(lis.get(i).text()));
+            lis.get(i).text(trans(lis.get(i).text()));
             log.debug("翻译进度：{}/{}", i + 1, lis.size());
         }
 
         return doc.body().children().toString();
+    }
+
+    private String trans(String text) {
+        return transApi.trans(TransParam.builder().text(text).build());
     }
 
     private String transAi(String text) {

@@ -51,4 +51,4 @@ spring:
       max-request-size: 100MB
 
 trans:
-  url: http://jiangxicheng.site:15500/trans
+  url: http://ss.jiangxicheng.site:15500/trans
