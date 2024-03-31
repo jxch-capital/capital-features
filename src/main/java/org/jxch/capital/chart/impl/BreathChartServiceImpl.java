@@ -40,13 +40,13 @@ public class BreathChartServiceImpl implements ChartPngService<BreathChartParam,
                 Color color = Colors.getColorFromGradientByRTG(scores.get(col) - 50, 50);
                 g.setColor(color);
                 g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-                g.setColor(Color.DARK_GRAY);
+                g.setColor(Color.BLACK);
                 g.drawString(String.valueOf(scores.get(col)), col * cellSize + cellSize / 6, row * cellSize + (int) (cellSize / 1.3));
             }
             g.setFont(new Font("default", Font.PLAIN, 9));
-            g.setColor(Color.BLACK);
-            g.fillRect(scores.size() * cellSize, row * cellSize, cellSize, cellSize);
             g.setColor(Color.DARK_GRAY);
+            g.fillRect(scores.size() * cellSize, row * cellSize, cellSize, cellSize);
+            g.setColor(new Color(255, 255, 255, 60));
             g.drawString(types.get(row), scores.size() * cellSize, row * cellSize + (int) (cellSize / 1.3));
         }
         g.dispose();

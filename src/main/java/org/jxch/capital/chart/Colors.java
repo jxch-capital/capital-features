@@ -19,9 +19,9 @@ public class Colors {
         double ratio = normalizeValue(value, min, max);
 
         // 计算红和绿的归一化值
-        int red = (int) (255 * (1 - ratio));
-        int green = (int) (255 * ratio);
-        int blue = 0; // 红色到绿色的过渡中蓝色始终为0
+        int red = (int) (120 * (1 - ratio));
+        int green = (int) (120 * ratio);
+        int blue = 30; // 红色到绿色的过渡中蓝色始终为0
 
         return new Color(red, green, blue);
     }

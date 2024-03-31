@@ -33,7 +33,7 @@ class StockPoolBubbleChartServiceImplTest {
 
         StockPoolScatterChartRes chart = stockPoolChartPngService.chart(param);
         log.info(JSONObject.toJSONString(chart));
-        stockPoolChartPngService.clear(chart);
+//        stockPoolChartPngService.clear(chart);
     }
 
 }
