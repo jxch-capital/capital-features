@@ -49,6 +49,7 @@ public class StockPoolBubbleChartServiceImpl implements ChartPngService<StockPoo
 
         chart.getStyler().setChartTitleVisible(true);
         chart.getStyler().setLegendVisible(false);
+        Charts.bubbleDartTheme(chart);
 
         List<Double> xData = new ArrayList<>();
         List<Double> yData = new ArrayList<>();

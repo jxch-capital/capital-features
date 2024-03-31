@@ -35,7 +35,7 @@ class KNNBubbleChartServiceImplTest {
                 .build();
 
         KNNBubbleChartRes res = knnBubbleChartService.chart(param);
-//        knnBubbleChartService.clear(res);
+        knnBubbleChartService.clear(res);
         log.info(JSONObject.toJSONString(res));
     }
 }

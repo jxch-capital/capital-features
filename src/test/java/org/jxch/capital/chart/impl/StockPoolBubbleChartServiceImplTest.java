@@ -25,7 +25,7 @@ class StockPoolBubbleChartServiceImplTest {
     void chart() {
         StockPoolBubbleChartParam param = StockPoolBubbleChartParam.builder()
                 .start(DateUtil.offset(Calendar.getInstance().getTime(), DateField.YEAR, -3))
-                .stockPoolIds(Arrays.asList(554952L))
+                .stockPoolIds(Arrays.asList(1L))
                 .pl(20)
                 .xl(60)
                 .yl(120)
@@ -33,7 +33,7 @@ class StockPoolBubbleChartServiceImplTest {
 
         StockPoolScatterChartRes chart = stockPoolChartPngService.chart(param);
         log.info(JSONObject.toJSONString(chart));
-//        stockPoolChartPngService.clear(chart);
+        stockPoolChartPngService.clear(chart);
     }
 
 }

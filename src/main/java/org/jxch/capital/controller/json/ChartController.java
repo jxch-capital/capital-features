@@ -3,12 +3,10 @@ package org.jxch.capital.controller.json;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.jxch.capital.chart.dto.BreathChartParam;
-import org.jxch.capital.chart.dto.BreathChartRes;
-import org.jxch.capital.chart.dto.KLineChartParam;
-import org.jxch.capital.chart.dto.KLineChartRes;
+import org.jxch.capital.chart.dto.*;
 import org.jxch.capital.chart.impl.BreathChartServiceImpl;
 import org.jxch.capital.chart.impl.KLineChartServiceImpl;
+import org.jxch.capital.chart.impl.StockPoolBubbleChartServiceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
@@ -29,6 +27,7 @@ import java.nio.file.Paths;
 public class ChartController {
     private final KLineChartServiceImpl kLineChartService;
     private final BreathChartServiceImpl breathChartService;
+    private final StockPoolBubbleChartServiceImpl stockPoolBubbleChartService;
 
     @SneakyThrows
     @PostMapping("kline")
@@ -40,6 +39,20 @@ public class ChartController {
                 StreamUtils.copy(in, outputStream);
             } finally {
                 kLineChartService.clear(kLineChartRes);
+            }
+        });
+    }
+
+    @SneakyThrows
+    @PostMapping("pool")
+    public ResponseEntity<StreamingResponseBody> pool(@RequestBody StockPoolBubbleChartParam param) {
+        StockPoolScatterChartRes chartRes = stockPoolBubbleChartService.chart(param);
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(outputStream -> {
+            try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(Paths.get(chartRes.getPath()).toFile()))) {
+                StreamUtils.copy(in, outputStream);
+            } finally {
+                stockPoolBubbleChartService.clear(chartRes);
             }
         });
     }

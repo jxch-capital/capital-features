@@ -4,10 +4,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-import org.knowm.xchart.XYSeries;
+import org.jetbrains.annotations.NotNull;
+import org.knowm.xchart.*;
 import org.knowm.xchart.internal.chartpart.Chart;
 import org.knowm.xchart.style.lines.SeriesLines;
 import org.knowm.xchart.style.markers.SeriesMarkers;
@@ -83,6 +81,16 @@ public class Charts {
     public static void init(@NonNull ChartConfig config) {
         pngPath = config.getPngPath();
         suffix = config.getSuffix();
+    }
+
+    public static void bubbleDartTheme(@NotNull BubbleChart chart) {
+        chart.getStyler().setPlotBorderColor(Color.BLACK);
+        chart.getStyler().setChartBackgroundColor(Color.BLACK);
+        chart.getStyler().setPlotBackgroundColor(Color.BLACK);
+        chart.getStyler().setPlotGridLinesColor(new Color(255, 255, 255, 60));
+        chart.getStyler().setChartFontColor(Color.GRAY);
+        chart.getStyler().setAxisTickLabelsColor(Color.GRAY);
+        chart.getStyler().setAnnotationTextFontColor(Color.WHITE);
     }
 
 }
