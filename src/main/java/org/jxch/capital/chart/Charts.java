@@ -30,8 +30,9 @@ public class Charts {
     @NonNull
     @SneakyThrows
     public static String createChartPng(String name, @NonNull Chart<?, ?> chart) {
-        BitmapEncoder.saveBitmap(chart, pngPath + name + UUID.randomUUID(), BitmapEncoder.BitmapFormat.PNG);
-        return pngPath + name + UUID.randomUUID() + suffix;
+        String filePathName = pngPath + name + UUID.randomUUID();
+        BitmapEncoder.saveBitmap(chart, filePathName, BitmapEncoder.BitmapFormat.PNG);
+        return filePathName + ".png";
     }
 
     @NonNull

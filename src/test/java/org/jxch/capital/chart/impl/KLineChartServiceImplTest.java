@@ -8,8 +8,6 @@ import org.jxch.capital.domain.dto.HistoryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 @SpringBootTest
 class KLineChartServiceImplTest {
@@ -22,5 +20,6 @@ class KLineChartServiceImplTest {
 
 
         log.info(kLineChartRes.getPath());
+        kLineChartService.clear(kLineChartRes);
     }
 }
