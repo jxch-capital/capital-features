@@ -68,6 +68,13 @@ public class KNNBubbleChartServiceImpl implements ChartPngService<KNNBubbleChart
 
         chart.getStyler().setChartTitleVisible(true);
         chart.getStyler().setLegendVisible(false);
+        chart.getStyler().setPlotBorderColor(Color.BLACK);
+        chart.getStyler().setChartBackgroundColor(Color.BLACK);
+        chart.getStyler().setPlotBackgroundColor(Color.BLACK);
+        chart.getStyler().setPlotGridLinesColor(new Color(255, 255, 255, 60));
+        chart.getStyler().setChartFontColor(Color.GRAY);
+        chart.getStyler().setAxisTickLabelsColor(Color.GRAY);
+        chart.getStyler().setAnnotationTextFontColor(Color.LIGHT_GRAY);
         KNNBubbleChartRes res = new KNNBubbleChartRes().setTimestamp(param.getTimestamp());
 
         for (int i = 0; i < xData.size(); i++) {
@@ -86,8 +93,7 @@ public class KNNBubbleChartServiceImpl implements ChartPngService<KNNBubbleChart
         currentSeries.setFillColor(Color.BLUE);
         currentSeries.setMarker(SeriesMarkers.CIRCLE);
         currentSeries.setLineColor(new Color(0, 0, 0, 0));
-        chart.addAnnotation(new AnnotationText(String.format("%s-%.2f%%", knnParam.getKNodeParam().getCode(), startX),
-                startX, 0, false));
+        chart.addAnnotation(new AnnotationText(String.format("%s-%.2f%%", knnParam.getKNodeParam().getCode(), startX), startX, 0, false));
 
         return res.setPath(Charts.createChartPng(param.getIdentifier() + getClass().getSimpleName() + param.getTimestamp(), chart));
     }

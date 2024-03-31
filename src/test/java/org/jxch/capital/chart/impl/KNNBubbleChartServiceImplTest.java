@@ -10,8 +10,6 @@ import org.jxch.capital.domain.dto.KNodeParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 @SpringBootTest
 class KNNBubbleChartServiceImplTest {
@@ -29,8 +27,8 @@ class KNNBubbleChartServiceImplTest {
                                 .code("SPY")
                                 .size(20)
                                 .maxLength(70)
-                                .indicesComId(21L)
-                                .stockPoolId(24)
+                                .indicesComId(1329741L)
+                                .stockPoolId(1)
                                 .normalized(true)
                                 .build())
                         .build())
