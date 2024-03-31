@@ -12,9 +12,12 @@ import org.knowm.xchart.internal.chartpart.Chart;
 import org.knowm.xchart.style.lines.SeriesLines;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -27,8 +30,16 @@ public class Charts {
     @NonNull
     @SneakyThrows
     public static String createChartPng(String name, @NonNull Chart<?, ?> chart) {
-        BitmapEncoder.saveBitmap(chart, pngPath + name, BitmapEncoder.BitmapFormat.PNG);
-        return pngPath + name + suffix;
+        BitmapEncoder.saveBitmap(chart, pngPath + name + UUID.randomUUID(), BitmapEncoder.BitmapFormat.PNG);
+        return pngPath + name + UUID.randomUUID() + suffix;
+    }
+
+    @NonNull
+    @SneakyThrows
+    public static String createAwtPng(String name, BufferedImage image) {
+        String filePath = pngPath + name + UUID.randomUUID() + ".png";
+        ImageIO.write(image, "png", new File(filePath));
+        return filePath;
     }
 
     public static void delete(String filePath) {

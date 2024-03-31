@@ -3,8 +3,11 @@ package org.jxch.capital.controller.json;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jxch.capital.chart.dto.BreathChartParam;
+import org.jxch.capital.chart.dto.BreathChartRes;
 import org.jxch.capital.chart.dto.KLineChartParam;
 import org.jxch.capital.chart.dto.KLineChartRes;
+import org.jxch.capital.chart.impl.BreathChartServiceImpl;
 import org.jxch.capital.chart.impl.KLineChartServiceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,7 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class ChartController {
     private final KLineChartServiceImpl kLineChartService;
+    private final BreathChartServiceImpl breathChartService;
 
     @SneakyThrows
     @PostMapping("kline")
@@ -36,6 +40,20 @@ public class ChartController {
                 StreamUtils.copy(in, outputStream);
             } finally {
                 kLineChartService.clear(kLineChartRes);
+            }
+        });
+    }
+
+    @SneakyThrows
+    @PostMapping("breath")
+    public ResponseEntity<StreamingResponseBody> breath(@RequestBody BreathChartParam param) {
+        BreathChartRes breathChartRes = breathChartService.chart(param);
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(outputStream -> {
+            try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(Paths.get(breathChartRes.getPath()).toFile()))) {
+                StreamUtils.copy(in, outputStream);
+            } finally {
+                breathChartService.clear(breathChartRes);
             }
         });
     }
