@@ -27,6 +27,8 @@ public class TransApi {
                 .newBuilder()
                 .addQueryParameter("text", param.getText())
                 .addQueryParameter("target", param.getTarget())
+                .addQueryParameter("source", param.getSource())
+                .addQueryParameter("engine", param.getEngine())
                 .build();
 
         return new Request.Builder()

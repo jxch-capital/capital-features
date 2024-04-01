@@ -16,6 +16,10 @@ public class TransParam {
 
     @Builder.Default
     private String target = "zh-CN";
+    @Builder.Default
+    private String source = "en-US";
+    @Builder.Default
+    private String engine = "MyMemoryTranslator";
 
     @Builder.Default
     private Boolean ignoredErrorTrans = true;
