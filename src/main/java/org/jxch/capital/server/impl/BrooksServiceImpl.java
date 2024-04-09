@@ -1,6 +1,7 @@
 package org.jxch.capital.server.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,6 +16,8 @@ import org.jxch.capital.server.BrooksService;
 import org.jxch.capital.utils.CollU;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
+import java.net.URL;
 import java.util.Objects;
 
 @Slf4j
@@ -52,6 +55,19 @@ public class BrooksServiceImpl implements BrooksService {
         }
 
         return doc.body().children().toString();
+    }
+
+    @Nullable
+    @Override
+    @SneakyThrows
+    public URL newBlogFirstChartUrl() {
+        String html = brooksBlogApi.newArticleHtml();
+        Document doc = Jsoup.parse(html);
+        Elements img = doc.select("img");
+        if (!img.isEmpty()) {
+            return new URL(img.get(0).attr("src"));
+        }
+        return null;
     }
 
     private String trans(String text) {

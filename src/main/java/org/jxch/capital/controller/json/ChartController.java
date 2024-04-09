@@ -5,10 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.chart.ChartPngService;
 import org.jxch.capital.chart.dto.*;
-import org.jxch.capital.chart.impl.BreathChartServiceImpl;
-import org.jxch.capital.chart.impl.KLineChartServiceImpl;
-import org.jxch.capital.chart.impl.KNNBubbleChartServiceImpl;
-import org.jxch.capital.chart.impl.StockPoolBubbleChartServiceImpl;
+import org.jxch.capital.chart.impl.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
@@ -31,6 +28,7 @@ public class ChartController {
     private final BreathChartServiceImpl breathChartService;
     private final StockPoolBubbleChartServiceImpl stockPoolBubbleChartService;
     private final KNNBubbleChartServiceImpl knnBubbleChartService;
+    private final BrooksBlogChartServiceImpl brooksBlogChartService;
 
     @SneakyThrows
     @PostMapping("kline")
@@ -58,6 +56,13 @@ public class ChartController {
     public ResponseEntity<StreamingResponseBody> breath(@RequestBody BreathChartParam param) {
         BreathChartRes chartRes = breathChartService.chart(param);
         return commImage(breathChartService, chartRes, chartRes.getPath());
+    }
+
+    @SneakyThrows
+    @PostMapping("brooks")
+    public ResponseEntity<StreamingResponseBody> brooks(@RequestBody BrooksBlogChartParam param) {
+        BrooksBlogChartRes chartRes = brooksBlogChartService.chart(param);
+        return commImage(brooksBlogChartService, chartRes, chartRes.getPath());
     }
 
     public <T extends ChartParam,R extends ChartRes> ResponseEntity<StreamingResponseBody> commImage(ChartPngService<T,R> service, R chartRes, String path) {

@@ -50,6 +50,11 @@ public class Charts {
         }
     }
 
+    @NotNull
+    public static String chartPath(String name) {
+        return pngPath + name + UUID.randomUUID() + ".png";
+    }
+
 
     @NonNull
     public static XYChart miniLineXYChart(String name, @NonNull List<Double> value) {
