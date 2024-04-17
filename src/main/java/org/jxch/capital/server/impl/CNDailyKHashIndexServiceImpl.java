@@ -9,6 +9,8 @@ import org.jxch.capital.domain.dto.CNDailyKHashIndexDto;
 import org.jxch.capital.khash.DailyGridKHashCNDailyIndexAgg;
 import org.jxch.capital.khash.KReader;
 import org.jxch.capital.server.CNDailyKHashIndexService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,24 +30,58 @@ public class CNDailyKHashIndexServiceImpl implements CNDailyKHashIndexService {
     }
 
     @Override
-    public List<CNDailyKHashIndexDto> findByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAgg agg) {
+    public List<List<CNDailyKHashIndexDto>> findByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAgg agg) {
         return agg.aggregate(reader.read()).values().stream().flatMap(List::stream)
-                .flatMap(dto -> findBySubHash(dto.getHash(), agg.getDailyGridKHashKLinesAgg().hashLength(), dto.getIsFillLength(), dto.getLeftVacancies()).stream()).toList();
+                .map(dto -> findBySubHash(dto.getHash(), agg.getDailyGridKHashKLinesAgg().hashLength(), dto.getIsFillLength(), dto.getLeftVacancies())).toList();
+    }
+
+    @Override
+    public List<Page<CNDailyKHashIndexDto>> findByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAgg agg, Pageable pageable) {
+        return agg.aggregate(reader.read()).values().stream().flatMap(List::stream)
+                .map(dto -> findBySubHash(dto.getHash(), agg.getDailyGridKHashKLinesAgg().hashLength(), dto.getIsFillLength(), dto.getLeftVacancies(), pageable)).toList();
+    }
+
+    @NotNull
+    private String fillAppendHash(@NotNull BigDecimal subHash, Integer hashLength, Integer leftVacancies) {
+        return new String(new char[hashLength - leftVacancies - String.valueOf(subHash).length()]).replace("\0", "0");
+    }
+
+    @NotNull
+    private Long fromByHash(@NotNull BigDecimal subHash, Integer hashLength, Integer leftVacancies) {
+        return Long.valueOf(subHash + fillAppendHash(subHash, hashLength, leftVacancies));
+    }
+
+    @NotNull
+    private Long toByHash(@NotNull BigDecimal subHash, Integer hashLength, Integer leftVacancies) {
+        return Long.valueOf((subHash.add(new BigDecimal(1))) + fillAppendHash(subHash, hashLength, leftVacancies));
     }
 
     @Override
     public List<CNDailyKHashIndexDto> findBySubHash(BigDecimal subHash, Integer hashLength, @NotNull Boolean isFillLength, Integer leftVacancies) {
-        String fillAppend = new String(new char[hashLength - leftVacancies - String.valueOf(subHash).length()]).replace("\0", "0");
-        Long from = Long.valueOf(subHash + fillAppend);
-        Long to = Long.valueOf((subHash.add(new BigDecimal(1))) + fillAppend);
+        Long from = fromByHash(subHash, hashLength, leftVacancies);
+        Long to = toByHash(subHash, hashLength, leftVacancies);
         return isFillLength ?
                 cnDailyKHashIndexMapper.toCNDailyKHashIndexDto(cnDailyKHashIndexRepository.findAllByHashBetweenAndAndIsFillLengthAndLeftVacancies(from, to, true, leftVacancies)) :
                 cnDailyKHashIndexMapper.toCNDailyKHashIndexDto(cnDailyKHashIndexRepository.findAllByHashBetweenAndAndIsFillLength(from, to, false));
     }
 
     @Override
+    public Page<CNDailyKHashIndexDto> findBySubHash(BigDecimal subHash, Integer hashLength, Boolean isFillLength, Integer leftVacancies, Pageable pageable) {
+        Long from = fromByHash(subHash, hashLength, leftVacancies);
+        Long to = toByHash(subHash, hashLength, leftVacancies);
+        return isFillLength ?
+                cnDailyKHashIndexRepository.findAllByHashBetweenAndAndIsFillLengthAndLeftVacancies(from, to, true, leftVacancies, pageable).map(cnDailyKHashIndexMapper::toCNDailyKHashIndexDto) :
+                cnDailyKHashIndexRepository.findAllByHashBetweenAndAndIsFillLength(from, to, false, pageable).map(cnDailyKHashIndexMapper::toCNDailyKHashIndexDto);
+    }
+
+    @Override
     public List<CNDailyKHashIndexDto> findBySubHash(BigDecimal subHash, Integer hashLength) {
         return findBySubHash(subHash, hashLength, false, 0);
+    }
+
+    @Override
+    public Page<CNDailyKHashIndexDto> findBySubHash(BigDecimal subHash, Integer hashLength, Pageable pageable) {
+        return findBySubHash(subHash, hashLength, false, 0, pageable);
     }
 
 }

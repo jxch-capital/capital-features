@@ -13,12 +13,15 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>3.2.1</spring-boot.version>
+        <spring-boot.ai.milvus.version>1.0.0</spring-boot.ai.milvus.version>
+        <spring.milvus.version>1.0.0</spring.milvus.version>
         <lombok.version>1.18.30</lombok.version>
         <slf4j.version>2.0.9</slf4j.version>
         <hutool.version>5.8.23</hutool.version>
         <okhttp.version>4.12.0</okhttp.version>
         <fastjson2.version>2.0.43</fastjson2.version>
         <postgresql.version>42.7.1</postgresql.version>
+        <influxdb.version>7.0.0</influxdb.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <caffeine.version>3.1.8</caffeine.version>
         <smile.version>3.0.2</smile.version>
@@ -91,6 +94,22 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.springboot.ai</groupId>-->
+<!--            <artifactId>spring-ai-milvus-store</artifactId>-->
+<!--            <version>${spring.milvus.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.springboot.ai</groupId>-->
+<!--            <artifactId>spring-ai-milvus-store-spring-boot-starter</artifactId>-->
+<!--            <version>${spring-boot.ai.milvus.version}</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.influxdb/influxdb-client-java -->
+        <dependency>
+            <groupId>com.influxdb</groupId>
+            <artifactId>influxdb-client-java</artifactId>
+            <version>${influxdb.version}</version>
         </dependency>
         <dependency>
             <groupId>io.minio</groupId>

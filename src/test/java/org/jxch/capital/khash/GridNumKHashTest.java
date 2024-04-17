@@ -24,4 +24,11 @@ class GridNumKHashTest {
         log.info(JSON.toJSONString(aggregate));
     }
 
+    @Test
+    void hashLength() {
+        DailyGridKHashKLinesAgg dailyGridKHashKLinesAgg = DailyGridKHashKLinesAgg.builder().ranger(4).hashSkip(8).build();
+        log.info("{}", dailyGridKHashKLinesAgg.hashLength());
+    }
+
+
 }

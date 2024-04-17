@@ -2,6 +2,7 @@ package org.jxch.capital.server.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import com.alibaba.fastjson.JSON;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,12 @@ import org.jxch.capital.khash.DailyGridKHashKLinesAgg;
 import org.jxch.capital.server.CNDailyKHashIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -69,9 +72,10 @@ class CNDailyKHashIndexServiceImplTest {
 
     @Test
     void findByLeftHash() {
+        Pageable pageable = PageRequest.of(1, 100);
         TimeInterval timer = DateUtil.timer();
-        List<CNDailyKHashIndexDto> byLeftHash = cnDailyKHashIndexService.findBySubHash(new BigDecimal("443334444"), 12);
-        log.info("[{}] - {}ms.", byLeftHash.size(), timer.interval());
+        Page<CNDailyKHashIndexDto> page = cnDailyKHashIndexService.findBySubHash(new BigDecimal("211"), 12, pageable);
+        log.info("total:{} - {}ms. {}", page.getTotalPages(), timer.interval(), JSON.toJSONString(page.toList()));
     }
 
 }

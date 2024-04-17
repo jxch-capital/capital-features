@@ -1,11 +1,13 @@
 package org.jxch.capital.controller.json;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jxch.capital.chart.ChartPngService;
 import org.jxch.capital.chart.dto.*;
 import org.jxch.capital.chart.impl.*;
+import org.jxch.capital.exception.StockServiceNoResException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
+import java.util.Date;
 
 @Slf4j
 @RestController
@@ -35,6 +38,19 @@ public class ChartController {
     public ResponseEntity<StreamingResponseBody> kline(@RequestBody KLineChartParam param) {
         KLineChartRes chartRes = kLineChartService.chart(param);
         return commImage(kLineChartService, chartRes, chartRes.getPath());
+    }
+
+    @SneakyThrows
+    @PostMapping("kline_last_daily")
+    public ResponseEntity<StreamingResponseBody> klineLastDaily(@RequestBody KLineChartParam param) {
+        try {
+            KLineChartRes chartRes = kLineChartService.chart(param);
+            return commImage(kLineChartService, chartRes, chartRes.getPath());
+        } catch (StockServiceNoResException e) {
+            Date start = param.getHistoryParam().getStart();
+            param.getHistoryParam().setStart(DateUtil.offsetDay(start, -1));
+            return klineLastDaily(param);
+        }
     }
 
     @SneakyThrows
