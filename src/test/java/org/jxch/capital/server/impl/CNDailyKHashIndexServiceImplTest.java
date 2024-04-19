@@ -8,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.jxch.capital.domain.dto.CNDailyKHashIndexDto;
 import org.jxch.capital.khash.BaoStockCSVKReader;
-import org.jxch.capital.khash.DailyGridKHashCNDailyIndexAgg;
-import org.jxch.capital.khash.DailyGridKHashKLinesAgg;
+import org.jxch.capital.khash.DailyGridKHashCNDailyIndexAggDeprecated;
+import org.jxch.capital.khash.DailyGridKHashKLinesAggDeprecated;
 import org.jxch.capital.server.CNDailyKHashIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,8 +34,8 @@ class CNDailyKHashIndexServiceImplTest {
 
     Integer save(File csvFile) {
         BaoStockCSVKReader baoStockCSVKReader = new BaoStockCSVKReader();
-        DailyGridKHashCNDailyIndexAgg dailyGridKHashCNDailyIndexAgg = new DailyGridKHashCNDailyIndexAgg()
-                .setDailyGridKHashKLinesAgg(DailyGridKHashKLinesAgg.builder().ranger(4).hashSkip(4).build());
+        DailyGridKHashCNDailyIndexAggDeprecated dailyGridKHashCNDailyIndexAgg = new DailyGridKHashCNDailyIndexAggDeprecated()
+                .setDailyGridKHashKLinesAgg(DailyGridKHashKLinesAggDeprecated.builder().ranger(4).hashSkip(4).build());
         baoStockCSVKReader.setCsvFile(csvFile);
         dailyGridKHashCNDailyIndexAgg.setCode(csvFile.getName().split("_")[0]);
 

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.dao.CNDailyKHashIndexRepository;
 import org.jxch.capital.domain.convert.CNDailyKHashIndexMapper;
 import org.jxch.capital.domain.dto.CNDailyKHashIndexDto;
-import org.jxch.capital.khash.DailyGridKHashCNDailyIndexAgg;
+import org.jxch.capital.khash.DailyGridKHashCNDailyIndexAggDeprecated;
 import org.jxch.capital.khash.KReader;
 import org.jxch.capital.server.CNDailyKHashIndexService;
 import org.springframework.data.domain.Page;
@@ -24,19 +24,19 @@ public class CNDailyKHashIndexServiceImpl implements CNDailyKHashIndexService {
     private final CNDailyKHashIndexMapper cnDailyKHashIndexMapper;
 
     @Override
-    public Integer saveByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAgg agg) {
+    public Integer saveByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAggDeprecated agg) {
         List<CNDailyKHashIndexDto> kHashIndexDtoList = agg.aggregate(reader.read()).values().stream().flatMap(List::stream).toList();
         return cnDailyKHashIndexRepository.saveAll(cnDailyKHashIndexMapper.toCNDailyKHashIndex(kHashIndexDtoList)).size();
     }
 
     @Override
-    public List<List<CNDailyKHashIndexDto>> findByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAgg agg) {
+    public List<List<CNDailyKHashIndexDto>> findByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAggDeprecated agg) {
         return agg.aggregate(reader.read()).values().stream().flatMap(List::stream)
                 .map(dto -> findBySubHash(dto.getHash(), agg.getDailyGridKHashKLinesAgg().hashLength(), dto.getIsFillLength(), dto.getLeftVacancies())).toList();
     }
 
     @Override
-    public List<Page<CNDailyKHashIndexDto>> findByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAgg agg, Pageable pageable) {
+    public List<Page<CNDailyKHashIndexDto>> findByAgg(@NotNull KReader reader, @NotNull DailyGridKHashCNDailyIndexAggDeprecated agg, Pageable pageable) {
         return agg.aggregate(reader.read()).values().stream().flatMap(List::stream)
                 .map(dto -> findBySubHash(dto.getHash(), agg.getDailyGridKHashKLinesAgg().hashLength(), dto.getIsFillLength(), dto.getLeftVacancies(), pageable)).toList();
     }

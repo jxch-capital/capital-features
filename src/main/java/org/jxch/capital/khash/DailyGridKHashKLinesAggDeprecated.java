@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @Getter
 @Builder
-public class DailyGridKHashKLinesAgg implements KHashAgg<List<KLine>> {
+public class DailyGridKHashKLinesAggDeprecated implements KHashAggDeprecated<List<KLine>> {
     @Builder.Default
     private DailyKSlicer dailyKSlicer = new DailyKSlicer();
     @Builder.Default

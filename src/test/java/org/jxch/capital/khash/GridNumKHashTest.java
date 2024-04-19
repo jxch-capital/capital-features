@@ -16,8 +16,8 @@ class GridNumKHashTest {
         BaoStockCSVKReader baoStockCSVKReader = new BaoStockCSVKReader();
         List<KLine> kLines = baoStockCSVKReader.setCsvFile(new File("G:\\app\\backup\\data\\stock_data\\csv\\5-2\\sz.301017_19900101-20231231.csv")).read();
 
-        DailyGridKHashKLinesAgg dailyGridKHashKLinesAgg = DailyGridKHashKLinesAgg.builder().ranger(4).hashSkip(10).build();
-        DailyGridKHashCNDailyIndexAgg dailyGridKHashCNDailyIndexAgg = new DailyGridKHashCNDailyIndexAgg()
+        DailyGridKHashKLinesAggDeprecated dailyGridKHashKLinesAgg = DailyGridKHashKLinesAggDeprecated.builder().ranger(4).hashSkip(10).build();
+        DailyGridKHashCNDailyIndexAggDeprecated dailyGridKHashCNDailyIndexAgg = new DailyGridKHashCNDailyIndexAggDeprecated()
                 .setCode("sz.301017").setDailyGridKHashKLinesAgg(dailyGridKHashKLinesAgg);
 
         var aggregate = dailyGridKHashCNDailyIndexAgg.aggregate(kLines);
@@ -26,7 +26,7 @@ class GridNumKHashTest {
 
     @Test
     void hashLength() {
-        DailyGridKHashKLinesAgg dailyGridKHashKLinesAgg = DailyGridKHashKLinesAgg.builder().ranger(4).hashSkip(8).build();
+        DailyGridKHashKLinesAggDeprecated dailyGridKHashKLinesAgg = DailyGridKHashKLinesAggDeprecated.builder().ranger(4).hashSkip(8).build();
         log.info("{}", dailyGridKHashKLinesAgg.hashLength());
     }
 

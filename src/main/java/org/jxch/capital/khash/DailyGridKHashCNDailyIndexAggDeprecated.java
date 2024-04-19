@@ -16,8 +16,8 @@ import java.util.Map;
 @Slf4j
 @Data
 @Accessors(chain = true)
-public class DailyGridKHashCNDailyIndexAgg implements KHashAgg<CNDailyKHashIndexDto> {
-    private DailyGridKHashKLinesAgg dailyGridKHashKLinesAgg;
+public class DailyGridKHashCNDailyIndexAggDeprecated implements KHashAggDeprecated<CNDailyKHashIndexDto> {
+    private DailyGridKHashKLinesAggDeprecated dailyGridKHashKLinesAgg;
     private String code;
 
     @Override

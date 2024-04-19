@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Slf4j
 @SpringBootTest
-class K5MCNServiceImplTest {
+class K5MCNInfluxServiceImplTest {
     @Autowired
     private K5MCNServiceImpl k5MCNService;
 

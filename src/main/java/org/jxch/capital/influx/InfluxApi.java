@@ -1,8 +1,11 @@
 package org.jxch.capital.influx;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.google.common.collect.Lists;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.DeletePredicateRequest;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.config.InfluxDBConfig;
 
@@ -25,34 +28,29 @@ public interface InfluxApi<POINT> {
         getInfluxDBClient().getWriteApiBlocking().writePoint(InfluxPoints.toInfluxPoint(point));
     }
 
+    @SneakyThrows
     default void writeAll(@NotNull List<POINT> points) {
-        getInfluxDBClient().getWriteApiBlocking().writePoints(points.stream().map(InfluxPoints::toInfluxPoint).toList());
-    }
-
-    default List<POINT> queryByTagsAndTimeBetween(@NotNull Map<String, String> tags, @NotNull Date startTime, @NotNull Date endTime, Class<POINT> resultClazz) {
-        StringBuilder fluxQuery = new StringBuilder(String.format("""
-                from(bucket: "%s")
-                    |> range(start: %s, stop: %s)
-                    |> filter(fn: (r) => r._measurement == "%s")
-                """, getInfluxDBConfig().getBucket(), startTime.getTime(), endTime.getTime(), InfluxPoints.getMeasurement(resultClazz)));
-
-        for (Map.Entry<String, String> entry : tags.entrySet()) {
-            fluxQuery.append(String.format("\n    |> filter(fn: (r) => r.%s == \"%s\")\n", entry.getKey(), entry.getValue()));
+        InfluxDBConfig influxDBConfig = SpringUtil.getBean(InfluxDBConfig.class);
+        for (List<POINT> pointList : Lists.partition(points, influxDBConfig.getBatch())) {
+            try {
+                influxDBConfig.getInfluxWriteSemaphore().acquire();
+                getInfluxDBClient().getWriteApiBlocking().writePoints(pointList.stream().map(InfluxPoints::toInfluxPoint).toList());
+            } finally {
+                influxDBConfig.getInfluxWriteSemaphore().release();
+            }
         }
-
-        return InfluxPoints.toPointDto(getInfluxDBClient().getQueryApi().query(fluxQuery.toString(), getInfluxDBConfig().getOrg()), resultClazz);
     }
 
     default List<POINT> queryByExampleTagEntityAndTimeBetween(POINT queryExampleEntity, @NotNull Date startTime, @NotNull Date endTime, Class<POINT> resultClazz) {
         StringBuilder fluxQuery = new StringBuilder(String.format("""
                 from(bucket: "%s")
-                    |> range(start: %s, stop: %s)
+                    |> range(start: time(v:"%s"), stop: time(v:"%s"))
                     |> filter(fn: (r) => r._measurement == "%s")
-                """, getInfluxDBConfig().getBucket(), startTime.getTime(), endTime.getTime(), InfluxPoints.getMeasurement(resultClazz)));
+                """, getInfluxDBConfig().getBucket(), DateUtil.format(startTime, "yyyy-MM-dd'T'HH:mm:ss'Z'"), DateUtil.format(endTime, "yyyy-MM-dd'T'HH:mm:ss'Z'"), InfluxPoints.getMeasurement(resultClazz)));
 
         if (InfluxPoints.hasAnyNonNullTagValue(queryExampleEntity)) {
             for (Map.Entry<String, String> entry : InfluxPoints.getNonNullTags(queryExampleEntity).entrySet()) {
-                fluxQuery.append(String.format("\n    |> filter(fn: (r) => r.%s == \"%s\")\n", entry.getKey(), entry.getValue()));
+                fluxQuery.append(String.format("    |> filter(fn: (r) => r.%s == \"%s\")\n", entry.getKey(), entry.getValue()));
             }
         }
 

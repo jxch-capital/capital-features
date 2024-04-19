@@ -1,8 +1,6 @@
 package org.jxch.capital.influx;
 
 import cn.hutool.core.annotation.AnnotationUtil;
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
 import com.influxdb.query.FluxRecord;
@@ -14,7 +12,6 @@ import org.jxch.capital.utils.ReflectionsU;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -108,7 +105,7 @@ public class InfluxPoints {
         for (FluxTable fluxTable : fluxTables) {
             for (FluxRecord record : fluxTable.getRecords()) {
                 POINT point = pointMap.get(record.getTime());
-                DateTime time = DateUtil.parseUTC(record.getTime().atZone(ZoneId.systemDefault()).toString());
+                Date time = Date.from(Objects.requireNonNull(record.getTime()));
                 ReflectionsU.setFieldValue(point, getInfluxPointTimeField(point).getName(), time);
 
                 String field = Objects.requireNonNull(record.getValueByKey("_field")).toString();

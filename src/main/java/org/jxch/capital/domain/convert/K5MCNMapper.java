@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jxch.capital.domain.dto.K5MCNCsvDto;
 import org.jxch.capital.domain.dto.K5MCNDto;
 import org.jxch.capital.domain.po.K5MCN;
+import org.jxch.capital.influx.point.K5MCNInfluxPoint;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -42,6 +43,18 @@ public interface K5MCNMapper {
 
     default List<K5MCNDto> toK5MCNDtoByCsvDto(List<K5MCNCsvDto> csvDtoList, String code) {
         return toK5MCNDtoByCsvDto(csvDtoList).stream().map(dto -> dto.setCode(code)).toList();
+    }
+
+    K5MCNInfluxPoint toK5MCNInfluxPoint(K5MCNCsvDto csvDto);
+
+    default K5MCNInfluxPoint toK5MCNInfluxPoint(K5MCNCsvDto csvDto, String code) {
+        return toK5MCNInfluxPoint(csvDto).setCode(code);
+    }
+
+    List<K5MCNInfluxPoint> toK5MCNInfluxPoint(List<K5MCNCsvDto> csvDtoList);
+
+    default List<K5MCNInfluxPoint> toK5MCNInfluxPoint(List<K5MCNCsvDto> csvDtoList, String code) {
+        return toK5MCNInfluxPoint(csvDtoList).stream().map(dto -> dto.setCode(code)).toList();
     }
 
 }

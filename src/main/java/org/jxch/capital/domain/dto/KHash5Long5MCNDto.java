@@ -15,12 +15,22 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class KHash5Long5MCNDto {
-    private String code;
+    private String ex;
+    private Integer code;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
-    private Long hash5;
-    private Long hash10;
-    private Long hash16;
-    private Long hash24;
-    private Long hash48;
+    private Long hash5l5s10;
+    private Long hash10l10s5;
+    private Long hash16l16s3;
+    private Long hash24sub1l12s2;
+    private Long hash24sub2l12s2;
+    private Long hash48sub1l12s1;
+    private Long hash48sub2l12s1;
+    private Long hash48sub3l12s1;
+    private Long hash48sub4l12s1;
+
+    public String getHash48() {
+        return String.format("%s%s%s%s", hash48sub1l12s1, hash48sub2l12s1, hash48sub3l12s1, hash48sub4l12s1);
+    }
+
 }

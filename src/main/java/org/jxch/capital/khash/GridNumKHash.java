@@ -31,6 +31,13 @@ public class GridNumKHash implements KHash {
 
     @Override
     public String hash(@NotNull List<KLine> kLines) {
+        List<String> hashcodeArr = fullHashCodeArr(kLines);
+        return IntStream.range(0, hashcodeArr.size()).filter(i -> i % hashSkip == 0)
+                .mapToObj(hashcodeArr::get)
+                .reduce(String::concat).orElseThrow();
+    }
+
+    public List<String> fullHashCodeArr(@NotNull List<KLine> kLines) {
         Double open = priceGetter.apply(kLines.get(0));
         Double start = refPriceGetter.apply(referenceLine);
         double[] values = kLines.stream().mapToDouble(kLine -> (priceGetter.apply(kLine) / start) - 1).toArray();
@@ -47,12 +54,28 @@ public class GridNumKHash implements KHash {
         values = Arrays.stream(values).map(value -> (value - min) / (max - min))
                 .map(value -> Math.max(0, Math.min(1, value))).toArray();
 
-        List<String> hashcodeArr = Arrays.stream(values).mapToObj(value -> {
+        return Arrays.stream(values).mapToObj(value -> {
             long gValue = Math.round(value * (ranger - 1));
             return String.format("%" + leftFillChar + String.valueOf(ranger).length() + "d", gValue + 1);
         }).toList();
+    }
 
-        return IntStream.range(0, hashcodeArr.size()).filter(i -> i % hashSkip == 0)
+    public String hash(int skip, @NotNull List<String> hashcodeArr) {
+        if (skip == 1) {
+            return hashcodeArr.stream().reduce(String::concat).orElseThrow();
+        }
+
+        return IntStream.range(0, hashcodeArr.size()).filter(i -> i % skip == 0)
+                .mapToObj(hashcodeArr::get)
+                .reduce(String::concat).orElseThrow();
+    }
+
+    public static String hash(int skip, String hashcode) {
+        if (skip == 1) {
+            return hashcode;
+        }
+        List<String> hashcodeArr = Arrays.asList(hashcode.split(""));
+        return IntStream.range(0, hashcodeArr.size()).filter(i -> i % skip == 0)
                 .mapToObj(hashcodeArr::get)
                 .reduce(String::concat).orElseThrow();
     }
